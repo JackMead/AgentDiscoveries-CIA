@@ -45,6 +45,8 @@ public class AgentDiscoveriesApplication implements Runnable {
         // Configure Java Spark to run server on port 8080
         port(config.getInt("server.port"));
 
+        staticFileLocation("/META-INF/resources/public");
+
         // Setup of all the routes
         path("/v1", () -> {
             // Endpoint used to get an authorisation token
