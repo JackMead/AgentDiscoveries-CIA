@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>./agentdiscoveries-frontend</module>
-    <module>./agentdiscoveries-backend</module>
+    <module>AgentDiscoveries-Frontend</module>
+    <module>AgentDiscoveries-Backend</module>
   </modules>
 </project>
