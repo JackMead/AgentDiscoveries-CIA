@@ -1,6 +1,5 @@
 package org.softwire.training.api.routes.v1;
 
-import com.sun.deploy.net.FailedDownloadException;
 import org.junit.jupiter.api.Test;
 import org.softwire.training.api.core.PasswordHasher;
 import org.softwire.training.api.core.TokenIssuer;
