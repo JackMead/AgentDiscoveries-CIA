@@ -43,7 +43,7 @@ public class RegionsDao {
                     handle.createUpdate("INSERT INTO location_region (location_id, region_id) " +
                             "VALUES (:location_id, :region_id)")
                             .bind("location_id", locationId)
-                            .bind("region_id", region.getRegionId())
+                            .bind("region_id", regionId)
                             .execute();
                 }
                 allLocationsInserted = true;
