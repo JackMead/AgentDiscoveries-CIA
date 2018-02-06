@@ -1,5 +1,7 @@
-$background-color: red;
+$background-color: blue;
+$text-color: white;
 
 body {
   background-color: $background-color;
+  color: $text-color;
 }

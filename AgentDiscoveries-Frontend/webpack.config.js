@@ -6,7 +6,7 @@ const extractSass = new ExtractTextPlugin("styles.css");
 const outputPath = path.join(__dirname, 'target', 'classes', 'META-INF', 'resources', 'public');
 
 module.exports = {
-    entry: './app/index.js',
+    entry: './app/src/index.js',
     module: {
         rules: [{
             test: /\.scss$/,
@@ -18,6 +18,11 @@ module.exports = {
                 }],
                 fallback: "style-loader"
             })
+        },
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
         }]
     },
 
