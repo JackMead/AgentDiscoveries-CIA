@@ -4,34 +4,33 @@ import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Query;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
-import org.softwire.training.models.LocationStatusReport;
-import org.softwire.training.models.LocationStatusReportWithTimeZone;
+import org.softwire.training.models.RegionSummaryReport;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class LocationReportsDao implements ReportsDao<LocationStatusReport, LocationStatusReportWithTimeZone> {
+public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport, RegionSummaryReport> {
 
     @Inject
     Jdbi jdbi;
 
-    public Optional<LocationStatusReport> getReport(int reportId) {
+    public Optional<RegionSummaryReport> getReport(int reportId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM agent_location_report WHERE report_id = :report_id")
+            return handle.createQuery("SELECT * FROM region_summary_report WHERE report_id = :report_id")
                     .bind("report_id", reportId)
-                    .mapToBean(LocationStatusReport.class)
+                    .mapToBean(RegionSummaryReport.class)
                     .findFirst();
         }
     }
 
-    public int addReport(LocationStatusReport report) {
+    public int addReport(RegionSummaryReport report) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO agent_location_report (location_id, agent_id, status, report_time, report_body)" +
-                    " VALUES (:location_id, :agent_id, :status, :report_time, :report_body)")
-                    .bind("location_id", report.getLocationId())
-                    .bind("agent_id", report.getAgentId())
+            return handle.createUpdate("INSERT INTO region_summary_report (region_id, user_id, status, report_time, report_body)" +
+                    " VALUES (:region_id, :user_id, :status, :report_time, :report_body)")
+                    .bind("region_id", report.getRegionId())
+                    .bind("user_id", report.getUserId())
                     .bind("status", report.getStatus())
                     .bind("report_time", report.getReportTime())
                     .bind("report_body", report.getReportBody())
@@ -43,19 +42,17 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
 
     public int deleteReport(int report_id) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM agent_location_report WHERE report_id = :report_id")
+            return handle.createUpdate("DELETE FROM region_summary_report WHERE report_id = :report_id")
                     .bind("report_id", report_id)
                     .execute();
         }
     }
 
-    public List<LocationStatusReportWithTimeZone> searchReports(List<ReportSearchCriterion> searchCriteria) {
+    public List<RegionSummaryReport> searchReports(List<ReportSearchCriterion> searchCriteria) {
         String whereClause = ReportsDaoUtils.buildWhereSubClaseFromCriteria(searchCriteria);
 
         try (Handle handle = jdbi.open()) {
-             Query query = handle.createQuery("SELECT agent_location_report.*, location.time_zone as location_time_zone " +
-                    "FROM agent_location_report JOIN location " +
-                    " ON agent_location_report.location_id = location.location_id" + whereClause);
+             Query query = handle.createQuery("SELECT * FROM region_summary_report " + whereClause);
 
              for (ReportSearchCriterion criterion : searchCriteria) {
                  for (Map.Entry<String, Object> bindingEntry : criterion.getBindingsForSql().entrySet()) {
@@ -63,7 +60,7 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
                  }
              }
 
-             return query.mapToBean(LocationStatusReportWithTimeZone.class).list();
+             return query.mapToBean(RegionSummaryReport.class).list();
         }
     }
 }

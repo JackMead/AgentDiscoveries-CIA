@@ -23,6 +23,14 @@ public class LocationsDao {
         }
     }
 
+    public List<Location> getLocations() {
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("SELECT * FROM location")
+                    .mapToBean(Location.class)
+                    .list();
+        }
+    }
+
     public int addLocation(Location location) {
         try (Handle handle = jdbi.open()) {
             return handle.createUpdate("INSERT INTO location (location, site_name, time_zone) " +

@@ -11,6 +11,7 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.TimeZone;
 
 public class LocationsRoutes implements EntityCRUDRoutes {
@@ -50,6 +51,10 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     public Location readEntity(Request req, Response res, int id) throws FailedRequestException {
         return locationsDao.getLocation(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Location not found"));
+    }
+
+    public List<Location> readEntities(Request req, Response res){
+        return locationsDao.getLocations();
     }
 
     @Override
