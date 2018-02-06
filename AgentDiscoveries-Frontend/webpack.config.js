@@ -3,6 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin("styles.css");
+const outputPath = path.join(__dirname, 'target', 'classes', 'META-INF', 'resources', 'public');
 
 module.exports = {
     entry: './app/index.js',
@@ -27,8 +28,19 @@ module.exports = {
         extractSass
     ],
 
+    devServer: {
+        contentBase: outputPath,
+        port: 8081,
+        proxy: {
+            '/v1': {
+                target: 'http://localhost:8080',
+                secure: false
+            }
+        }
+    },
+
     output: {
-        path: path.join(__dirname, 'target', 'classes', 'META-INF', 'resources', 'public'),
+        path: outputPath,
         filename: 'bundle.js'
     }
 };
