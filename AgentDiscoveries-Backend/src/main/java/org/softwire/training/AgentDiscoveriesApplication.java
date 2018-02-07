@@ -37,6 +37,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject LocationStatusReportsRoutes locationStatusReportsRoutes;
     @Inject RegionSummaryReportsRoutes regionSummaryReportsRoutes;
     @Inject UsersRoutes usersRoutes;
+    @Inject ExecutiveSummaryRoutes executiveSummaryRoutes;
 
     @Override
     public void run() {
@@ -53,6 +54,11 @@ public class AgentDiscoveriesApplication implements Runnable {
 
             path("/api", () -> {
                 before("/*", tokenRoutes::validateToken);
+
+                path("/legacy", () -> {
+                    before("/*", (request, response) -> response.type("text/plain"));
+                    path("/executivesummary", this::executivesSummaryGroup);
+                });
 
                 path("/agents", this::agentsRouteGroup);
                 path("/regions", this::regionsRouteGroup);
@@ -81,6 +87,10 @@ public class AgentDiscoveriesApplication implements Runnable {
         });
 
         get("/healthcheck", (req, res) -> "Server started okay!");
+    }
+
+    private void executivesSummaryGroup() {
+        post("/generate", executiveSummaryRoutes::readExecutiveSummary);
     }
 
     private void agentsRouteGroup() {
