@@ -1,0 +1,7 @@
+version: 0.0
+os: linux
+
+# List of files to include in the deployment
+files:
+  - source: agentdiscoveries-backend-1.0-SNAPSHOT.jar
+    destination: /usr/lib/agentdiscoveries
