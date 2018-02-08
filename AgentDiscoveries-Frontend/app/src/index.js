@@ -5,6 +5,7 @@ import * as ReactDOM from "react-dom";
 
 import Navbar from "./components/navbar";
 import Login from "./components/login";
+import ApiSearch from "./components/apisearch"
 
 ReactDOM.render(
     <Navbar />,
@@ -14,4 +15,9 @@ ReactDOM.render(
 ReactDOM.render(
     <Login />,
     document.getElementById("react-root")
+);
+
+ReactDOM.render(
+    <ApiSearch />,
+    document.getElementById("react-search")
 );

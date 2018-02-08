@@ -22,9 +22,9 @@ export default class Login extends React.Component {
                     <ControlLabel>{this.isLoggedInMessage()}</ControlLabel>
                     <h3>Sign in</h3>
                     <FormGroup>
-                        <FormControl type="text" inputRef={username => this.username = username} placeholder="enter you username" />
+                        <FormControl type="text" inputRef={username => this.username = username} placeholder="enter your username" />
                         <FormControl type="password" inputRef={password => this.password = password} placeholder="enter password" />
-                        <Button type="submit">Login</Button> <Button onClick={this.handleRegister.bind(this)}>Register</Button>
+                        <Button type="submit">Login</Button><Button onClick={this.handleRegister.bind(this)}>Register</Button>
                     </FormGroup>
                 </Form>
             </div>
@@ -74,9 +74,7 @@ export default class Login extends React.Component {
     }
 
     makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
-        console.log(requestBodyJSON)
         var requestBody = JSON.stringify(requestBodyJSON);
-        console.log(requestBody)
         return fetch(apiAddress, {
             method: 'POST',
             headers: {
