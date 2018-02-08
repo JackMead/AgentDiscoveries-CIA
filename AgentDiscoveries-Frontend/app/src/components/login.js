@@ -55,13 +55,16 @@ export default class Login extends React.Component {
             .then(response => {
                 let token = response.token;
                 console.log(token);
-                if (token !== undefined){
+                if (!response.errorCode){
                     window.localStorage.setItem("Token", token);
-                   this.setState({authenticationMessage: "Signed in successfully"});
+                    this.setState({authenticationMessage: "Signed in successfully"});
                 } else {
                     console.log(response)
                     this.setState({authenticationMessage: response.message});
                 }
+            })
+            .catch(err => {
+                this.setState({ authenticationMessage: err });
             });
 
     }
@@ -76,7 +79,7 @@ export default class Login extends React.Component {
         this.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
             .then(response => response.json())
             .then(response => {
-                if (!response.errCode) {
+                if (!response.errorCode) {
                     this.updateIsLoggedIn();
                     this.setState({authenticationMessage: "User " + response.username + " created successfully"});
                 } else {
@@ -84,6 +87,9 @@ export default class Login extends React.Component {
                     this.setState({ authenticationMessage: response.message });
                 }
             })
+            .catch(err => {
+                this.setState({ authenticationMessage: err });
+            });
     }
 
     makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
