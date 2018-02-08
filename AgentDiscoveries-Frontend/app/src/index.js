@@ -5,7 +5,8 @@ import * as ReactDOM from "react-dom";
 
 import Navbar from "./components/navbar";
 import Login from "./components/login";
-import ApiSearch from "./components/apisearch"
+import ApiSearch from "./components/apisearch";
+import ApiSubmitReport from "./components/apisubmit-report";
 
 ReactDOM.render(
     <Navbar />,
@@ -18,6 +19,7 @@ ReactDOM.render(
 );
 
 ReactDOM.render(
-    <ApiSearch />,
+    //<ApiSearch />,
+    <ApiSubmitReport />,
     document.getElementById("react-search")
 );

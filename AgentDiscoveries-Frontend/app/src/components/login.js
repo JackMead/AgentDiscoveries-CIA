@@ -6,21 +6,31 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
+import * as CRUD from "./crud"
 
 export default class Login extends React.Component {
 
     constructor() {
         super();
+        this.state = {
+            authenticationMessage: "",
+            isLoggedInMessage: "",
+        }
+    }
+
+    componentDidMount() {
+        this.updateIsLoggedIn();
     }
 
     render() {
         return (
             <div>
-                <Button onClick={this.logOut}>Log out</Button>
+                <div>{this.state.isLoggedInMessage}</div>
+                <Button onClick={this.logOut.bind(this)}>Log out</Button>
                 
-                <Form inline onSubmit={this.handleLogIn.bind(this)}>
-                    <ControlLabel>{this.isLoggedInMessage()}</ControlLabel>
+                <Form onSubmit={this.handleLogIn.bind(this)}>
                     <h3>Sign in</h3>
+                    <ControlLabel bsStyle="warning">{this.state.authenticationMessage}</ControlLabel> 
                     <FormGroup>
                         <FormControl type="text" inputRef={username => this.username = username} placeholder="enter your username" />
                         <FormControl type="password" inputRef={password => this.password = password} placeholder="enter password" />
@@ -31,11 +41,7 @@ export default class Login extends React.Component {
         );
     }
 
-    isLoggedIn() {
-        let token = window.localStorage.getItem("Token");
-        if (token) return true;
-        return false;
-    }
+    
 
     handleLogIn(e) {
         e.preventDefault();
@@ -48,8 +54,14 @@ export default class Login extends React.Component {
             .then(response => response.json())
             .then(response => {
                 let token = response.token;
-                window.localStorage.setItem("Token", token);
-                location.reload();
+                console.log(token);
+                if (token !== undefined){
+                    window.localStorage.setItem("Token", token);
+                   this.setState({authenticationMessage: "Signed in successfully"});
+                } else {
+                    console.log(response)
+                    this.setState({authenticationMessage: response.message});
+                }
             });
 
     }
@@ -62,15 +74,16 @@ export default class Login extends React.Component {
         }
 
         this.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
+            .then(response => response.json())
             .then(response => {
-                if (response.status === 200) {
-                    return Promise.resolve("Debug: Response", response.json())
+                if (!response.errCode) {
+                    this.updateIsLoggedIn();
+                    this.setState({authenticationMessage: "User " + response.username + " created successfully"});
                 } else {
-                    return Promise.reject(response.status, response.json)
+                    console.log(response)
+                    this.setState({ authenticationMessage: response.message });
                 }
             })
-            .then(alert("User created successfully"))
-            .catch((status, error) => console.log(status, error));
     }
 
     makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
@@ -85,17 +98,21 @@ export default class Login extends React.Component {
         });
     }
 
-    isLoggedInMessage() {
-        if (this.isLoggedIn()) {
-            return (
-                <p> User is logged in </p>
-            )
-        }
-        return <p> The user <strong>is not</strong> logged in </p>
+    updateIsLoggedIn() {
+        let token = window.localStorage.getItem("Token");
+        var isLoggedIn = token && true;
+
+        this.setState({ isLoggedIn: isLoggedIn,
+            isLoggedInMessage: this.getIsLoggedInMessage(isLoggedIn) });
+    }
+
+    getIsLoggedInMessage(isLoggedIn) {
+        var isLoggedInMessage = isLoggedIn ? "User is logged in" : "User is not logged in";
+        return isLoggedInMessage;
     }
 
     logOut() {
         window.localStorage.clear("Token");
-        location.reload();
+        this.updateIsLoggedIn();
     }
 };

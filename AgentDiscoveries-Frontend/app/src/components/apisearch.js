@@ -6,6 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
+import * as CRUD from "./crud"
 
 export default class ApiSearch extends React.Component {
 
@@ -71,21 +72,9 @@ export default class ApiSearch extends React.Component {
         }).filter(el => el != "" && el).join('&');
 
         console.log(searchParams);
-        this.makeSearchApiCall("/v1/api/reports/locationstatuses", searchParams)
+        CRUD.searchAPI("/v1/api/reports/locationstatuses", searchParams)
             .then(response => response.json())
             .then(response => console.log(response))
-    }
-
-    makeSearchApiCall(apiAddress, searchOptions) {
-        var tokenHeader = "Bearer " + window.localStorage.getItem("Token");
-        return fetch(apiAddress + "?" + searchOptions, {
-            method: 'GET',
-            headers: {
-                'Authorization': tokenHeader,
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
     }
 
     getDateDaysAgo(daysAgo) {
