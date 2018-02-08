@@ -54,6 +54,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         path("/v1", () -> {
             // Endpoint used to get an authorisation token
             post("/token", tokenRoutes::createToken, responseTransformer);
+            post("/makeuser", usersRoutes::createEntity, responseTransformer);
 
             path("/api", () -> {
                 before("/*", tokenRoutes::validateToken);

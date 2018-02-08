@@ -3,9 +3,15 @@ require("../sass/styles.scss"); // Import so that webpack loads all of the sass
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import Test from "./components/test";
+import Navbar from "./components/navbar";
+import Login from "./components/login";
 
 ReactDOM.render(
-    <Test />,
+    <Navbar />,
+    document.getElementById("react-navbar")
+);
+
+ReactDOM.render(
+    <Login />,
     document.getElementById("react-root")
 );
