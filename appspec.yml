@@ -3,8 +3,12 @@ os: linux
 
 # List of files to include in the deployment
 files:
-  - source: agentdiscoveries-backend-1.0-SNAPSHOT.jar
+  - source: *
     destination: /usr/lib/agentdiscoveries
-  - source: scripts
-    destination: /usr/lib/agentdiscoveries
+hooks:
+  BeforeInstall:
+    - location: before.sh
+  AfterInstall:
+    - location: after.sh
+
 
