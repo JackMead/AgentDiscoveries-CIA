@@ -20,8 +20,6 @@ export default class ApiSearch extends React.Component {
     render() {
         return (
             <div>
-                
-
                 <Form onSubmit={this.handleSearch.bind(this)}>
                     <h3>Api Search</h3>
 

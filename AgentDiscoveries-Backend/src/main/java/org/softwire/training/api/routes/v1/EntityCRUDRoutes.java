@@ -1,7 +1,7 @@
 package org.softwire.training.api.routes.v1;
 
-        import spark.Request;
-        import spark.Response;
+import spark.Request;
+import spark.Response;
 
 public interface EntityCRUDRoutes {
 

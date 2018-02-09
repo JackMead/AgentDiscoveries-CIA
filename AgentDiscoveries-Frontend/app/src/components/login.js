@@ -60,7 +60,7 @@ export default class Login extends React.Component {
                     this.setState({authenticationMessage: "Signed in successfully"});
                 } else {
                     console.log(response)
-                    this.setState({authenticationMessage: response.message});
+                    this.setState({authenticationMessage: "response.message"});
                 }
             })
             .catch(err => {
