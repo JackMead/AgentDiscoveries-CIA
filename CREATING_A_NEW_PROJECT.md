@@ -8,6 +8,9 @@ be many in the future). This can be anything, you could ask your team for ideas,
 something sensible yourself. For example, the project which is builds the original source code
 is called "skeleton".
 
+Note: You may want to consider creating separate projects ones for test and live, where only the 
+test one is triggered automatically.
+
 ### Create a New KeyPair
 When AWS creates a new EC2 instance, it allows a user with a specific key pair to SSH into it. 
 So first you must create this. Visit https://eu-west-2.console.aws.amazon.com/ec2/v2/home?region=eu-west-2#KeyPairs
