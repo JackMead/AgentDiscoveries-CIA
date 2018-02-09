@@ -5,3 +5,6 @@ os: linux
 files:
   - source: agentdiscoveries-backend-1.0-SNAPSHOT.jar
     destination: /usr/lib/agentdiscoveries
+  - source: scripts
+    destination: /usr/lib/agentdiscoveries
+
