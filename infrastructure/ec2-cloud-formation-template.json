@@ -11,6 +11,11 @@
       "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
     },
 
+    "ProjectTag": {
+      "Description" : "Tag unique to this particular instance of the Agent Discoveries project, will be appended to the instance name",
+      "Type": "String"
+    },
+
     "InstanceType" : {
       "Description" : "WebServer EC2 instance type",
       "Type" : "String",
@@ -288,6 +293,9 @@
         "IamInstanceProfile": { "Ref": "WebServerProfile" },
         "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
+        "Tags" : [
+          { "Key" : "Name", "Value" : { "Ref" : "ProjectTag" }}
+        ],
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash -xe\n",
           "yum update -y aws-cfn-bootstrap\n",
