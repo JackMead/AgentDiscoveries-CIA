@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --hot --inline",
-    "test": "mocha --require babel-register test/helpers/setupTests.js test/*.js"
+    "test": "mocha --require babel-register app/test/helpers/setupTests.js app/test/*.js"
   },
   "author": "",
   "license": "ISC",

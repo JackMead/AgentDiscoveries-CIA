@@ -1,6 +1,6 @@
 import chai from 'chai'
 import React from 'react'
-import Test from '../app/src/components/test'
+import Test from '../src/components/test'
 import {shallow} from 'enzyme'
 
 let expect = chai.expect
