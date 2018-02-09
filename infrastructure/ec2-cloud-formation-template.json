@@ -261,7 +261,8 @@
             "services" : {
               "sysvinit" : {
                 "httpd"  : { "enabled" : "true", "ensureRunning" : "true" },
-                "mysqld" : { "enabled" : "true", "ensureRunning" : "true" }
+                "mysqld" : { "enabled" : "true", "ensureRunning" : "true" },
+                "codedeploy-agent": { "enabled": "true", "ensureRunning": "true" }
               }
             }
           },
@@ -291,6 +292,11 @@
           "#!/bin/bash -xe\n",
           "yum update -y aws-cfn-bootstrap\n",
 
+          "# Install the AWS CodeDeploy Agent.\n",
+          "cd /home/ec2-user/\n",
+          "aws s3 cp 's3://aws-codedeploy-eu-west-2/latest/codedeploy-agent.noarch.rpm' .\n",
+          "yum -y install codedeploy-agent.noarch.rpm\n",
+
           "/opt/aws/bin/cfn-init -v ",
           "         --stack ", { "Ref" : "AWS::StackName" },
           "         --resource WebServer ",
@@ -300,7 +306,20 @@
           "/opt/aws/bin/cfn-signal -e $? ",
           "         --stack ", { "Ref" : "AWS::StackName" },
           "         --resource WebServer ",
-          "         --region ", { "Ref" : "AWS::Region" }, "\n"
+          "         --region ", { "Ref" : "AWS::Region" }, "\n",
+
+          "# Update apache config\n",
+          "echo \"",
+          "<VirtualHost *:80>\n",
+          "    ErrorLog ${APACHE_LOG_DIR}.error_log\n",
+          "    <Location />\n",
+          "        ProxyPass http://localhost:8080/\n",
+          "        ProxyPassReverse http://localhost:8080/\n",
+          "    </Location>\n",
+          "</VirtualHost>\n",
+          "\" >> /etc/httpd/conf/httpd.conf\n",
+
+          "service httpd restart\n"
         ]]}}
       },
       "CreationPolicy" : {
