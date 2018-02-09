@@ -3,7 +3,7 @@ os: linux
 
 # List of files to include in the deployment
 files:
-  - source: *
+  - source: /
     destination: /usr/lib/agentdiscoveries
 hooks:
   BeforeInstall:
