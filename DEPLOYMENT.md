@@ -9,3 +9,6 @@ This will run the tests and build the JAR (in the Agent Discoveries Build job). 
 Deploy job will then be triggered to deploy your changes to the server.
 
 After a few minutes, you should be able to see your changes at the URL provided by your trainer.
+
+## LOGS
+Currently, very basic logs can be found on the server at `/usr/lib/agentdiscoveries/agentdiscoveries.log`.
