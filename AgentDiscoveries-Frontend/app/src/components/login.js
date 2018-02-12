@@ -54,6 +54,8 @@ export default class Login extends React.Component {
             .then(response => response.json())
             .then(response => {
                 let token = response.token;
+                window.localStorage.setItem("Token", token);
+                this.updateIsLoggedIn();
                 if (!response.errorCode){
                     this.setState({authenticationMessage: "Signed in successfully"});
                 } else {
@@ -80,6 +82,7 @@ export default class Login extends React.Component {
                     this.updateIsLoggedIn();
                     this.setState({authenticationMessage: "User " + response.username + " created successfully"});
                 } else {
+                    console.log(response)
                     this.setState({ authenticationMessage: response.message });
                 }
             })

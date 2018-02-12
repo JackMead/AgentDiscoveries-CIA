@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 
 import * as SearchUtils from "./search-utilities"
-
+import SearchResult from "./search-result"
 import * as CRUD from "../crud"
 
 export default class RegionSummariesSearch extends React.Component {
@@ -16,13 +16,14 @@ export default class RegionSummariesSearch extends React.Component {
     constructor() {
         super();
         this.state = {
-            "searchForm": {}
+            "searchForm": {},
+            "results": []
         }
     }
 
     render() {
         return (
-            <div>
+            <div className="col-md-12">
                 <Form onSubmit={this.handleSearch.bind(this)}>
                     <h3>API Region Report Search</h3>
 
@@ -51,6 +52,8 @@ export default class RegionSummariesSearch extends React.Component {
                         <Button type="submit">Search</Button>
                     </FormGroup>
                 </Form>
+
+                <SearchResult results={this.state.results} />
             </div>
         );
     }

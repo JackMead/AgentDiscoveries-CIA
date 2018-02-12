@@ -19,7 +19,7 @@ export default class RegionSummarySubmit extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col-md-12">
                 <Form onSubmit={this.handleSubmit.bind(this)}>
                     <h3>Submit Summary</h3>
 

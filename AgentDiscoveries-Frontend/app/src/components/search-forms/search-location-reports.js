@@ -24,7 +24,7 @@ export default class LocationReportsSearch extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col-md-12">
                 <Form onSubmit={this.handleSearch.bind(this)}>
                     <h3>API Location Report Search</h3>
 
@@ -53,7 +53,6 @@ export default class LocationReportsSearch extends React.Component {
                         <Button type="submit">Search</Button>
                     </FormGroup>
                 </Form>
-                <h3>Results</h3>
                 
                 <SearchResult results={this.state.results} />
             </div>
@@ -67,7 +66,7 @@ export default class LocationReportsSearch extends React.Component {
             return this.state.searchForm[key].value == "" ? "" : encodeURIComponent(key) + '=' + encodeURIComponent(SearchUtils.getTransformedData(key, this.state.searchForm[key].value));
         }).filter(el => el != "" && el).join('&');
 
-        CRUD.searchAPI("/v1/api/reports/locationstatuses?", searchParams)
+        CRUD.searchAPI("/v1/api/reports/locationstatuses", searchParams)
             .then(response => response.json())
             .then(response => {
                 this.setState({"results": response});
