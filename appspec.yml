@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+
+# List of files to include in the deployment
+files:
+  - source: /
+    destination: /usr/lib/agentdiscoveries
+hooks:
+  BeforeInstall:
+    - location: before.sh
+  AfterInstall:
+    - location: after.sh
+
+
