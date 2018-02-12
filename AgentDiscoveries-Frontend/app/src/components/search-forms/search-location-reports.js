@@ -39,16 +39,6 @@ export default class LocationReportsSearch extends React.Component {
                             inputRef={locationId => this.state.searchForm.locationId = locationId}
                             placeholder="enter location ID" />
 
-                        <ControlLabel>Region ID</ControlLabel>
-                        <FormControl type="text"
-                            inputRef={regionId => this.state.searchForm.regionId = regionId}
-                            placeholder="enter region ID" />
-
-                        <ControlLabel>User ID</ControlLabel>
-                        <FormControl type="text"
-                            inputRef={userId => this.state.searchForm.userId = userId}
-                            placeholder="enter region ID" />
-
                         <ControlLabel>From</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}

@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 import * as CRUD from "../crud"
 
-export default class ApiSubmitReport extends React.Component {
+export default class RegionSummarySubmit extends React.Component {
 
     constructor() {
         super();
@@ -21,18 +21,18 @@ export default class ApiSubmitReport extends React.Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <h3>Submit Report</h3>
+                    <h3>Submit Summary</h3>
 
                     <FormGroup>
-                        <ControlLabel>Agent ID</ControlLabel>
+                        <ControlLabel>User ID</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={agentId => this.state.submitForm.agentId = agentId}
-                            placeholder="enter agent ID" />
+                            inputRef={userId => this.state.submitForm.userId = userId}
+                            placeholder="enter user ID" />
 
-                        <ControlLabel>Location ID</ControlLabel>
+                        <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={locationId => this.state.submitForm.locationId = locationId}
-                            placeholder="enter location ID" />
+                            inputRef={regionId => this.state.submitForm.regionId = regionId}
+                            placeholder="enter region ID" />
                         
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type="text" required
@@ -65,7 +65,7 @@ export default class ApiSubmitReport extends React.Component {
 
         var requestBody = JSON.stringify(bodyJSON);
 
-        CRUD.createAPI("/v1/api/reports/locationstatuses", requestBody)
+        CRUD.createAPI("/v1/api/reports/regionsummaries", requestBody)
             .then(response => response.json())
             .then(response => console.log(response))
     }

@@ -27,16 +27,6 @@ export default class RegionSummariesSearch extends React.Component {
                     <h3>API Region Report Search</h3>
 
                     <FormGroup>
-                        <ControlLabel>Agent ID</ControlLabel>
-                        <FormControl type="text"
-                            inputRef={agentId => this.state.searchForm.agentId = agentId}
-                            placeholder="enter agent ID" />
-
-                        <ControlLabel>Location ID</ControlLabel>
-                        <FormControl type="text"
-                            inputRef={locationId => this.state.searchForm.locationId = locationId}
-                            placeholder="enter location ID" />
-
                         <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text"
                             inputRef={regionId => this.state.searchForm.regionId = regionId}
