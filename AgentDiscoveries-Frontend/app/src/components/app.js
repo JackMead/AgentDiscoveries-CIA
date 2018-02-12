@@ -2,8 +2,8 @@ import * as React from "react";
 
 import Navbar from "./navbar";
 import Login from "./login";
-import ApiSearch from "./apisearch";
-import ApiSubmitReport from "./apisubmit-report";
+import LocationReportSearch from "./search-forms/search-location-reports";
+import LocationReportSubmit from "./submit-forms/submit-location-report";
 
 export default class Test extends React.Component {
     constructor() {
@@ -15,8 +15,8 @@ export default class Test extends React.Component {
             <div>
                 <Navbar />
                 <Login />
-                <ApiSearch />
-                <ApiSubmitReport />
+                <LocationReportSearch />
+                <LocationReportSubmit />
             </div>
         );
     }

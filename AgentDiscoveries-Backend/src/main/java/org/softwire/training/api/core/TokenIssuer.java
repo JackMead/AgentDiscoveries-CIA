@@ -8,10 +8,10 @@ import org.softwire.training.api.models.FailedRequestException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
-import javax.xml.bind.DatatypeConverter;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Base64;
 import java.util.Date;
 
 public class TokenIssuer {
@@ -53,7 +53,7 @@ public class TokenIssuer {
 
     private SecretKey getSecretKey() {
         return new SecretKeySpec(
-                DatatypeConverter.parseBase64Binary(configuration.getString("server.authentication.key")),
+                Base64.getDecoder().decode(configuration.getString("server.authentication.key")),
                 configuration.getString("server.authentication.algorithm"));
     }
 

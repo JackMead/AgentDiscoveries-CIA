@@ -6,14 +6,19 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import * as CRUD from "./crud"
 
-export default class ApiSearch extends React.Component {
+import * as SearchUtils from "./search-utilities"
+
+import * as CRUD from "../crud"
+import SearchResult from "./search-result"
+import { searchAPI } from "../crud";
+export default class LocationReportsSearch extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            "searchForm": {}
+            "searchForm": {},
+            "results": []
         }
     }
 
@@ -21,7 +26,7 @@ export default class ApiSearch extends React.Component {
         return (
             <div>
                 <Form onSubmit={this.handleSearch.bind(this)}>
-                    <h3>Api Search</h3>
+                    <h3>API Location Report Search</h3>
 
                     <FormGroup>
                         <ControlLabel>Agent ID</ControlLabel>
@@ -47,17 +52,20 @@ export default class ApiSearch extends React.Component {
                         <ControlLabel>From</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}
-                            defaultValue={this.getFormDate(this.getDateDaysAgo(7))}
-                            />
+                            defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}
+                        />
 
                         <ControlLabel>To</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={toTime => this.state.searchForm.toTime = toTime}
-                            defaultValue={this.getFormDate(new Date())}/>
+                            defaultValue={SearchUtils.getFormDate(new Date())} />
 
                         <Button type="submit">Search</Button>
                     </FormGroup>
                 </Form>
+                <h3>Results</h3>
+                
+                <SearchResult results={this.state.results} />
             </div>
         );
     }
@@ -66,35 +74,14 @@ export default class ApiSearch extends React.Component {
         e.preventDefault();
 
         const searchParams = Object.keys(this.state.searchForm).map((key) => {
-            return this.state.searchForm[key].value == "" ? "" : encodeURIComponent(key) + '=' + encodeURIComponent(this.getTransformedData(key));
+            return this.state.searchForm[key].value == "" ? "" : encodeURIComponent(key) + '=' + encodeURIComponent(SearchUtils.getTransformedData(key, this.state.searchForm[key].value));
         }).filter(el => el != "" && el).join('&');
 
-        console.log(searchParams);
-        CRUD.searchAPI("/v1/api/reports/locationstatuses", searchParams)
+        CRUD.searchAPI("/v1/api/reports/locationstatuses?", searchParams)
             .then(response => response.json())
-            .then(response => console.log(response))
+            .then(response => {
+                this.setState({"results": response});
+            })
     }
 
-    getDateDaysAgo(daysAgo) {
-        let date = new Date();
-        date.setDate(date.getDate() - daysAgo);
-        return date
-    }
-
-    getFormDate(date) {
-        return date.toISOString().slice(0, 16);
-    }
-
-    getTransformedData(key) {
-        var transformedData = this.state.searchForm[key].value;
-        switch (key) {
-            case "fromTime":
-            case "toTime":
-                transformedData = transformedData.length > 0 && transformedData !== undefined ? transformedData + "Z" : "";
-            
-        }
-        console.log(key, transformedData);
-        return transformedData;
-    }
-    
 };

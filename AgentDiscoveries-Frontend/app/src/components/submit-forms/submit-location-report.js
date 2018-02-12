@@ -6,9 +6,9 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import * as CRUD from "./crud"
+import * as CRUD from "../crud"
 
-export default class ApiSubmitReport extends React.Component {
+export default class LocationReportSubmit extends React.Component {
 
     constructor() {
         super();
@@ -21,7 +21,7 @@ export default class ApiSubmitReport extends React.Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <h3>Submit Report</h3>
+                    <h3>Submit Location Report</h3>
 
                     <FormGroup>
                         <ControlLabel>Agent ID</ControlLabel>
