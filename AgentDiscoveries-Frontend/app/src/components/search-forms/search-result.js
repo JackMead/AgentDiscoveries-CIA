@@ -32,7 +32,6 @@ export default class SearchResult extends React.Component {
     }
 
     getResultsHeader(results) {
-        console.log("rendering results" + results.length)
         return results.length > 0 ? <h3>{results.length + " results"}</h3> : "";
     }
 }

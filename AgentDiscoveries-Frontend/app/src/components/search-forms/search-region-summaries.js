@@ -67,7 +67,9 @@ export default class RegionSummariesSearch extends React.Component {
 
         CRUD.searchAPI("/v1/api/reports/regionsummaries", searchParams)
             .then(response => response.json())
-            .then(response => console.log(response))
+            .then(response => {
+                this.setState({ "results": response });
+            })
     }
 
 };
