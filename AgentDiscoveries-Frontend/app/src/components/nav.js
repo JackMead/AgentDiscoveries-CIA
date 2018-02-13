@@ -14,7 +14,12 @@ export default class NavigationBar extends React.Component {
             <Navbar inverse collapseOnSelect>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <Link to="/">Agent Discoveries</Link>
+                        <Link to="/">
+                            <span>
+                                <img className="agent-discoveries-logo" src={require("../../static/agent.png")} alt="Agent Discoveries" />
+                            </span>
+                            <span>Agent Discoveries</span>
+                        </Link>
                     </Navbar.Brand>
                     <Navbar.Toggle />
                 </Navbar.Header>
