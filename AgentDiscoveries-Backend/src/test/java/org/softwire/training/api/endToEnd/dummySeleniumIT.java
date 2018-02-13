@@ -17,6 +17,7 @@ public class dummySeleniumIT {
         assertTrue(title.equals("Agent Discoveries"));
     }
 
+    @Test
     public void testOnline(){
         WebDriver driver = new HtmlUnitDriver();
         driver.get(Target_Address);
