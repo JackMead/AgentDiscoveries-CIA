@@ -19,7 +19,7 @@ the server you're about to create.
 
 ### Create Resources
 Run the Jenkins build called 
-["Agent Discoveries Create New"](http://ec2-35-177-87-184.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Create%20New).
+["Agent Discoveries Create New"](http://ec2-52-56-165-128.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Create%20New).
 This will create all of the resources you will need for your project.
 
 Note: After the build finishes, you will have to wait 10 mins or so for all of your resources to build.
@@ -30,7 +30,7 @@ instance etc. And then sets up the code deploy resources so that Jenkins will be
 
 ### Create a Jenkins Build
 You should create a Jenkins build for your project. A good starting place is to clone the 
-[Skeleton build](http://ec2-35-177-87-184.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton/). And then
+[Skeleton build](http://ec2-52-56-165-128.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton/). And then
 edit the values in the configuration to use your git repo and your project tag.
 
 The idea is to create a build that is automatically triggered (you will need to add the following hook to your github repo: 

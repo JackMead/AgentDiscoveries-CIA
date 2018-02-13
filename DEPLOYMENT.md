@@ -1,7 +1,7 @@
 # Deployment
 
 ## Jenkins
-The Jenkins server for this project can be found [here](http://ec2-35-177-87-184.eu-west-2.compute.amazonaws.com/).
+The Jenkins server for this project can be found [here](http://ec2-52-56-165-128.eu-west-2.compute.amazonaws.com/).
 When you push to the origin/master branch on git, a jenkins build should be triggered(there should
 be one corresponding to your project).
 
