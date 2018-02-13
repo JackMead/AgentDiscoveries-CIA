@@ -44,9 +44,4 @@ export default class Test extends React.Component {
             </div>
         );
     }
-
-    moveToNextMessage() {
-        const newMessageId = (this.state.messageId + 1) % messages.length;
-        this.setState({messageId: newMessageId});
-    }
 };
