@@ -18,6 +18,7 @@ public class RequestGenerationHelper {
         Request request = mock(Request.class);
 
         when(request.bodyAsBytes()).thenReturn(GSON.toJson(object).getBytes(REQUEST_CHARSET));
+        when(request.body()).thenReturn(GSON.toJson(object));
 
         return request;
     }
