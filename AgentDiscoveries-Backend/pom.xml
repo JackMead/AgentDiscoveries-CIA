@@ -29,6 +29,7 @@
             <properties>
                 <skip.unit.tests>true</skip.unit.tests>
                 <skip.integration.tests>false</skip.integration.tests>
+                <target.address>http://localhost:8080</target.address>
             </properties>
         </profile>
         <profile>
@@ -39,6 +40,7 @@
             <properties>
                 <skip.unit.tests>false</skip.unit.tests>
                 <skip.integration.tests>true</skip.integration.tests>
+                <target.address>http://localhost:8080</target.address>
             </properties>
         </profile>
     </profiles>
@@ -263,6 +265,9 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <skipTests>${skip.integration.tests}</skipTests>
+                    <systemPropertyVariables>
+                        <target.address>${target.address}</target.address>
+                    </systemPropertyVariables>
                 </configuration>
                 <version>2.20.1</version>
                 <executions>
