@@ -14,7 +14,6 @@ public class dummySeleniumIT {
         WebDriver driver = new HtmlUnitDriver();
         driver.get(Target_Address);
         String title = driver.getTitle();
-        System.out.println("Title found: "+title);
         assertTrue(title.equals("Agent Discoveries"));
     }
 
