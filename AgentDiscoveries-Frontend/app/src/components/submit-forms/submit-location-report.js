@@ -69,19 +69,4 @@ export default class LocationReportSubmit extends React.Component {
             .then(response => response.json())
             .then(response => console.log(response))
     }
-
-    makeSubmitApiCall(apiAddress, requestBody) {
-        var tokenHeader = "Bearer " + window.localStorage.getItem("Token");
-        
-        console.log(requestBody);
-        return fetch(apiAddress, {
-            method: 'Post',
-            headers: {
-                'Authorization': tokenHeader,
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            "body": requestBody
-        });
-    }
 };
