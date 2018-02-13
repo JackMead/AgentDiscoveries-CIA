@@ -17,6 +17,7 @@
             </activation>
             <properties>
                 <npm.command>run start</npm.command>
+                <skip.unit.tests>false</skip.unit.tests>
             </properties>
         </profile>
 
@@ -30,6 +31,14 @@
             </activation>
             <properties>
                 <npm.command>run build</npm.command>
+                <skip.unit.tests>false</skip.unit.tests>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>integration-test</id>
+            <properties>
+                <skip.unit.tests>true</skip.unit.tests>
             </properties>
         </profile>
       </profiles>
@@ -72,6 +81,7 @@
 
                         <configuration>
                             <arguments>test</arguments>
+                            <skip>${skip.unit.tests}</skip>
                         </configuration>
                     </execution>
 
