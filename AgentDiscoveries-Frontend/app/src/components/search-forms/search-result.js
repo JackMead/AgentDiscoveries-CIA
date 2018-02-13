@@ -27,11 +27,11 @@ export default class SearchResult extends React.Component {
 
     getItemHTML(result) {
         return Object.keys(result).map(key => {
-            return <p key={key} id={key}>{key + ": " + result[key]}</p>
+            return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>
         })
     }
 
     getResultsHeader(results) {
-        return results.length > 0 ? <h3>{results.length + " results"}</h3> : "";
+        return results.length > 0 ? (results.length === 1 ? <h3>{`${results.length} result`}</h3> : <h3>{`${results.length} results`}</h3>) : "";
     }
 }

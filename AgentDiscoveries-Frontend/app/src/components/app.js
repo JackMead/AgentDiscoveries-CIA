@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import Navbar from "./navbar";
 import Login from "./login";
 import LocationReportSearch from "./search-forms/search-location-reports";
 import RegionSummarySearch from "./search-forms/search-region-summaries";
@@ -9,9 +8,6 @@ import RegionSummarySubmit from "./submit-forms/submit-region-summary";
 
 import {Tabs, Tab} from "react-bootstrap"
 export default class Test extends React.Component {
-    constructor() {
-        super();
-    }
 
     render() {
         return (

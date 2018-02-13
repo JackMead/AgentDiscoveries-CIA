@@ -80,7 +80,7 @@ export default class Login extends React.Component {
             .then(response => {
                 if (!response.errorCode) {
                     this.updateIsLoggedIn();
-                    this.setState({authenticationMessage: "User " + response.username + " created successfully"});
+                    this.setState({authenticationMessage: `User ${response.username} created successfully`});
                 } else {
                     console.log(response)
                     this.setState({ authenticationMessage: response.message });

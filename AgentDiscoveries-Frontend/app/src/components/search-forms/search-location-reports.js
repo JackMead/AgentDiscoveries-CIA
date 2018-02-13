@@ -9,9 +9,7 @@ import {
 
 import * as SearchUtils from "./search-utilities"
 
-import * as CRUD from "../crud"
 import SearchResult from "./search-result"
-import { searchAPI } from "../crud";
 export default class LocationReportsSearch extends React.Component {
 
     constructor() {
@@ -25,7 +23,7 @@ export default class LocationReportsSearch extends React.Component {
     render() {
         return (
             <div className="col-md-12">
-                <Form onChange={this.handleSearch.bind(this)}>
+                <Form onChange={this.onSubmit.bind(this)}>
                     <h3>API Location Report Search</h3>
 
                     <FormGroup>
@@ -57,18 +55,9 @@ export default class LocationReportsSearch extends React.Component {
         );
     }
 
-    handleSearch(e) {
+    onSubmit(e) {
         e.preventDefault();
-
-        const searchParams = Object.keys(this.state.searchForm).map((key) => {
-            return this.state.searchForm[key].value == "" ? "" : encodeURIComponent(key) + '=' + encodeURIComponent(SearchUtils.getTransformedData(key, this.state.searchForm[key].value));
-        }).filter(el => el != "" && el).join('&');
-
-        CRUD.searchAPI("/v1/api/reports/locationstatuses", searchParams)
-            .then(response => response.json())
-            .then(response => {
-                this.setState({"results": response});
-            })
+        SearchUtils.getResultsAsynch('/v1/api/reports/locationstatuses', this.state.searchForm)
+            .then(results => this.setState({ "results": results }))
     }
-
 };

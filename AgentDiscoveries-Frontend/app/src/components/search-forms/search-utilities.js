@@ -1,26 +1,38 @@
-function getDateDaysAgo(daysAgo) {
+import { searchAPI } from "../crud"
+
+export function getDateDaysAgo(daysAgo) {
     let date = new Date();
     date.setDate(date.getDate() - daysAgo);
     return date
 }
 
-function getFormDate(date) {
+export function getFormDate(date) {
     return date.toISOString().slice(0, 16);
 }
 
-function getTransformedData(key, value) {
+export function getTransformedData(key, value) {
     var transformedData = value;
-    switch (key) {
-        case "fromTime":
-        case "toTime":
-            transformedData = transformedData.length > 0 && transformedData !== undefined ? transformedData + "Z" : "";
-
+    if (key === "fromTime" || key === "toTime") {
+        transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : "";
     }
     return transformedData;
 }
 
-export {
-    getDateDaysAgo,
-    getFormDate,
-    getTransformedData
+function getSearchParams(searchForm) {
+    const searchParams = Object.keys(searchForm).map((key) => {
+        return searchForm[key].value === "" ? "" : `${encodeURIComponent(key)}=${encodeURIComponent(getTransformedData(key, searchForm[key].value))}`;
+    }).filter(el => el !== "" && el).join('&');
+    return searchParams
 }
+
+export function getResultsAsynch(apiAddress, searchForm) {
+    const searchParams = getSearchParams(searchForm);
+
+    var response = searchAPI(apiAddress, searchParams)
+        .then(response => {
+            return response.json();
+        })
+
+    return response;
+}
+

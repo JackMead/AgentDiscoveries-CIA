@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import * as CRUD from "../crud"
+import { handleSubmit } from "./submit-utilities"
 
 export default class LocationReportSubmit extends React.Component {
 
@@ -20,7 +20,7 @@ export default class LocationReportSubmit extends React.Component {
     render() {
         return (
             <div className="col-md-12">
-                <Form onSubmit={this.handleSubmit.bind(this)}>
+                <Form onSubmit={this.onSubmit.bind(this)}>
                     <h3>Submit Location Report</h3>
 
                     <FormGroup>
@@ -52,21 +52,8 @@ export default class LocationReportSubmit extends React.Component {
         );
     }
 
-    handleSubmit(e) {
+    onSubmit(e) {
         e.preventDefault();
-        
-
-        let bodyJSON = {};
-        Object.keys(this.state.submitForm).forEach((key) => {
-            bodyJSON[key] = this.state.submitForm[key].value;
-        });
-
-        bodyJSON.reportTime = new Date().toJSON();
-
-        var requestBody = JSON.stringify(bodyJSON);
-
-        CRUD.createAPI("/v1/api/reports/locationstatuses", requestBody)
-            .then(response => response.json())
-            .then(response => console.log(response))
+        handleSubmit('/v1/api/reports/locationstatuses', this.state.submitForm)
     }
 };

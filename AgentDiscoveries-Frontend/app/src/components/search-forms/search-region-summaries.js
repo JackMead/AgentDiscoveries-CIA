@@ -9,7 +9,6 @@ import {
 
 import * as SearchUtils from "./search-utilities"
 import SearchResult from "./search-result"
-import * as CRUD from "../crud"
 
 export default class RegionSummariesSearch extends React.Component {
 
@@ -24,7 +23,7 @@ export default class RegionSummariesSearch extends React.Component {
     render() {
         return (
             <div className="col-md-12">
-                <Form onChange={this.handleSearch.bind(this)}>
+                <Form onChange={this.onSubmit.bind(this)}>
                     <h3>API Region Report Search</h3>
 
                     <FormGroup>
@@ -55,19 +54,9 @@ export default class RegionSummariesSearch extends React.Component {
             </div>
         );
     }
-
-    handleSearch(e) {
+    onSubmit(e) {
         e.preventDefault();
-
-        const searchParams = Object.keys(this.state.searchForm).map((key) => {
-            return this.state.searchForm[key].value == "" ? "" : encodeURIComponent(key) + '=' + encodeURIComponent(SearchUtils.getTransformedData(key, this.state.searchForm[key].value));
-        }).filter(el => el != "" && el).join('&');
-
-        CRUD.searchAPI("/v1/api/reports/regionsummaries", searchParams)
-            .then(response => response.json())
-            .then(response => {
-                this.setState({ "results": response });
-            })
+        SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.state.searchForm)
+            .then(results => this.setState({ "results": results }))
     }
-
 };

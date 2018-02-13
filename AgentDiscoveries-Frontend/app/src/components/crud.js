@@ -1,5 +1,5 @@
 
-function createAPI(apiAddress, requestBodyJSON) {
+export function createAPI(apiAddress, requestBodyJSON) {
     var tokenHeader = getTokenHeader();
     
     return fetch(apiAddress, {
@@ -13,9 +13,9 @@ function createAPI(apiAddress, requestBodyJSON) {
     });
 }
 
-function searchAPI(apiAddress, searchString) {
+export function searchAPI(apiAddress, searchString) {
     var tokenHeader = getTokenHeader();
-    var requestAddress = apiAddress + "?" + searchString;
+    var requestAddress = `${apiAddress}?${searchString}`;
     console.log(requestAddress)
     return fetch(requestAddress, {
         method: 'GET',
@@ -27,9 +27,9 @@ function searchAPI(apiAddress, searchString) {
     });
 }
 
-function readAPI(apiAddress, id) {
+export function readAPI(apiAddress, id) {
     var tokenHeader = getTokenHeader();
-    var requestAddress = apiAddress + "/" + id
+    var requestAddress = `${apiAddress}/${id}`
 
     return fetch(requestAddress, {
         method: 'GET',
@@ -42,11 +42,11 @@ function readAPI(apiAddress, id) {
 }
 
 
-function updateAPI(apiAddress, id, requestBodyJSON) {
+export function updateAPI(apiAddress, id, requestBodyJSON) {
     var tokenHeader = getTokenHeader();
-    var requestAddress = apiAddress + "/" + id
+    var requestAddress = `${apiAddress}/${id}`;
 
-    return fetch(requestAddress + "/" + id, {
+    return fetch(requestAddress, {
         method: 'PUT',
         headers: {
             'Authorization': tokenHeader,
@@ -57,9 +57,9 @@ function updateAPI(apiAddress, id, requestBodyJSON) {
     });
 }
 
-function deleteAPI(apiAddress, id) {
+export function deleteAPI(apiAddress, id) {
     var tokenHeader = getTokenHeader();
-    var requestAddress = apiAddress + "/" + id;
+    var requestAddress = `${apiAddress}/${id}`;
 
     return fetch(requestAddress, {
         method: 'DELETE',
@@ -72,13 +72,5 @@ function deleteAPI(apiAddress, id) {
 }
 
 function getTokenHeader() {
-    return "Bearer " + window.localStorage.getItem("Token");
-}
-
-export{
-    createAPI,
-    searchAPI,
-    readAPI,
-    updateAPI,
-    deleteAPI
+    return `Bearer ${window.localStorage.getItem("Token")}`;
 }
