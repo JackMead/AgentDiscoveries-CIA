@@ -9,13 +9,13 @@ import {
 
 import * as SearchUtils from "./search-utilities"
 import SearchResult from "./search-result"
-
 export default class RegionSummariesSearch extends React.Component {
 
     constructor() {
         super();
         this.state = {
             "searchForm": {},
+            "errorMessage": "",
             "results": []
         }
     }
@@ -27,6 +27,8 @@ export default class RegionSummariesSearch extends React.Component {
                     <h3>API Region Report Search</h3>
 
                     <FormGroup>
+                        <p className="text-warn">{this.state.errorMessage}</p>
+                        
                         <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text"
                             inputRef={regionId => this.state.searchForm.regionId = regionId}
@@ -54,9 +56,11 @@ export default class RegionSummariesSearch extends React.Component {
             </div>
         );
     }
+    
     onSubmit(e) {
         e.preventDefault();
         SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.state.searchForm)
-            .then(results => this.setState({ "results": results }))
+            .then(results => this.setState({ "results": results, "errorMessage": "" }))
+            .catch(error => this.setState({ "errorMessage": error }))
     }
 };

@@ -5,3 +5,14 @@ body {
   background-color: $background-color;
   color: $text-color;
 }
+
+.tab-buttons {
+  position: absolute;
+  right: 2%;
+  top: 4px;
+}
+
+.log-out-button {
+  position: relative;
+  float: right;
+}
