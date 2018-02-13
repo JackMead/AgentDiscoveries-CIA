@@ -19,7 +19,7 @@ the server you're about to create.
 
 ### Create Resources
 Run the Jenkins build called 
-["Agent Discoveries Create New"](http://ec2-35-177-87-184.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Create%20New).
+["Agent Discoveries Create New"](http://ec2-52-56-165-128.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Create%20New).
 This will create all of the resources you will need for your project.
 
 Note: After the build finishes, you will have to wait 10 mins or so for all of your resources to build.
@@ -30,7 +30,7 @@ instance etc. And then sets up the code deploy resources so that Jenkins will be
 
 ### Create a Jenkins Build
 You should create a Jenkins build for your project. A good starting place is to clone the 
-[Skeleton build](http://ec2-35-177-87-184.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton/). And then
+[Skeleton build](http://ec2-52-56-165-128.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton/). And then
 edit the values in the configuration to use your git repo and your project tag.
 
 The idea is to create a build that is automatically triggered (you will need to add the following hook to your github repo: 
@@ -43,6 +43,11 @@ Find your new instance in the list of EC2 instance: https://eu-west-2.console.aw
 Visit the url listed under the Public DNS (IPv4) value in the description for this instance.
 
 Hopefully, you are able to see your website!
+
+## Create a Jenkin's Job for End-to-End Tests
+Like the Jenkin's build above, the easiest way to do this is to clone the [End-To-End Skeleton](http://ec2-35-178-57-85.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton%20End-To-End%20Testing/), then edit the parameters in the configuration to use your Github Repository, and your Deployment Address. This job will trigger the generic Agent Discoveries End-to-End Testing job and report the results.
+
+You should then add your team's email addresses at the bottom so that you'll be notified quickly in the case of any broken tests, and optionally can configure the job to run on a different schedule to the current one.
 
 ## Giving users SSH access
 You should do this, even if it's just so that you can login as yourself, instead of the root user.
