@@ -3,7 +3,7 @@ import React from 'react'
 import App from '../src/components/app'
 import {shallow} from 'enzyme'
 
-let expect = chai.expect
+let expect = chai.expect;
 
 describe("<App/>", ()=>{
     "use strict";
@@ -11,4 +11,4 @@ describe("<App/>", ()=>{
         const wrapper = shallow(<App />);
         expect(wrapper.find('div')).to.not.have.length(0)
     });
-})
+});
