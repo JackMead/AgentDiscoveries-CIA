@@ -24,7 +24,7 @@ export default class RegionSummariesSearch extends React.Component {
     render() {
         return (
             <div className="col-md-12">
-                <Form onSubmit={this.handleSearch.bind(this)}>
+                <Form onChange={this.handleSearch.bind(this)}>
                     <h3>API Region Report Search</h3>
 
                     <FormGroup>
@@ -48,8 +48,6 @@ export default class RegionSummariesSearch extends React.Component {
                         <FormControl type="datetime-local"
                             inputRef={toTime => this.state.searchForm.toTime = toTime}
                             defaultValue={SearchUtils.getFormDate(new Date())} />
-
-                        <Button type="submit">Search</Button>
                     </FormGroup>
                 </Form>
 
