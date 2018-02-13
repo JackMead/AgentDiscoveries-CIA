@@ -1,144 +1,134 @@
 package org.softwire.training.api.routes.v1;
 
-import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.LocationStatusReportApiModel;
+import org.softwire.training.api.models.searchcriteria.*;
 import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.LocationReportsDao;
 import org.softwire.training.db.daos.LocationsDao;
 import org.softwire.training.models.Location;
 import org.softwire.training.models.LocationStatusReport;
+import org.softwire.training.models.LocationStatusReportWithTimeZone;
 import spark.QueryParamsMap;
 import spark.Request;
-import spark.Response;
-import spark.utils.StringUtils;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
-public class LocationStatusReportsRoutes {
-
-    private final LocationReportsDao locationReportsDao;
-    private final AgentsDao agentsDao;
-    private final LocationsDao locationsDao;
+public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
     @Inject
     public LocationStatusReportsRoutes(LocationReportsDao locationReportsDao, AgentsDao agentsDao, LocationsDao locationsDao) {
-        this.locationReportsDao = locationReportsDao;
-        this.agentsDao = agentsDao;
-        this.locationsDao = locationsDao;
+        super(
+            LocationStatusReportApiModel.class,
+            new LocationStatusValidationMapper(locationsDao, agentsDao),
+            locationReportsDao,
+            new LocationStatusReportSearchCriteriaParser());
     }
 
-    public LocationStatusReportApiModel createReport(Request req, Response res) throws FailedRequestException {
-        LocationStatusReportApiModel reportApiModel = JsonRequestUtils.readBodyAsType(req, LocationStatusReportApiModel.class);
+    private static class LocationStatusValidationMapper
+            implements ValidatorMapper<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
-        if (reportApiModel.getReportId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "reportId cannot be specified on create");
+        private final LocationsDao locationsDao;
+        private final AgentsDao agentsDao;
+
+        LocationStatusValidationMapper(LocationsDao locationReportsDao, AgentsDao agentsDao) {
+            this.locationsDao = locationReportsDao;
+            this.agentsDao = agentsDao;
         }
 
-        // Validate report model before storing
-        LocationStatusReport reportModel = validateApiModelThenMap(reportApiModel);
+        @Override
+        public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) throws FailedRequestException {
+            // First check agent exists
+            if (!agentsDao.getAgent(apiModel.getAgentId()).isPresent()) {
+                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Agent does not exist");
+            }
 
-        int newReportId = locationReportsDao.addReport(reportModel);
+            Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
 
-        // Create requests should return 201
-        reportApiModel.setReportId(newReportId);
-        res.status(201);
+            if (!location.isPresent()) {
+                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Location does not exist");
+            } else {
+                TimeZone locationTimeZone = TimeZone.getTimeZone(location.get().getTimeZone());
 
-        return reportApiModel;
-    }
+                LocalDateTime dateTimeInReportLocation = apiModel.getReportTime()
+                        .withZoneSameInstant(locationTimeZone.toZoneId())
+                        .toLocalDateTime();
 
-    private LocationStatusReport validateApiModelThenMap(LocationStatusReportApiModel apiModel) throws FailedRequestException {
-        // First check agent exists
-        if (!agentsDao.getAgent(apiModel.getAgentId()).isPresent()) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Agent does not exist");
+                LocationStatusReport model = new LocationStatusReport();
+                model.setAgentId(apiModel.getAgentId());
+                model.setLocationId(apiModel.getLocationId());
+                model.setStatus(apiModel.getStatus());
+                model.setReportTime(dateTimeInReportLocation);
+                model.setReportBody(apiModel.getReportBody());
+
+                return model;
+            }
         }
 
-        Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
+        @Override
+        public LocationStatusReportApiModel mapToApiModel(LocationStatusReport model) throws FailedRequestException {
+            Optional<Location> location = locationsDao.getLocation(model.getLocationId());
+            if (!location.isPresent()) {
+                throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Could not successfully get location info");
+            }
 
-        if (!location.isPresent()) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Location does not exist");
-        } else {
-            TimeZone locationTimeZone = TimeZone.getTimeZone(location.get().getTimeZone());
-
-            LocalDateTime dateTimeInReportLocation = apiModel.getReportTime()
-                    .withZoneSameInstant(locationTimeZone.toZoneId())
-                    .toLocalDateTime();
-
-            LocationStatusReport model = new LocationStatusReport();
-            model.setAgentId(apiModel.getAgentId());
-            model.setLocationId(apiModel.getLocationId());
-            model.setStatus(apiModel.getStatus());
-            model.setReportTime(dateTimeInReportLocation);
-            model.setReportBody(apiModel.getReportBody());
-
-            return model;
+            return mapReportAndTimezoneToApiModel(model, location.get().getTimeZone());
         }
 
-    }
-
-    public LocationStatusReportApiModel readReport(Request req, Response res, int id) throws FailedRequestException {
-        return mapToApiModel(locationReportsDao.getReport(id)
-                .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Report not found")));
-    }
-
-    private LocationStatusReportApiModel mapToApiModel(LocationStatusReport model) throws FailedRequestException {
-        LocationStatusReportApiModel apiModel = new LocationStatusReportApiModel();
-
-        Optional<Location> location = locationsDao.getLocation(model.getLocationId());
-        if (!location.isPresent()) {
-            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Could not successfully get location info");
+        @Override
+        public LocationStatusReportApiModel mapSearchResultToApiModel(LocationStatusReportWithTimeZone model) {
+            return mapReportAndTimezoneToApiModel(model, model.getLocationTimeZone());
         }
 
-        TimeZone locationTimeZone = TimeZone.getTimeZone(location.get().getTimeZone());
+        private LocationStatusReportApiModel mapReportAndTimezoneToApiModel(LocationStatusReport model, String timeZone) {
+            LocationStatusReportApiModel apiModel = new LocationStatusReportApiModel();
 
-        apiModel.setAgentId(model.getAgentId());
-        apiModel.setLocationId(model.getLocationId());
-        apiModel.setStatus(model.getStatus());
-        apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone.toZoneId()));
-        apiModel.setReportBody(model.getReportBody());
+            TimeZone locationTimeZone = TimeZone.getTimeZone(timeZone);
 
-        return apiModel;
-    }
+            apiModel.setReportId(model.getReportId());
+            apiModel.setAgentId(model.getAgentId());
+            apiModel.setLocationId(model.getLocationId());
+            apiModel.setStatus(model.getStatus());
+            apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone.toZoneId()));
+            apiModel.setReportBody(model.getReportBody());
 
-    public Object deleteReport(Request req, Response res, int id) throws Exception {
-        if (StringUtils.isNotEmpty(req.body())) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Report delete request should have no body");
+            return apiModel;
         }
-
-        // Do not do anything with output, if nothing to delete request is successfully done (no-op)
-        locationReportsDao.deleteReport(id);
-        res.status(204);
-
-        return new Object();
     }
 
-    public List<LocationStatusReportApiModel> searchReports(Request req, Response res) {
-        QueryParamsMap queryMap = req.queryMap();
+    private static class LocationStatusReportSearchCriteriaParser
+            implements ReportSearchCriteriaParser<LocationStatusReportWithTimeZone> {
 
-        // All query parameters are optional and any combination can be specified
-        Optional<Integer> agentId = Optional.ofNullable(queryMap.get("agentId").integerValue());
-        Optional<Integer> locationId = Optional.ofNullable(queryMap.get("locationId").integerValue());
+        public List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> parseApiReportSearchCriteria(Request req) {
+            QueryParamsMap queryMap = req.queryMap();
+            List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> apiReportSearchCriteria = new ArrayList<>();
 
-        // fromTime / toTime specify the report should be made between those times taking into account time zones.
-        // The reports are stored as a date time in the location timezone.
-        Optional<ZonedDateTime> fromTime = Optional.ofNullable(queryMap.get("fromTime").value())
-                .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-        Optional<ZonedDateTime> toTime = Optional.ofNullable(queryMap.get("toTime").value())
-                .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            // All query parameters are optional and any combination can be specified
+            Optional.ofNullable(queryMap.get("agentId").integerValue())
+                    .ifPresent(agentId -> apiReportSearchCriteria.add(new AgentIdApiSearchCriterion(agentId)));
+            Optional.ofNullable(queryMap.get("locationId").integerValue())
+                    .ifPresent(locationId -> apiReportSearchCriteria.add(new LocationIdApiSearchCriterion(locationId)));
 
-        // If specified then the reportBody should include exactly this many digits.
-        Optional<Integer> numberOfDigitsInBody = Optional.ofNullable(queryMap.get("digitsInBody").integerValue());
+            // fromTime / toTime specify the report should be made between those times taking into account time zones.
+            // The reports are stored as a date time in the location timezone.
+            Optional.ofNullable(queryMap.get("fromTime").value())
+                    .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+                    .ifPresent(fromTime -> apiReportSearchCriteria.add(new FromTimeApiLocationStatusSearchCriterion(fromTime)));
+            Optional.ofNullable(queryMap.get("toTime").value())
+                    .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
+                    .ifPresent(toTime -> apiReportSearchCriteria.add(new ToTimeApiLocationStatusSearchCriterion(toTime)));
 
-        // TODO: Part2 Implement this
+            // If specified then the reportBody should include exactly this many digits.
+            Optional.ofNullable(queryMap.get("digitsInBody").integerValue())
+                    .ifPresent(digitsInBody ->
+                            apiReportSearchCriteria.add(new DigitsInBodyApiSearchCriterion<>(digitsInBody)));
 
-        return new ArrayList<>();
+            return apiReportSearchCriteria;
+        }
     }
 }

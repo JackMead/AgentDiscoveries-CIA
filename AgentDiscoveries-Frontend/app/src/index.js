@@ -3,9 +3,9 @@ require("../sass/styles.scss"); // Import so that webpack loads all of the sass
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import Test from "./components/test";
+import App from "./components/app";
 
 ReactDOM.render(
-    <Test />,
+    <App />,
     document.getElementById("react-root")
 );

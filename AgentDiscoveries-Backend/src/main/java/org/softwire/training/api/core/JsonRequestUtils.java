@@ -9,7 +9,7 @@ public class JsonRequestUtils {
     private static Gson gson = CustomisedGsonBuilder.getGson();
 
     public static <T> T readBodyAsType(Request req, Class<T> classType) {
-        String bodyString = StringUtils.toString(req.bodyAsBytes(), "ISO-8859-1");
+        String bodyString = req.body();
         return gson.fromJson(bodyString, classType);
     }
 }

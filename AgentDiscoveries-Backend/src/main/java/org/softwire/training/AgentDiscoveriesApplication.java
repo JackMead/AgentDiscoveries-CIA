@@ -35,7 +35,9 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject LocationsRoutes locationsRoutes;
     @Inject RegionsRoutes regionsRoutes;
     @Inject LocationStatusReportsRoutes locationStatusReportsRoutes;
+    @Inject RegionSummaryReportsRoutes regionSummaryReportsRoutes;
     @Inject UsersRoutes usersRoutes;
+    @Inject ExecutiveSummaryRoutes executiveSummaryRoutes;
 
     @Override
     public void run() {
@@ -52,14 +54,22 @@ public class AgentDiscoveriesApplication implements Runnable {
         path("/v1", () -> {
             // Endpoint used to get an authorisation token
             post("/token", tokenRoutes::createToken, responseTransformer);
+            post("/makeuser", usersRoutes::createEntity, responseTransformer);
 
             path("/api", () -> {
                 before("/*", tokenRoutes::validateToken);
 
+                path("/legacy", () -> {
+                    before("/*", (request, response) -> response.type("text/plain"));
+                    path("/executivesummary", this::executivesSummaryGroup);
+                });
+
                 path("/agents", this::agentsRouteGroup);
                 path("/regions", this::regionsRouteGroup);
-                path("/reports/locationstatuses", this::reportsRouteGroup);
+                path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
+                path("/reports/regionsummaries", () -> reportsRouteGroup(regionSummaryReportsRoutes));
                 setupBasicEntityCrudRoutes("/locations", locationsRoutes);
+                get("/locations", locationsRoutes::readEntities, responseTransformer);
                 setupBasicEntityCrudRoutes("/users", usersRoutes);
 
                 // API endpoint to initiate shutdown
@@ -83,23 +93,28 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("/healthcheck", (req, res) -> "Server started okay!");
     }
 
+    private void executivesSummaryGroup() {
+        post("/generate", executiveSummaryRoutes::readExecutiveSummary);
+    }
+
     private void agentsRouteGroup() {
         post("", agentsRoutes::createAgent, responseTransformer);
+        get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> agentsRoutes.deleteAgent(req, res, idParamAsInt(req)), responseTransformer);
     }
 
     private void regionsRouteGroup() {
         post("", regionsRoutes::createRegion, responseTransformer);
-        get("/:id", (req, res) -> regionsRoutes.readRegion(req, res, idParamAsInt(req)));
+        get("/:id", (req, res) -> regionsRoutes.readRegion(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> regionsRoutes.deleteRegion(req, res, idParamAsInt(req)), responseTransformer);
     }
 
-    private void reportsRouteGroup() {
-        post("", locationStatusReportsRoutes::createReport, responseTransformer);
-        get("/:id", (req, res) -> locationStatusReportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
-        delete("/:id", (req, res) -> locationStatusReportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);
-        get("", locationStatusReportsRoutes::searchReports, responseTransformer);
+    private void reportsRouteGroup(ReportsRoutesBase<?, ?, ? > reportsRoutes) {
+        post("", reportsRoutes::createReport, responseTransformer);
+        get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
+        delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);
+        get("", reportsRoutes::searchReports, responseTransformer);
     }
 
     private void setupBasicEntityCrudRoutes(String path, EntityCRUDRoutes entityCRUDRoutes) {
