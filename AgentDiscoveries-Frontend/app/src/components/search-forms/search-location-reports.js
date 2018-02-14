@@ -25,7 +25,7 @@ export default class LocationReportsSearch extends React.Component {
         return (
             <div className="col-md-12">
                 <Form onChange={this.onSubmit.bind(this)}>
-                    <h3>API Location Report Search</h3>
+                    <h3>Search Location Reports</h3>
 
                     <Message message={this.state.message} />
 

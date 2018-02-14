@@ -24,7 +24,7 @@ export default class RegionSummariesSearch extends React.Component {
         return (
             <div className="col-md-12">
                 <Form onChange={this.onSubmit.bind(this)}>
-                    <h3>API Region Report Search</h3>
+                    <h3>Search Region Summaries</h3>
 
                     <Message message={this.state.message} />
                     

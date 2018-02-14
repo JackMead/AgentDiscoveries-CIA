@@ -25,7 +25,7 @@ export default class RegionSummarySubmit extends React.Component {
         return (
             <div className="col-md-12">
                 <Form onSubmit={this.onSubmit.bind(this)}>
-                    <h3>Submit Summary</h3>
+                    <h3>Submit Region Summary</h3>
 
                     <Message message={this.state.message} />
                     
