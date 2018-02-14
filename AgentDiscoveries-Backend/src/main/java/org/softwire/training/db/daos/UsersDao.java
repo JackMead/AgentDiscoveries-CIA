@@ -2,9 +2,11 @@ package org.softwire.training.db.daos;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
+import org.softwire.training.models.Agent;
 import org.softwire.training.models.User;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class UsersDao {
@@ -32,10 +34,11 @@ public class UsersDao {
 
     public int addUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO user (username, hashed_password) " +
-                    "VALUES (:username, :hashed_password)")
+            return handle.createUpdate("INSERT INTO user (username, hashed_password, call_sign) " +
+                    "VALUES (:username, :hashed_password, :call_sign)")
                     .bind("username", user.getUsername())
                     .bind("hashed_password", user.getHashedPassword())
+                    .bind("call_sign", user.getCallSign())
                     .executeAndReturnGeneratedKeys("user_id")
                     .mapTo(Integer.class)
                     .findOnly();
@@ -52,11 +55,21 @@ public class UsersDao {
 
     public int updateUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password " +
+            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password , call_sign = :call_sign" +
                     "WHERE user_id = :user_id")
                     .bind("user_id", user.getUserId())
                     .bind("username", user.getUsername())
                     .bind("password", user.getHashedPassword())
+                    .bind("call_sign", user.getCallSign())
+                    .execute();
+        }
+    }
+
+    public int updateUserCallSign(String currentCallSign, String newCallSign) {
+        try (Handle handle = jdbi.open()) {
+            return handle.createUpdate("UPDATE user SET call_sign = :call_sign WHERE call_sign = :current_call_sign")
+                    .bind("call_sign", newCallSign)
+                    .bind("current_call_sign", currentCallSign)
                     .execute();
         }
     }

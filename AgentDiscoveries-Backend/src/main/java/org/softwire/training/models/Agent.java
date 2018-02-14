@@ -10,6 +10,18 @@ public class Agent {
     private int rank;
     private String callSign;
 
+    public Agent() {
+
+    }
+
+    public Agent(String firstName, String lastName, LocalDate dateOfBirth, int rank, String callSign) {
+        this.firstName=firstName;
+        this.lastName=lastName;
+        this.dateOfBirth=dateOfBirth;
+        this.rank=rank;
+        this.callSign=callSign;
+    }
+
     public String getFirstName() {
         return firstName;
     }

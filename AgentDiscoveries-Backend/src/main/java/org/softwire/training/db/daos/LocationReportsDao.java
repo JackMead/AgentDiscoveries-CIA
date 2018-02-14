@@ -29,9 +29,9 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
     public int addReport(LocationStatusReport report) {
         try (Handle handle = jdbi.open()) {
             return handle.createUpdate("INSERT INTO agent_location_report (location_id, agent_id, status, report_time, report_body)" +
-                    " VALUES (:location_id, :agent_id, :status, :report_time, :report_body)")
+                    " VALUES (:location_id, :call_sign, :status, :report_time, :report_body)")
                     .bind("location_id", report.getLocationId())
-                    .bind("agent_id", report.getAgentId())
+                    .bind("call_sign", report.getCallSign())
                     .bind("status", report.getStatus())
                     .bind("report_time", report.getReportTime())
                     .bind("report_body", report.getReportBody())

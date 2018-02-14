@@ -98,10 +98,8 @@ public class AgentDiscoveriesApplication implements Runnable {
     }
 
     private void agentsRouteGroup() {
-        post("", agentsRoutes::createAgent, responseTransformer);
-        get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
-        put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
-        delete("/:id", (req, res) -> agentsRoutes.deleteAgent(req, res, idParamAsInt(req)), responseTransformer);
+        get("/:callSign", (req, res) -> agentsRoutes.readAgent(req, res, req.params("callSign")), responseTransformer);
+        put("/:callSign", (req, res) -> agentsRoutes.updateAgent(req, res, req.params("callSign")), responseTransformer);
     }
 
     private void regionsRouteGroup() {

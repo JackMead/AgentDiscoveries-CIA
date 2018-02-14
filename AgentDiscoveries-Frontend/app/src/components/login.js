@@ -34,14 +34,13 @@ export default class Login extends React.Component {
                     <FormGroup>
                         <FormControl type="text" inputRef={username => this.username = username} placeholder="enter your username" />
                         <FormControl type="password" inputRef={password => this.password = password} placeholder="enter password" />
+                        <FormControl type="password" inputRef={callSign => this.callSign = callSign} placeholder="enter call sign if registering" />
                         <Button type="submit">Login</Button><Button onClick={this.handleRegister.bind(this)}>Register</Button>
                     </FormGroup>
                 </Form>
             </div>
         );
     }
-
-    
 
     handleLogIn(e) {
         e.preventDefault();
@@ -59,7 +58,7 @@ export default class Login extends React.Component {
                 if (!response.errorCode){
                     this.setState({authenticationMessage: "Signed in successfully"});
                 } else {
-                    this.setState({authenticationMessage: "response.message"});
+                    this.setState({authenticationMessage: response.message});
                 }
             })
             .catch(err => {
@@ -72,7 +71,8 @@ export default class Login extends React.Component {
         e.preventDefault();
         var requestBodyJSON = {
             "username": this.username.value,
-            "password": this.password.value
+            "password": this.password.value,
+            "callSign": this.callSign.value
         }
 
         this.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)

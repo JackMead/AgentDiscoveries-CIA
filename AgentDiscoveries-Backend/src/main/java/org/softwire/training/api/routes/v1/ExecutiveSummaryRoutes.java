@@ -102,7 +102,7 @@ public class ExecutiveSummaryRoutes {
     }
 
     private String generateIndividualLocationStatusReportString(LocationStatusReportWithTimeZone locationStatusReport) {
-        Agent agent = agentsDao.getAgent(locationStatusReport.getAgentId()).get();
+        Agent agent = agentsDao.getAgent(locationStatusReport.getCallSign()).get();
         Location location = locationsDao.getLocation(locationStatusReport.getLocationId()).get();
         StringBuilder individualLocationStatusReportBuilder = new StringBuilder();
         individualLocationStatusReportBuilder.append("Submitted by: ");

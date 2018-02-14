@@ -12,10 +12,10 @@ public class AgentsDao {
     @Inject
     Jdbi jdbi;
 
-    public Optional<Agent> getAgent(int agentId) {
+    public Optional<Agent> getAgent(String callSign) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM agent WHERE agent_id = :agent_id")
-                    .bind("agent_id", agentId)
+            return handle.createQuery("SELECT * FROM agent WHERE call_sign = :call_sign")
+                    .bind("call_sign", callSign)
                     .mapToBean(Agent.class)
                     .findFirst();
         }
@@ -30,26 +30,24 @@ public class AgentsDao {
                     .bind("date_of_birth", agent.getDateOfBirth())
                     .bind("rank", agent.getRank())
                     .bind("call_sign", agent.getCallSign())
-                    .executeAndReturnGeneratedKeys("agent_id")
-                    .mapTo(Integer.class)
-                    .findOnly();
-        }
-    }
-
-    public int deleteAgent(int agent_id) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM agent WHERE agent_id = :agent_id")
-                    .bind("agent_id", agent_id)
                     .execute();
         }
     }
 
-    public int updateAgent(Agent agent) {
+    public int deleteAgent(String callSign) {
+        try (Handle handle = jdbi.open()) {
+            return handle.createUpdate("DELETE FROM agent WHERE call_sign = :call_sign")
+                    .bind("call_sign", callSign)
+                    .execute();
+        }
+    }
+
+    public int updateAgent(Agent agent, String currentCallSign) {
         try (Handle handle = jdbi.open()) {
             return handle.createUpdate("UPDATE agent SET first_name = :first_name, last_name = :last_name, " +
                     "date_of_birth = :date_of_birth, rank = :rank, call_sign = :call_sign " +
-                    "WHERE agent_id = :agent_id")
-                    .bind("agent_id", agent.getAgentId())
+                    "WHERE call_sign = :current_call_sign")
+                    .bind("current_call_sign", currentCallSign)
                     .bind("first_name", agent.getFirstName())
                     .bind("last_name", agent.getLastName())
                     .bind("date_of_birth", agent.getDateOfBirth())

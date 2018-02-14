@@ -44,7 +44,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         @Override
         public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) throws FailedRequestException {
             // First check agent exists
-            if (!agentsDao.getAgent(apiModel.getAgentId()).isPresent()) {
+            if (!agentsDao.getAgent(apiModel.getCallSign()).isPresent()) {
                 throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Agent does not exist");
             }
 
@@ -60,7 +60,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
                         .toLocalDateTime();
 
                 LocationStatusReport model = new LocationStatusReport();
-                model.setAgentId(apiModel.getAgentId());
+                model.setCallSign(apiModel.getCallSign());
                 model.setLocationId(apiModel.getLocationId());
                 model.setStatus(apiModel.getStatus());
                 model.setReportTime(dateTimeInReportLocation);
@@ -91,7 +91,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             TimeZone locationTimeZone = TimeZone.getTimeZone(timeZone);
 
             apiModel.setReportId(model.getReportId());
-            apiModel.setAgentId(model.getAgentId());
+            apiModel.setCallsign(model.getCallSign());
             apiModel.setLocationId(model.getLocationId());
             apiModel.setStatus(model.getStatus());
             apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone.toZoneId()));

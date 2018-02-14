@@ -5,18 +5,23 @@ import org.softwire.training.api.core.PasswordHasher;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.UserApiModel;
+import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.UsersDao;
+import org.softwire.training.models.Agent;
 import org.softwire.training.models.User;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
     private final UsersDao usersDao;
     private final PasswordHasher passwordHasher;
+    @Inject
+    AgentsDao agentsDao;
 
     @Inject
     public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher) {
@@ -32,8 +37,9 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.getCallSign());
 
+        agentsDao.addAgent(new Agent("","", LocalDate.now(),0,user.getCallSign()));
         int newUserId = usersDao.addUser(user);
 
         // Set the userId and for security remove the password
@@ -61,7 +67,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.getCallSign());
         user.setUserId(id);
 
         usersDao.updateUser(user);
