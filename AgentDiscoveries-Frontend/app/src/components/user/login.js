@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-
+import { Message } from "../message"
 import * as UserUtils from "./user-utilities"
 import * as CRUD from "../crud"
 
@@ -15,7 +15,7 @@ export default class Login extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            authenticationMessage: "",
+            authenticationMessage: {"message": "", "type": "error"}
         }
     }
     render() {
@@ -24,7 +24,7 @@ export default class Login extends React.Component {
                 <div>{this.state.isLoggedInMessage}</div>
                 <Form onSubmit={this.handleLogIn.bind(this)}>
                     <h3>Sign in</h3>
-                    <ControlLabel bsStyle="warning">{this.state.authenticationMessage}</ControlLabel> 
+                    <Message message={this.state.authenticationMessage} />
                     <FormGroup>
                         <FormControl type="text" inputRef={username => this.state.username = username} placeholder="enter your username" />
                         <FormControl type="password" inputRef={password => this.state.password = password} placeholder="enter password" />
@@ -55,11 +55,11 @@ export default class Login extends React.Component {
             .then(response => {
                 let token = response.token;
                 window.localStorage.setItem("Token", token);
-                this.setState({authenticationMessage: `Signed in successfully as ${this.state.username.value}`});
+                this.setState({authenticationMessage: {"message": `Signed in successfully as ${this.state.username.value}`, "type": "info"} });
                 location.reload();
             })
             .catch(err => {
-                this.setState({ authenticationMessage: err });
+                this.setState({ authenticationMessage: {"message": err, "type": "error"} });
             });
     }
 
@@ -79,11 +79,11 @@ export default class Login extends React.Component {
                 }
             })
             .then(response => {
-                this.setState({authenticationMessage: `User ${response.username} created successfully`});
+                this.setState({authenticationMessage: {"message": `User ${response.username} created successfully`}, "type": "info"} );
                 console.log(response);
             })
             .catch(err => {
-                this.setState({ authenticationMessage: err });
+                this.setState({ authenticationMessage: {"message": err, "type": "error"} });
             });
     }
 };
