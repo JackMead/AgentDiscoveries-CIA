@@ -18,10 +18,8 @@ export default class Login extends React.Component {
             authenticationMessage: { "message": "", "type": "info"}
         }
     }
+
     render() {
-        if (UserUtils.isLoggedIn()) {
-            window.location.hash = "#/search/location";
-        }
         return (
             <div>
                 <Form onSubmit={this.handleLogIn.bind(this)}>
@@ -37,6 +35,12 @@ export default class Login extends React.Component {
         );
     }
 
+    componentWillMount() {
+        if (UserUtils.isLoggedIn()) {
+            window.location.hash = "#/search/location";
+        }
+    }
+    
     handleLogIn(e) {
         e.preventDefault();
         var requestBodyJSON = {
