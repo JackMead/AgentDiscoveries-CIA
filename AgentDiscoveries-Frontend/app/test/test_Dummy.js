@@ -9,6 +9,6 @@ describe("<App/>", ()=>{
     "use strict";
     it('renders one <div> tag', ()=>{
         const wrapper = shallow(<App />);
-        expect(wrapper.find('div')).to.not.have.length(0)
+        expect(wrapper.find('div')).to.have.length(0)
     });
 });
