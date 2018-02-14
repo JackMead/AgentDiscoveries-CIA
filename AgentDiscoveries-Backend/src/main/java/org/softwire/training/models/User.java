@@ -5,14 +5,16 @@ public class User {
     private int userId;
     private String username;
     private String hashedPassword;
+    private String callSign;
 
     public User() {
 
     }
 
-    public User(String username, String hashedPassword) {
+    public User(String username, String hashedPassword, String callSign) {
         this.username = username;
         this.hashedPassword = hashedPassword;
+        this.callSign = callSign;
     }
 
     public int getUserId() {
@@ -38,4 +40,8 @@ public class User {
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
+
+    public String getCallSign(){return callSign;}
+
+    public void setCallSign(String callSign){this.callSign=callSign;}
 }
