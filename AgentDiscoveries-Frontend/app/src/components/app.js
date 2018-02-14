@@ -17,10 +17,6 @@ import RegionSummarySubmit from "./submit-forms/submit-region-summary";
 
 export default class App extends React.Component {
 
-    constructor() {
-        super();
-    }
-
     render() {
         return (
             <React.Fragment>
@@ -36,10 +32,5 @@ export default class App extends React.Component {
                 </Router>
             </React.Fragment>
         );
-    }
-
-    handleLogOut(e) {
-        e.preventDefault();
-        logOut();
     }
 };

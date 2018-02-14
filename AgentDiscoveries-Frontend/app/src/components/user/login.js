@@ -21,7 +21,6 @@ export default class Login extends React.Component {
     render() {
         return (
             <div>
-                <div>{this.state.isLoggedInMessage}</div>
                 <Form onSubmit={this.handleLogIn.bind(this)}>
                     <h3>Sign in</h3>
                     <Message message={this.state.authenticationMessage} />
@@ -80,7 +79,6 @@ export default class Login extends React.Component {
             })
             .then(response => {
                 this.setState({authenticationMessage: {"message": `User ${response.username} created successfully`}, "type": "info"} );
-                console.log(response);
             })
             .catch(err => {
                 this.setState({ authenticationMessage: {"message": err, "type": "error"} });
