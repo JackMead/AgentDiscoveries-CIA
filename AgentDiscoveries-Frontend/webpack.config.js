@@ -1,6 +1,7 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin("styles.css");
 const outputPath = path.join(__dirname, 'target', 'classes', 'META-INF', 'resources', 'public');
@@ -30,6 +31,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './app/static/index.html'
         }),
+        new FaviconsWebpackPlugin('./app/static/agent.png'),
         extractSass
     ],
 

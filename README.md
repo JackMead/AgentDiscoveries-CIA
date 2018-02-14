@@ -66,5 +66,17 @@ Configuration of type `Application`, the main class is
 
 # Unit Tests
 
+## Backend Tests
 To run the server side unit tests in intelliJ, right click on the `AgentDiscoveries-Backend/src/test/java` folder and then choose `Run 'All Tests'`.
-From the command line, use `mvn test`.
+From the command line, use `mvn test`. 
+
+Unit test files should be named ending with "Test.java", whilst end-to-end tests should have a "IT.java" name ending (since the system views them as integration tests).
+
+## Frontend Tests
+To run the front-end unit tests, from command line navigate to `AgentDiscoveries-Frontend` and then run npm test.
+
+## End-to-End Tests
+In order to run the End-To-End tests locally the webserver needs to be active, so ensure you first run the application as described in the "Run" section.
+
+Once the server is online, you can run the tests from the command line using `mvn verify -P integration-test`. This can be run from either the root directory or AgentDiscoveries-Backend. It will target the address `http://localhost:8080` by default.
+If you need to run the tests on another address for any reason, use the command `mvn verify -P integration-test -Dtarget.address="http://foo.bar"` with the relevant address.
