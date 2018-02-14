@@ -6,7 +6,6 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import * as CRUD from "./crud"
 
 export default class Login extends React.Component {
 
@@ -103,9 +102,14 @@ export default class Login extends React.Component {
         });
     }
 
-    updateIsLoggedIn() {
+    isUserLoggedIn(){
         let token = window.localStorage.getItem("Token");
-        var isLoggedIn = token && true;
+        return token && true;
+    }
+
+    updateIsLoggedIn() {
+
+        var isLoggedIn = this.isUserLoggedIn();
 
         this.setState({ isLoggedIn: isLoggedIn,
             isLoggedInMessage: this.getIsLoggedInMessage(isLoggedIn) });
