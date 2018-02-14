@@ -30,7 +30,12 @@ export function getResultsAsynch(apiAddress, searchForm) {
 
     var response = searchAPI(apiAddress, searchParams)
         .then(response => {
-            return response.json();
+            if (response.status === 200) {
+                let results = response.json()
+                return results;
+            } else {
+                throw "API server could not process the request";
+            }
         })
 
     return response;

@@ -7,13 +7,15 @@ import {
     ControlLabel
 } from "react-bootstrap";
 import { handleSubmit } from "./submit-utilities"
+import { Message } from "../message"
 
 export default class LocationReportSubmit extends React.Component {
 
     constructor() {
         super();
         this.state = {
-            "submitForm": {}
+            "submitForm": {},
+            "message": { "message": "", "type": "danger" },
         }
     }
 
@@ -22,6 +24,8 @@ export default class LocationReportSubmit extends React.Component {
             <div className="col-md-12">
                 <Form onSubmit={this.onSubmit.bind(this)}>
                     <h3>Submit Location Report</h3>
+
+                    <Message message={this.state.message} />
 
                     <FormGroup>
                         <ControlLabel>Agent ID</ControlLabel>
@@ -55,5 +59,11 @@ export default class LocationReportSubmit extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         handleSubmit('/v1/api/reports/locationstatuses', this.state.submitForm)
+            .then(response => {
+                this.setState({ "message": { "message": "Report sent", "type": "info" } })
+            })
+            .catch(error => {
+                this.setState({ "message": { "message": error, "type": "danger" } });
+            })
     }
 };

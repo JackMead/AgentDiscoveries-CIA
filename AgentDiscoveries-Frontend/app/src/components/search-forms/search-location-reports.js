@@ -6,9 +6,9 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
+import { Message } from "../message"
 
 import * as SearchUtils from "./search-utilities"
-
 import SearchResult from "./search-result"
 export default class LocationReportsSearch extends React.Component {
 
@@ -16,6 +16,7 @@ export default class LocationReportsSearch extends React.Component {
         super();
         this.state = {
             "searchForm": {},
+            "message": {"message": "", "type": "danger"},
             "results": []
         }
     }
@@ -25,6 +26,8 @@ export default class LocationReportsSearch extends React.Component {
             <div className="col-md-12">
                 <Form onChange={this.onSubmit.bind(this)}>
                     <h3>API Location Report Search</h3>
+
+                    <Message message={this.state.message} />
 
                     <FormGroup>
                         <ControlLabel>Agent ID</ControlLabel>
@@ -40,8 +43,7 @@ export default class LocationReportsSearch extends React.Component {
                         <ControlLabel>From</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}
-                            defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}
-                        />
+                            defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}/>
 
                         <ControlLabel>To</ControlLabel>
                         <FormControl type="datetime-local"
@@ -58,6 +60,10 @@ export default class LocationReportsSearch extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         SearchUtils.getResultsAsynch('/v1/api/reports/locationstatuses', this.state.searchForm)
-            .then(results => this.setState({ "results": results }))
+            .then(results => {
+                console.log(results),
+                this.setState({ "results": results, "message": { "message": "", "type": "danger" } })
+            })
+            .catch(error => this.setState({ "message": {"message": error, "type": "danger"}}))
     }
 };

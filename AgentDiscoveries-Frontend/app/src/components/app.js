@@ -5,9 +5,10 @@ import {
     Switch
 } from 'react-router-dom';
 
-import Login from "./login";
+import Login from "./user/login";
 import Home from "./home";
 import Page from "./page";
+
 import LocationReportSearch from "./search-forms/search-location-reports";
 import RegionSummarySearch from "./search-forms/search-region-summaries";
 import LocationReportSubmit from "./submit-forms/submit-location-report";
