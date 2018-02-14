@@ -31,12 +31,11 @@ export function getResultsAsynch(apiAddress, searchForm) {
     var response = searchAPI(apiAddress, searchParams)
         .then(response => {
             console.log(response)
-            if (response.ok) {
-                results = response.json()
-                console.log(results)
+            if (response.status === 200) {
+                let results = response.json()
                 return results;
             } else {
-                throw "API server did not process the request";
+                throw "API server could not process the request";
             }
         })
 

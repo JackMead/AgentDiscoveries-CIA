@@ -1,5 +1,6 @@
 $background-color: rgb(238, 238, 238);
 $text-color: rgb(12, 12, 12);
+$error-color: rgb(202, 34, 34);
 
 body {
   background-color: $background-color;
@@ -15,4 +16,8 @@ body {
 .log-out-button {
   position: relative;
   float: right;
+}
+
+.error-message {
+  color: $error-color;
 }

@@ -6,6 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
+import {ErrorMessage} from "../error-message"
 
 import * as SearchUtils from "./search-utilities"
 import SearchResult from "./search-result"
@@ -20,6 +21,10 @@ export default class RegionSummariesSearch extends React.Component {
         }
     }
 
+    componentWillMount() {
+        this.setState({ "errorMessage": "" })
+    }
+
     render() {
         return (
             <div className="col-md-12">
@@ -27,8 +32,9 @@ export default class RegionSummariesSearch extends React.Component {
                     <h3>API Region Report Search</h3>
 
                     <FormGroup>
-                        <p className="text-warn">{this.state.errorMessage}</p>
                         
+                        <ErrorMessage errorMessage={this.state.errorMessage} />
+
                         <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text"
                             inputRef={regionId => this.state.searchForm.regionId = regionId}
@@ -42,8 +48,7 @@ export default class RegionSummariesSearch extends React.Component {
                         <ControlLabel>From</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}
-                            defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}
-                        />
+                            defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}/>
 
                         <ControlLabel>To</ControlLabel>
                         <FormControl type="datetime-local"
@@ -60,7 +65,10 @@ export default class RegionSummariesSearch extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.state.searchForm)
-            .then(results => this.setState({ "results": results, "errorMessage": "" }))
+            .then(results => {
+                console.log(results),
+                this.setState({ "results": results, "errorMessage": "" })
+            })
             .catch(error => this.setState({ "errorMessage": error }))
     }
 };
