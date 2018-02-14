@@ -1,6 +1,5 @@
 
 export function makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
-    console.log(requestBodyJSON)
     var requestBody = JSON.stringify(requestBodyJSON);
     return fetch(apiAddress, {
         method: 'POST',

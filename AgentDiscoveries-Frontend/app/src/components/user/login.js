@@ -55,7 +55,7 @@ export default class Login extends React.Component {
                 let token = response.token;
                 window.localStorage.setItem("Token", token);
                 this.setState({authenticationMessage: {"message": `Signed in successfully as ${this.state.username.value}`, "type": "info"} });
-                location.reload();
+                window.dispatchEvent(new CustomEvent('login'));
             })
             .catch(err => {
                 this.setState({ authenticationMessage: {"message": err, "type": "error"} });

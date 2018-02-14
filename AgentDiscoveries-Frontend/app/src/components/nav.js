@@ -18,6 +18,15 @@ export default class NavigationBar extends React.Component {
         this.setAuthenticationElement();
     }
 
+    componentDidMount() {
+        console.log("this")
+        window.addEventListener("login", this.setAuthenticationElement.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("login", this.setAuthenticationElement.bind(this));
+    }
+
     render() {
         return (
             <Navbar inverse collapseOnSelect>
@@ -52,10 +61,11 @@ export default class NavigationBar extends React.Component {
     }
 
     handleLogOut(e) {
+        console.log(localStorage.getItem("Token"))
         e.preventDefault();
         logOut();
-        window.location.hash = "#/login"
-        this.setAuthenticationElement();
+        window.dispatchEvent(new CustomEvent('login'));
+        window.location.hash = "#/login";
     }
 
     setAuthenticationElement() {
@@ -72,6 +82,6 @@ export default class NavigationBar extends React.Component {
                 </NavItem>
             )
         }
-        this.setState({"authenticationElement": authenticationElement})
+        this.setState({"authenticationElement": authenticationElement});
     }
 };
