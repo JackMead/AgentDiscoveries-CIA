@@ -15,7 +15,7 @@ export default class LocationReportSubmit extends React.Component {
         super();
         this.state = {
             "submitForm": {},
-            "message": { "message": "", "type": "error" },
+            "message": { "message": "", "type": "danger" },
         }
     }
 
@@ -63,7 +63,7 @@ export default class LocationReportSubmit extends React.Component {
                 this.setState({ "message": { "message": "Report sent", "type": "info" } })
             })
             .catch(error => {
-                this.setState({ "message": { "message": error, "type": "error" } });
+                this.setState({ "message": { "message": error, "type": "danger" } });
             })
     }
 };

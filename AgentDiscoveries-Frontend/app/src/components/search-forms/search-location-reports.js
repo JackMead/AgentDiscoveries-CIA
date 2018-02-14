@@ -16,7 +16,7 @@ export default class LocationReportsSearch extends React.Component {
         super();
         this.state = {
             "searchForm": {},
-            "message": {"message": "", "type": "error"},
+            "message": {"message": "", "type": "danger"},
             "results": []
         }
     }
@@ -62,8 +62,8 @@ export default class LocationReportsSearch extends React.Component {
         SearchUtils.getResultsAsynch('/v1/api/reports/locationstatuses', this.state.searchForm)
             .then(results => {
                 console.log(results),
-                this.setState({ "results": results, "message": { "message": "", "type": "error" } })
+                this.setState({ "results": results, "message": { "message": "", "type": "danger" } })
             })
-            .catch(error => this.setState({ "message": {"message": error, "type": "error"}}))
+            .catch(error => this.setState({ "message": {"message": error, "type": "danger"}}))
     }
 };

@@ -16,7 +16,7 @@ export default class RegionSummariesSearch extends React.Component {
         super();
         this.state = {
             "searchForm": {},
-            "message": { "message": "", "type": "error" },
+            "message": { "message": "", "type": "danger" },
             "results": []
         }
     }
@@ -61,8 +61,8 @@ export default class RegionSummariesSearch extends React.Component {
         e.preventDefault();
         SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.state.searchForm)
             .then(results => {
-                this.setState({ "results": results, "message": { "message": "", "type": "error" } })
+                this.setState({ "results": results, "message": { "message": "", "type": "danger" } })
             })
-            .catch(error => this.setState({ "message": { "message": error, "type": "error" } }))
+            .catch(error => this.setState({ "message": { "message": error, "type": "danger" } }))
     }
 };

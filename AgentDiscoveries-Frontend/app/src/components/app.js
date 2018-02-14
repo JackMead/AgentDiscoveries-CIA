@@ -6,7 +6,6 @@ import {
 } from 'react-router-dom';
 
 import Login from "./user/login";
-import { isLoggedIn, logOut } from "./user/user-utilities"
 import Home from "./home";
 import Page from "./page";
 

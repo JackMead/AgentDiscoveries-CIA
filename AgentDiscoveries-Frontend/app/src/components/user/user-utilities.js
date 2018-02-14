@@ -11,14 +11,9 @@ export function makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
     });
 }
 
-export function getIsLoggedInMessage() {
-    var isLoggedInMessage = isLoggedIn() ? "User is logged in" : "User is not logged in";
-    return isLoggedInMessage;
-}
-
 export function isLoggedIn() {
     let token = window.localStorage.getItem("Token");
-    return token && true;
+    return !!token;
 }
 
 export function logOut() {

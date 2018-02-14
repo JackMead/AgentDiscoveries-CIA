@@ -15,7 +15,7 @@ export default class Login extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            authenticationMessage: {"message": "", "type": "error"}
+            authenticationMessage: {"message": "", "type": "danger"}
         }
     }
     render() {
@@ -27,7 +27,7 @@ export default class Login extends React.Component {
                     <FormGroup>
                         <FormControl type="text" inputRef={username => this.state.username = username} placeholder="enter your username" />
                         <FormControl type="password" inputRef={password => this.state.password = password} placeholder="enter password" />
-                        <Button type="submit">Login</Button><Button onClick={this.handleRegister.bind(this)}>Register</Button>
+                        <Button id="login-submit" type="submit">Login</Button><Button onClick={this.handleRegister.bind(this)}>Register</Button>
                     </FormGroup>
                 </Form>
             </div>
@@ -55,10 +55,9 @@ export default class Login extends React.Component {
                 let token = response.token;
                 window.localStorage.setItem("Token", token);
                 this.setState({authenticationMessage: {"message": `Signed in successfully as ${this.state.username.value}`, "type": "info"} });
-                window.dispatchEvent(new CustomEvent('login'));
             })
             .catch(err => {
-                this.setState({ authenticationMessage: {"message": err, "type": "error"} });
+                this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
             });
     }
 
@@ -72,16 +71,17 @@ export default class Login extends React.Component {
         UserUtils.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
             .then(response => {
                 if (response.ok) {
-                    return response.json();
+                    document.getElementById("login-submit").click();
+                    return response.json()
                 } else {
                     throw "Registration error. Try using a different username";
                 }
             })
             .then(response => {
-                this.setState({authenticationMessage: {"message": `User ${response.username} created successfully`}, "type": "info"} );
+                this.setState({ authenticationMessage: { "message": `User ${response.username} created successfully`}, "type": "info"} );
             })
             .catch(err => {
-                this.setState({ authenticationMessage: {"message": err, "type": "error"} });
+                this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
             });
     }
 };

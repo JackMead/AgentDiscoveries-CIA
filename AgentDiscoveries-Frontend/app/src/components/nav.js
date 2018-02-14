@@ -10,16 +10,12 @@ import {Link} from "react-router-dom";
 import { logOut, isLoggedIn } from "./user/user-utilities"
 
 export default class NavigationBar extends React.Component {
-    constructor() {
-        super();
-    }
 
     componentWillMount() {
         this.setAuthenticationElement();
     }
 
     componentDidMount() {
-        console.log("this")
         window.addEventListener("login", this.setAuthenticationElement.bind(this));
     }
 
@@ -61,7 +57,6 @@ export default class NavigationBar extends React.Component {
     }
 
     handleLogOut(e) {
-        console.log(localStorage.getItem("Token"))
         e.preventDefault();
         logOut();
         window.dispatchEvent(new CustomEvent('login'));
