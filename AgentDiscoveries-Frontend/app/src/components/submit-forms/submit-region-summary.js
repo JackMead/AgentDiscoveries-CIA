@@ -34,25 +34,27 @@ export default class RegionSummarySubmit extends React.Component {
                         <FormControl type="text" required
                             inputRef={userId => this.state.submitForm.userId = userId}
                             placeholder="enter user ID" />
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text" required
                             inputRef={regionId => this.state.submitForm.regionId = regionId}
                             placeholder="enter region ID" />
-                        
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type="text" required
                             inputRef={status => this.state.submitForm.status = status}
                             placeholder="enter status"/>
-                        
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Summary</ControlLabel>
                         <FormControl type="text" required
                             componentClass="textarea" rows={6}
                             inputRef={reportBody => this.state.submitForm.reportBody = reportBody}
                             placeholder="write region summary" />
-
-                        <Button type="submit">Submit</Button>
                     </FormGroup>
+                    <Button type="submit">Submit</Button>
                 </Form>
             </div>
         );

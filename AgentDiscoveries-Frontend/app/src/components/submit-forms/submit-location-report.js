@@ -32,25 +32,27 @@ export default class LocationReportSubmit extends React.Component {
                         <FormControl type="text" required
                             inputRef={agentId => this.state.submitForm.agentId = agentId}
                             placeholder="enter agent ID" />
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Location ID</ControlLabel>
                         <FormControl type="text" required
                             inputRef={locationId => this.state.submitForm.locationId = locationId}
                             placeholder="enter location ID" />
-                        
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type="text" required
                             inputRef={status => this.state.submitForm.status = status}
                             placeholder="enter status"/>
-                        
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Report</ControlLabel>
                         <FormControl type="text" required
                             componentClass="textarea" rows={6}
                             inputRef={reportBody => this.state.submitForm.reportBody = reportBody}
                             placeholder="write report" />
-
-                        <Button type="submit">Submit</Button>
                     </FormGroup>
+                    <Button type="submit">Submit</Button>
                 </Form>
             </div>
         );

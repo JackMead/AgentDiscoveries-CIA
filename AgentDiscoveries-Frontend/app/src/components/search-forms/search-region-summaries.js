@@ -26,25 +26,27 @@ export default class RegionSummariesSearch extends React.Component {
                 <Form onChange={this.onSubmit.bind(this)}>
                     <h3>API Region Report Search</h3>
 
+                    <Message message={this.state.message} />
+                    
                     <FormGroup>
-                        
-                        <Message message={this.state.message} />
-
                         <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text"
                             inputRef={regionId => this.state.searchForm.regionId = regionId}
                             placeholder="enter region ID" />
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>User ID</ControlLabel>
                         <FormControl type="text"
                             inputRef={userId => this.state.searchForm.userId = userId}
                             placeholder="enter region ID" />
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>From</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}
                             defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}/>
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>To</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={toTime => this.state.searchForm.toTime = toTime}

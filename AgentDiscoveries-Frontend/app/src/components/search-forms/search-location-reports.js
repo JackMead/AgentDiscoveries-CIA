@@ -34,17 +34,20 @@ export default class LocationReportsSearch extends React.Component {
                         <FormControl type="text"
                             inputRef={agentId => this.state.searchForm.agentId = agentId}
                             placeholder="enter agent ID" />
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Location ID</ControlLabel>
                         <FormControl type="text"
                             inputRef={locationId => this.state.searchForm.locationId = locationId}
                             placeholder="enter location ID" />
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>From</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}
                             defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}/>
-
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>To</ControlLabel>
                         <FormControl type="datetime-local"
                             inputRef={toTime => this.state.searchForm.toTime = toTime}
