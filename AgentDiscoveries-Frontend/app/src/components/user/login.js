@@ -15,10 +15,13 @@ export default class Login extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            authenticationMessage: { "message": UserUtils.isLoggedIn() ? "Already logged in" : "", "type": "info"}
+            authenticationMessage: { "message": "", "type": "info"}
         }
     }
     render() {
+        if (UserUtils.isLoggedIn()) {
+            window.location.hash = "#/search/location";
+        }
         return (
             <div>
                 <Form onSubmit={this.handleLogIn.bind(this)}>
@@ -33,8 +36,6 @@ export default class Login extends React.Component {
             </div>
         );
     }
-
-    
 
     handleLogIn(e) {
         e.preventDefault();
@@ -54,8 +55,8 @@ export default class Login extends React.Component {
             .then(response => {
                 let token = response.token;
                 window.localStorage.setItem("Token", token);
-                this.setState({authenticationMessage: {"message": `Signed in successfully as ${this.state.username.value}`, "type": "info"} });
                 window.dispatchEvent(new Event("login"));
+                window.location.hash = "#/";
             })
             .catch(err => {
                 this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
@@ -72,14 +73,11 @@ export default class Login extends React.Component {
         UserUtils.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
             .then(response => {
                 if (response.ok) {
-                    document.getElementById("login-submit").click();
+                    document.getElementById("login-submit").click(); // log in with the newly registered account
                     return response.json()
                 } else {
                     throw "Registration error. Try using a different username";
                 }
-            })
-            .then(response => {
-                this.setState({ authenticationMessage: { "message": `User ${response.username} created successfully`}, "type": "info"} );
             })
             .catch(err => {
                 this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
