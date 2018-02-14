@@ -15,7 +15,7 @@ export default class Login extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            authenticationMessage: {"message": "", "type": "danger"}
+            authenticationMessage: { "message": UserUtils.isLoggedIn() ? "Already logged in" : "", "type": "info"}
         }
     }
     render() {
@@ -55,6 +55,7 @@ export default class Login extends React.Component {
                 let token = response.token;
                 window.localStorage.setItem("Token", token);
                 this.setState({authenticationMessage: {"message": `Signed in successfully as ${this.state.username.value}`, "type": "info"} });
+                window.dispatchEvent(new Event("login"));
             })
             .catch(err => {
                 this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
