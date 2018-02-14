@@ -65,7 +65,7 @@ export default class NavigationBar extends React.Component {
         e.preventDefault();
         logOut();
         window.dispatchEvent(new CustomEvent('login'));
-        window.location.hash = "#/login";
+        window.location.hash = "#/";
     }
 
     setAuthenticationElement() {
