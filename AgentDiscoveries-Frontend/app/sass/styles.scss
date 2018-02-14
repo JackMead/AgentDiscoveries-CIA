@@ -1,6 +1,7 @@
 $background-color: rgb(238, 238, 238);
 $text-color: rgb(12, 12, 12);
 $error-color: rgb(202, 34, 34);
+$info-color: rgb(147, 147, 240);
 
 body {
   background-color: $background-color;
@@ -20,4 +21,8 @@ body {
 
 .error-message {
   color: $error-color;
+}
+
+.info-message {
+  color: $info-color;
 }

@@ -6,6 +6,8 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
+
+import { Message } from "../message"
 import { handleSubmit } from "./submit-utilities"
 
 export default class RegionSummarySubmit extends React.Component {
@@ -13,9 +15,11 @@ export default class RegionSummarySubmit extends React.Component {
     constructor() {
         super();
         this.state = {
-            "submitForm": {}
+            "submitForm": {},
+            "message": {"message": "", "type": "error"},
         }
     }
+
 
     render() {
         return (
@@ -23,6 +27,8 @@ export default class RegionSummarySubmit extends React.Component {
                 <Form onSubmit={this.onSubmit.bind(this)}>
                     <h3>Submit Summary</h3>
 
+                    <Message message={this.state.message} />
+                    
                     <FormGroup>
                         <ControlLabel>User ID</ControlLabel>
                         <FormControl type="text" required
@@ -55,5 +61,11 @@ export default class RegionSummarySubmit extends React.Component {
     onSubmit(e) {
         e.preventDefault();
         handleSubmit('/v1/api/reports/regionsummaries', this.state.submitForm)
+            .then(response => {
+                this.setState({"message": {"message": "Report sent", "type": "info"}})
+            })
+            .catch(error => {
+                this.setState({"message": {"message": error, "type": "error"}});
+            })
     }
 };

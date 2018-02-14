@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import { ErrorMessage } from "../error-message"
+import { Message } from "../message"
 
 import * as SearchUtils from "./search-utilities"
 import SearchResult from "./search-result"
@@ -16,13 +16,9 @@ export default class LocationReportsSearch extends React.Component {
         super();
         this.state = {
             "searchForm": {},
-            "errorMessage": {},
+            "message": {"message": "", "type": "error"},
             "results": []
         }
-    }
-
-    componentWillMount() {
-        this.setState({"errorMessage": ""})
     }
 
     render() {
@@ -31,7 +27,7 @@ export default class LocationReportsSearch extends React.Component {
                 <Form onChange={this.onSubmit.bind(this)}>
                     <h3>API Location Report Search</h3>
 
-                    <ErrorMessage errorMessage={this.state.errorMessage} />
+                    <Message message={this.state.message} />
 
                     <FormGroup>
                         <ControlLabel>Agent ID</ControlLabel>
@@ -66,7 +62,8 @@ export default class LocationReportsSearch extends React.Component {
         SearchUtils.getResultsAsynch('/v1/api/reports/locationstatuses', this.state.searchForm)
             .then(results => {
                 console.log(results),
-                this.setState({ "results": results, "errorMessage": "" })})
-            .catch(error => this.setState({ "errorMessage": error }))
+                this.setState({ "results": results, "message": { "message": "", "type": "error" } })
+            })
+            .catch(error => this.setState({ "message": {"message": error, "type": "error"}}))
     }
 };

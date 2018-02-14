@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import {ErrorMessage} from "../error-message"
+import {Message} from "../message"
 
 import * as SearchUtils from "./search-utilities"
 import SearchResult from "./search-result"
@@ -16,15 +16,10 @@ export default class RegionSummariesSearch extends React.Component {
         super();
         this.state = {
             "searchForm": {},
-            "errorMessage": "",
+            "message": { "message": "", "type": "error" },
             "results": []
         }
     }
-
-    componentWillMount() {
-        this.setState({ "errorMessage": "" })
-    }
-
     render() {
         return (
             <div className="col-md-12">
@@ -33,7 +28,7 @@ export default class RegionSummariesSearch extends React.Component {
 
                     <FormGroup>
                         
-                        <ErrorMessage errorMessage={this.state.errorMessage} />
+                        <Message message={this.state.message} />
 
                         <ControlLabel>Region ID</ControlLabel>
                         <FormControl type="text"
@@ -66,9 +61,8 @@ export default class RegionSummariesSearch extends React.Component {
         e.preventDefault();
         SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.state.searchForm)
             .then(results => {
-                console.log(results),
-                this.setState({ "results": results, "errorMessage": "" })
+                this.setState({ "results": results, "message": { "message": "", "type": "error" } })
             })
-            .catch(error => this.setState({ "errorMessage": error }))
+            .catch(error => this.setState({ "message": { "message": error, "type": "error" } }))
     }
 };

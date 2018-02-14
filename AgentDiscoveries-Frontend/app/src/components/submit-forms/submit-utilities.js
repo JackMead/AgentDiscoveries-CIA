@@ -10,7 +10,11 @@ export function handleSubmit(apiAddress, submitForm) {
 
     var requestBody = JSON.stringify(bodyJSON);
 
-    createAPI(apiAddress, requestBody)
-        .then(response => response.json())
-        .then(response => console.log(response))
+    return createAPI(apiAddress, requestBody)
+        .then(response => {
+            console.log(response);
+            if (response.status !== 201) {
+                throw("Server could not create the report. Make sure all fields are correct")
+            }
+        })
 }
