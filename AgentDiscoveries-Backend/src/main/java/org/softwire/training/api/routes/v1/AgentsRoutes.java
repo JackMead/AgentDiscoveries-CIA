@@ -34,11 +34,22 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if(id!=userId){
+            //TODO allow admin control
+            throw new FailedRequestException(ErrorCode.INVALID_CREDENTIALS, "User not authorised");
+        }
         return agentsDao.getAgentByUserId(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if(id!=userId){
+            //TODO allow admin control
+            throw new FailedRequestException(ErrorCode.INVALID_CREDENTIALS, "User not authorised");
+        }
+
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
         agent.setUserId(id);
         agentsDao.updateAgent(agent);

@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import Login from "./login";
+import Profile from "./profile";
 import LocationReportSearch from "./search-forms/search-location-reports";
 import RegionSummarySearch from "./search-forms/search-region-summaries";
 import LocationReportSubmit from "./submit-forms/submit-location-report";
@@ -35,6 +36,9 @@ export default class Test extends React.Component {
                                 <RegionSummarySearch />
                             </Tab>
                         </Tabs>
+                    </Tab>
+                    <Tab title="Profile" eventKey={4}>
+                        <Profile />
                     </Tab>
                 </Tabs>
             </div>
