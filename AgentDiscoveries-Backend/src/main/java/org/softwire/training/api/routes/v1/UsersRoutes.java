@@ -12,6 +12,8 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
+import javax.swing.text.html.parser.Entity;
+import java.util.List;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
@@ -51,6 +53,11 @@ public class UsersRoutes implements EntityCRUDRoutes {
         return usersDao.getUser(id)
                 .map(this::mapModelToApiModel)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "User not found"));
+    }
+
+    @Override
+    public List<User> readEntities(Request req, Response res){
+        return usersDao.getUsers();
     }
 
     @Override

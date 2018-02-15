@@ -51,6 +51,10 @@ public class RegionsRoutes {
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Region not found"));
     }
 
+    public List<Region> readRegions(Request req, Response res) {
+        return regionsDao.getRegions();
+    }
+
     public Object deleteRegion(Request req, Response res, int id) throws FailedRequestException {
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Region delete request should have no body");

@@ -9,6 +9,7 @@ import {
 
 import { Message } from "../message"
 import { handleReportSubmit } from "./submit-utilities"
+import { searchAPI } from "../crud"
 
 export default class RegionSummarySubmit extends React.Component {
 
@@ -16,8 +17,18 @@ export default class RegionSummarySubmit extends React.Component {
         super();
         this.state = {
             "submitForm": {},
+            "regions": [],
+            "users": [],
             "message": {"message": "", "type": "danger"},
         }
+
+        searchAPI("v1/api/regions", "")
+            .then(response => response.json())
+            .then(response => this.setState({ "regions": response }))
+
+        searchAPI("v1/api/users", "")
+            .then(response => response.json())
+            .then(response => this.setState({ "users": response }))
     }
 
 
@@ -31,15 +42,19 @@ export default class RegionSummarySubmit extends React.Component {
                     
                     <FormGroup>
                         <ControlLabel>User ID</ControlLabel>
-                        <FormControl type="text" required
+                        <FormControl componentClass="select" required
                             inputRef={userId => this.state.submitForm.userId = userId}
-                            placeholder="enter user ID" />
+                            placeholder="enter user ID">
+                            {this.getUserOptions.bind(this)()}
+                        </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Region ID</ControlLabel>
-                        <FormControl type="text" required
+                        <FormControl componentClass="select" required
                             inputRef={regionId => this.state.submitForm.regionId = regionId}
-                            placeholder="enter region ID" />
+                            placeholder="enter region ID">
+                            {this.getRegionOptions.bind(this)()}
+                        </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
@@ -69,5 +84,19 @@ export default class RegionSummarySubmit extends React.Component {
             .catch(error => {
                 this.setState({"message": {"message": error, "type": "danger"}});
             })
+    }
+
+    getUserOptions() {
+        return Object.keys(this.state.users).map(key => {
+            let user = this.state.users[key];
+            return <option key={user.userId} value={user.userId}>{user.username}</option>
+        })
+    }
+
+    getRegionOptions() {
+        return Object.keys(this.state.regions).map(key => {
+            let region = this.state.regions[key];
+            return <option key={region.regionId} value={region.regionId}>{region.name} (id: {region.regionId})</option>
+        })
     }
 };

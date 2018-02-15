@@ -5,6 +5,7 @@ import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.models.Agent;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 public class AgentsDao {
@@ -18,6 +19,14 @@ public class AgentsDao {
                     .bind("agent_id", agentId)
                     .mapToBean(Agent.class)
                     .findFirst();
+        }
+    }
+
+    public List<Agent> getAgents() {
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("SELECT * FROM agent")
+                    .mapToBean(Agent.class)
+                    .list();
         }
     }
 

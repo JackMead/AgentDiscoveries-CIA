@@ -5,6 +5,7 @@ import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.models.Region;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 public class RegionsDao {
@@ -26,6 +27,14 @@ public class RegionsDao {
                                 .list());
                         return r;
                     });
+        }
+    }
+
+    public List<Region> getRegions() {
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("SELECT * FROM region")
+                    .mapToBean(Region.class)
+                    .list();
         }
     }
 

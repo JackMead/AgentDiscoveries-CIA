@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { handleReportSubmit } from "./submit-utilities"
 import { Message } from "../message"
+import { searchAPI } from "../crud"
 
 export default class LocationReportSubmit extends React.Component {
 
@@ -15,9 +16,20 @@ export default class LocationReportSubmit extends React.Component {
         super();
         this.state = {
             "submitForm": {},
+            "locations": [],
+            "agents": [],
             "message": { "message": "", "type": "danger" },
         }
+
+        searchAPI("v1/api/agents", "")
+            .then(response => response.json())
+            .then(response => this.setState({ "agents": response }))
+
+        searchAPI("v1/api/locations", "")
+            .then(response => response.json())
+            .then(response => this.setState({ "locations": response }))
     }
+
 
     render() {
         return (
@@ -28,16 +40,20 @@ export default class LocationReportSubmit extends React.Component {
                     <Message message={this.state.message} />
 
                     <FormGroup>
-                        <ControlLabel>Agent ID</ControlLabel>
-                        <FormControl type="text" required
-                            inputRef={agentId => this.state.submitForm.agentId = agentId}
-                            placeholder="enter agent ID" />
+                        <ControlLabel>Agent</ControlLabel>
+                        <FormControl componentClass="select" required
+                            inputRef={agent => this.state.submitForm.agentId = agent}
+                            placeholder="enter agent ID">
+                            {this.getAgentOptions.bind(this)()}
+                        </FormControl>
                     </FormGroup>
                     <FormGroup>
-                        <ControlLabel>Location ID</ControlLabel>
-                        <FormControl type="text" required
-                            inputRef={locationId => this.state.submitForm.locationId = locationId}
-                            placeholder="enter location ID" />
+                        <ControlLabel>Location</ControlLabel>
+                        <FormControl componentClass="select" required
+                            inputRef={location => this.state.submitForm.locationId = location}
+                            placeholder="enter location ID">
+                            {this.getLocationOptions.bind(this)()}
+                        </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
@@ -67,5 +83,19 @@ export default class LocationReportSubmit extends React.Component {
             .catch(error => {
                 this.setState({ "message": { "message": error, "type": "danger" } });
             })
+    }
+
+    getLocationOptions() {
+        return Object.keys(this.state.locations).map(key => {
+            let location = this.state.locations[key];
+            return <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>
+        })
+    }
+
+    getAgentOptions() {
+        return Object.keys(this.state.agents).map(key => {
+            let agent = this.state.agents[key];
+            return <option key={agent.agentId} value={agent.agentId}>{agent.firstName} {agent.lastName} ({agent.callSign})</option>
+        })
     }
 };

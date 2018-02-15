@@ -10,6 +10,7 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class AgentsRoutes {
 
@@ -39,6 +40,10 @@ public class AgentsRoutes {
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
         return agentsDao.getAgent(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
+    }
+
+    public List<Agent> readAgents(Request req, Response res) {
+        return agentsDao.getAgents();
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {

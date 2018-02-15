@@ -5,6 +5,7 @@ import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.models.User;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Optional;
 
 public class UsersDao {
@@ -27,6 +28,14 @@ public class UsersDao {
                     .bind("userId", userId)
                     .mapToBean(User.class)
                     .findFirst();
+        }
+    }
+
+    public List<User> getUsers() {
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("SELECT * FROM user")
+                    .mapToBean(User.class)
+                    .list();
         }
     }
 

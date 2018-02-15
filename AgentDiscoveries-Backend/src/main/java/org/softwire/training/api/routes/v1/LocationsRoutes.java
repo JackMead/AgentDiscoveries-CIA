@@ -20,6 +20,8 @@ public class LocationsRoutes implements EntityCRUDRoutes {
 
     private final LocationsDao locationsDao;
     private final RegionsDao regionsDao;
+    private Request req;
+    private Response res;
 
     @Inject
     public LocationsRoutes(LocationsDao locationsDao, RegionsDao regionsDao) {
@@ -53,6 +55,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Location not found"));
     }
 
+    @Override
     public List<Location> readEntities(Request req, Response res){
         return locationsDao.getLocations();
     }
