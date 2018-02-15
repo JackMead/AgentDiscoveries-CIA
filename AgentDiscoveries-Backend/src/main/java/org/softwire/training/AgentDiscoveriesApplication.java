@@ -98,8 +98,8 @@ public class AgentDiscoveriesApplication implements Runnable {
     }
 
     private void agentsRouteGroup() {
-        get("/:callSign", (req, res) -> agentsRoutes.readAgent(req, res, req.params("callSign")), responseTransformer);
-        put("/:callSign", (req, res) -> agentsRoutes.updateAgent(req, res, req.params("callSign")), responseTransformer);
+        get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
+        put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
     }
 
     private void regionsRouteGroup() {
