@@ -16,7 +16,6 @@ export function createAPI(apiAddress, requestBodyJSON) {
 export function searchAPI(apiAddress, searchString) {
     var tokenHeader = getTokenHeader();
     var requestAddress = `${apiAddress}?${searchString}`;
-    console.log(requestAddress)
     return fetch(requestAddress, {
         method: 'GET',
         headers: {

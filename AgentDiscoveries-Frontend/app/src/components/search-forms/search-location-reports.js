@@ -64,7 +64,6 @@ export default class LocationReportsSearch extends React.Component {
         e.preventDefault();
         SearchUtils.getResultsAsynch('/v1/api/reports/locationstatuses', this.state.searchForm)
             .then(results => {
-                console.log(results),
                 this.setState({ "results": results, "message": { "message": "", "type": "danger" } })
             })
             .catch(error => this.setState({ "message": {"message": error, "type": "danger"}}))
