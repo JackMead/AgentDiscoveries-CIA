@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class Agent {
 
+    private int userId;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
@@ -14,12 +15,13 @@ public class Agent {
 
     }
 
-    public Agent(String firstName, String lastName, LocalDate dateOfBirth, int rank, String callSign) {
-        this.firstName=firstName;
-        this.lastName=lastName;
-        this.dateOfBirth=dateOfBirth;
-        this.rank=rank;
-        this.callSign=callSign;
+    public Agent(int userId, String firstName, String lastName, LocalDate dateOfBirth, int rank, String callSign) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.rank = rank;
+        this.callSign = callSign;
     }
 
     public String getFirstName() {
@@ -61,4 +63,8 @@ public class Agent {
     public void setCallSign(String callSign) {
         this.callSign = callSign;
     }
+
+    public int getUserId(){return userId;}
+
+    public void setUserId(int userId){this.userId=userId;}
 }

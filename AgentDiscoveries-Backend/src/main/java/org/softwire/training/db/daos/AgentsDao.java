@@ -21,11 +21,21 @@ public class AgentsDao {
         }
     }
 
+    public Optional<Agent> getAgentByUserId(int userId) {
+        try (Handle handle = jdbi.open()) {
+            return handle.createQuery("SELECT * FROM agent WHERE user_id = :user_id")
+                    .bind("user_id", userId)
+                    .mapToBean(Agent.class)
+                    .findFirst();
+        }
+    }
+
     public int addAgent(Agent agent) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO agent (first_name, last_name, date_of_birth, rank, call_sign)" +
-                    " VALUES (:first_name, :last_name, :date_of_birth, :rank, :call_sign)")
+            return handle.createUpdate("INSERT INTO agent (user_id, first_name, last_name, date_of_birth, rank, call_sign)" +
+                    " VALUES (:user_id, :first_name, :last_name, :date_of_birth, :rank, :call_sign)")
                     .bind("first_name", agent.getFirstName())
+                    .bind("user_id", agent.getUserId())
                     .bind("last_name", agent.getLastName())
                     .bind("date_of_birth", agent.getDateOfBirth())
                     .bind("rank", agent.getRank())
@@ -34,20 +44,20 @@ public class AgentsDao {
         }
     }
 
-    public int deleteAgent(String callSign) {
+    public int deleteAgent(int userId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM agent WHERE call_sign = :call_sign")
-                    .bind("call_sign", callSign)
+            return handle.createUpdate("DELETE FROM agent WHERE user_id = :user_id")
+                    .bind("user_id", userId)
                     .execute();
         }
     }
 
-    public int updateAgent(Agent agent, String currentCallSign) {
+    public int updateAgent(Agent agent) {
         try (Handle handle = jdbi.open()) {
             return handle.createUpdate("UPDATE agent SET first_name = :first_name, last_name = :last_name, " +
                     "date_of_birth = :date_of_birth, rank = :rank, call_sign = :call_sign " +
-                    "WHERE call_sign = :current_call_sign")
-                    .bind("current_call_sign", currentCallSign)
+                    "WHERE user_id = :user_id")
+                    .bind("user_id", agent.getUserId())
                     .bind("first_name", agent.getFirstName())
                     .bind("last_name", agent.getLastName())
                     .bind("date_of_birth", agent.getDateOfBirth())

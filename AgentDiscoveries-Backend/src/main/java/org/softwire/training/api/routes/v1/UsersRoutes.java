@@ -19,13 +19,13 @@ import java.time.LocalDate;
 public class UsersRoutes implements EntityCRUDRoutes {
 
     private final UsersDao usersDao;
+    private final AgentsDao agentsDao;
     private final PasswordHasher passwordHasher;
-    @Inject
-    AgentsDao agentsDao;
 
     @Inject
-    public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher) {
+    public UsersRoutes(UsersDao usersDao, AgentsDao agentsDao, PasswordHasher passwordHasher) {
         this.usersDao = usersDao;
+        this.agentsDao = agentsDao;
         this.passwordHasher = passwordHasher;
     }
 
@@ -37,10 +37,16 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.getCallSign());
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
 
-        agentsDao.addAgent(new Agent("","", LocalDate.now(),0,user.getCallSign()));
         int newUserId = usersDao.addUser(user);
+
+        //TODO creating new user should have choice to also create a corresponding agent.
+        //And should provide the relevant parameters
+        if(true){
+            Agent agent = new Agent(newUserId,"","",null,0,"");
+            agentsDao.addAgent(agent);
+        }
 
         // Set the userId and for security remove the password
         userApiModel.setPassword(null);
@@ -67,7 +73,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.getCallSign());
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
 
         usersDao.updateUser(user);

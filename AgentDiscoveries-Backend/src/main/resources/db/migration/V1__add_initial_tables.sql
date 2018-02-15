@@ -1,20 +1,20 @@
-create table agent (
-  `first_name` varchar(30),
-  `last_name` varchar(100),
-  `date_of_birth` date,
-  `rank` int NOT NULL,
-  `call_sign` varchar(20) NOT NULL,
-  PRIMARY KEY `call_sign` (`call_sign`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 create table user (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
   `hashed_password` char(128) NOT NULL,
-  `call_sign` varchar(20) NOT NULL,
   PRIMARY KEY `user_id` (`user_id`),
-  FOREIGN KEY `call_sign` (`call_sign`) REFERENCES agent(`call_sign`) ON UPDATE CASCADE ON DELETE CASCADE ,
   UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+create table agent (
+    `call_sign` varchar(20) NOT NULL,
+    `user_id` int NOT NULL,
+  `first_name` varchar(30),
+  `last_name` varchar(100),
+  `date_of_birth` date,
+  `rank` int NOT NULL,
+  PRIMARY KEY `call_sign` (`call_sign`),
+  FOREIGN KEY `user_id` (`user_id`) REFERENCES user(`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table location (

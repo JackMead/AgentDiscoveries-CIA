@@ -24,20 +24,17 @@ public class AgentsRoutesTest {
     private AgentsDao agentsDao = mock(AgentsDao.class);
     private AgentsRoutes agentsRoutes = new AgentsRoutes(agentsDao);
     private Response response = mock(Response.class);
-/*
+
     @Test
     public void readAgentFailsIfAgentDoesNotExist() {
         // Given
-        int randomId = 1553;
-        String callSign = "aCallSign";
-        when(Request.params("user_id")).thenReturn(randomId);
-
-        when(agentsDao.getAgent(callSign)).thenReturn(Optional.empty());
+        int userId = 15;
+        when(agentsDao.getAgentByUserId(userId)).thenReturn(Optional.empty());
 
         // When
         FailedRequestException exception = assertThrows(
                 FailedRequestException.class,
-                () -> agentsRoutes.readAgent(mock(Request.class), response, randomId));
+                () -> agentsRoutes.readAgent(mock(Request.class), response, userId));
 
         // Then
         assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
@@ -46,15 +43,14 @@ public class AgentsRoutesTest {
     @Test
     public void readAgentReturnsAgentIfAgentExists() throws FailedRequestException {
         // Given
-        String callSign = "aCallSign";
+        int agentId = 15;
         Agent mockAgent = mock(Agent.class);
-        when(agentsDao.getAgent(callSign)).thenReturn(Optional.of(mockAgent));
+        when(agentsDao.getAgentByUserId(agentId)).thenReturn(Optional.of(mockAgent));
 
         // When
-        Agent returnedAgent = agentsRoutes.readAgent(mock(Request.class), response, callSign);
+        Agent returnedAgent = agentsRoutes.readAgent(mock(Request.class), response, agentId);
 
         // Then
         assertEquals(mockAgent, returnedAgent);
     }
-    */
 }
