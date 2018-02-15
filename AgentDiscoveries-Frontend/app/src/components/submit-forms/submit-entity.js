@@ -65,7 +65,10 @@ export default class EntitySubmit extends React.Component {
 
     onSelectApi(e) {
         e.preventDefault();
-        this.setState({ "form": this.apiForms[this.state.api.value]})
+        this.setState({
+            "form": this.apiForms[this.state.api.value],
+            "message": { "message": "", "type": "danger" }
+        })
     }
 
     onSubmit(e) {
