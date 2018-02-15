@@ -1,7 +1,7 @@
 create table agent (
   `first_name` varchar(30),
   `last_name` varchar(100),
-  `date_of_birth` date NOT NULL,
+  `date_of_birth` date,
   `rank` int NOT NULL,
   `call_sign` varchar(20) NOT NULL,
   PRIMARY KEY `call_sign` (`call_sign`)

@@ -39,12 +39,12 @@ export default class Profile extends React.Component {
 
     handleProfileUpdate(e) {
         e.preventDefault();
-        var randomId = 1;
+        var defaultAgentId = 0;
         var requestBodyJSON = {
-            "callsign": this.codename.value
+            "callSign": this.codename.value,
         };
 
-        updateAPI("/v1/api/agents", randomId, JSON.stringify(requestBodyJSON))
+        updateAPI("/v1/api/agents", defaultAgentId, JSON.stringify(requestBodyJSON))
     }
 
     isUserLoggedIn() {
