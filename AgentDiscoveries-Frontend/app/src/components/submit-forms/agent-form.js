@@ -45,7 +45,7 @@ export class CreateAgent extends React.Component {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Rank</ControlLabel>
-                        <FormControl type="text" required
+                        <FormControl type="number" required
                             inputRef={rank => this.state.submitForm.rank = rank}
                             placeholder="enter rank (numeric)" />
                     </FormGroup>

@@ -33,7 +33,7 @@ export default class LocationReportSubmit extends React.Component {
 
     render() {
         return (
-            <div className="col-md-12">
+            <div className="col-md-8 col-md-offset-2">
                 <Form onSubmit={this.onSubmit.bind(this)}>
                     <h3>Submit Location Report</h3>
 
@@ -57,9 +57,9 @@ export default class LocationReportSubmit extends React.Component {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
-                        <FormControl type="text" required
+                        <FormControl type="number" required
                             inputRef={status => this.state.submitForm.status = status}
-                            placeholder="enter status"/>
+                            placeholder="enter status (numeric)"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Report</ControlLabel>

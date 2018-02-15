@@ -23,33 +23,32 @@ export default class LocationReportsSearch extends React.Component {
 
     render() {
         return (
-            <div className="col-md-12">
+            <div className="col-md-8 col-md-offset-2">
                 <Form onChange={this.onSubmit.bind(this)}>
                     <h3>Search Location Reports</h3>
 
                     <Message message={this.state.message} />
 
                     <FormGroup>
-                        <ControlLabel>Agent ID</ControlLabel>
-                        <FormControl type="text"
+                        <ControlLabel>Agent</ControlLabel>
+                        <FormControl type="number"
                             inputRef={agentId => this.state.searchForm.agentId = agentId}
                             placeholder="enter agent ID" />
                     </FormGroup>
                     <FormGroup>
-                        <ControlLabel>Location ID</ControlLabel>
-                        <FormControl type="text"
+                        <ControlLabel>Location</ControlLabel>
+                        <FormControl type="number"
                             inputRef={locationId => this.state.searchForm.locationId = locationId}
                             placeholder="enter location ID" />
                     </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>From</ControlLabel>
-                        <FormControl type="datetime-local"
+                    <FormGroup className="form-inline">
+                        <ControlLabel className="form-section-inline">From</ControlLabel>
+                        <FormControl className="form-section-inline" type="datetime-local"
                             inputRef={fromTime => this.state.searchForm.fromTime = fromTime}
                             defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}/>
-                    </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>To</ControlLabel>
-                        <FormControl type="datetime-local"
+
+                        <ControlLabel className="form-section-inline">To</ControlLabel>
+                        <FormControl className="form-section-inline" type="datetime-local"
                             inputRef={toTime => this.state.searchForm.toTime = toTime}
                             defaultValue={SearchUtils.getFormDate(new Date())} />
                     </FormGroup>

@@ -37,7 +37,7 @@ export default class EntitySubmit extends React.Component {
 
     render() {
         return (
-            <div className="col-md-12">
+            <div className="col-md-8 col-md-offset-2">
             
                 <Message message={this.state.message} />
 

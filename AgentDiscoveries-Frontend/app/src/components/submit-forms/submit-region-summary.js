@@ -34,14 +34,15 @@ export default class RegionSummarySubmit extends React.Component {
 
     render() {
         return (
-            <div className="col-md-12">
-                <Form onSubmit={this.onSubmit.bind(this)}>
+            <div>
+                <Form className="col-md-8 col-md-offset-2" onSubmit={this.onSubmit.bind(this)}>
+
                     <h3>Submit Region Summary</h3>
 
                     <Message message={this.state.message} />
                     
                     <FormGroup>
-                        <ControlLabel>User ID</ControlLabel>
+                        <ControlLabel>User</ControlLabel>
                         <FormControl componentClass="select" required
                             inputRef={userId => this.state.submitForm.userId = userId}
                             placeholder="enter user ID">
@@ -49,7 +50,7 @@ export default class RegionSummarySubmit extends React.Component {
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
-                        <ControlLabel>Region ID</ControlLabel>
+                        <ControlLabel>Region</ControlLabel>
                         <FormControl componentClass="select" required
                             inputRef={regionId => this.state.submitForm.regionId = regionId}
                             placeholder="enter region ID">
@@ -58,9 +59,9 @@ export default class RegionSummarySubmit extends React.Component {
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
-                        <FormControl type="text" required
+                        <FormControl type="number" required
                             inputRef={status => this.state.submitForm.status = status}
-                            placeholder="enter status"/>
+                            placeholder="enter status (numeric)"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Summary</ControlLabel>
