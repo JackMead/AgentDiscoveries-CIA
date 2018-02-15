@@ -6,9 +6,12 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import { handleSubmit } from "./submit-utilities"
+import { handleEntitySubmit } from "./submit-utilities"
 import { Message } from "../message"
 import { CreateLocation } from "./location-form"
+import { CreateRegion } from "./region-form"
+import { CreateAgent } from "./agent-form"
+
 export default class EntitySubmit extends React.Component {
 
     constructor() {
@@ -16,37 +19,39 @@ export default class EntitySubmit extends React.Component {
 
         this.state = {
             "submitForm": {},
-            "api": "location",
+            "api": "locations",
             "message": { "message": "", "type": "danger" },
         }
     }
 
     componentWillMount() {
-        console.log(this.state)
         this.apiForms = {
-            "location": <CreateLocation submitForm={this.state.submitForm} onSubmit={this.onSubmit} />,
-            "region": <div>Lol2</div>
-        } 
+            "locations": <CreateLocation submitForm={this.state.submitForm} onSubmit={this.onSubmit.bind(this)} />,
+            "regions": <CreateRegion submitForm={this.state.submitForm} onSubmit={this.onSubmit.bind(this)} />,
+            "agents": <CreateAgent submitForm={this.state.submitForm} onSubmit={this.onSubmit.bind(this)} />
+        }
         
         console.log(this.apiForms)
-
-        this.setState({"form": <div></div>})
+        this.setState({ "form": this.apiForms[this.state.api]})
     }
 
     render() {
         return (
             <div className="col-md-12">
+            
+                <Message message={this.state.message} />
+
                 <Form onChange={this.onSelectApi.bind(this)}>
                     <FormGroup>
                         <ControlLabel>Api</ControlLabel>
                         <FormControl componentClass="select"
                             placeholder="select"
                             inputRef={api => this.state.api = api}>
-                            <option />
                             {this.getFormApiOptions()}
                         </FormControl>
                     </FormGroup>
                 </Form>
+
                 {this.state.form}
             </div>
         );
@@ -61,11 +66,12 @@ export default class EntitySubmit extends React.Component {
     onSelectApi(e) {
         e.preventDefault();
         this.setState({ "form": this.apiForms[this.state.api.value]})
-        console.log(this.state.form)
     }
 
     onSubmit(e) {
         e.preventDefault();
-        console.log(this.state.submitForm)
+        handleEntitySubmit(`/v1/api/${this.state.api.value}`, this.state.submitForm)
+            .then(response => this.setState({ "message": { "message": "Entity created successfully", "type": "info" } }))
+            .catch(error => this.setState({ "message": { "message": error, "type": "danger" } }))
     }
 };

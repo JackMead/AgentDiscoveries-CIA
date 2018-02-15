@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 
 import { Message } from "../message"
-import { handleSubmit } from "./submit-utilities"
+import { handleReportSubmit } from "./submit-utilities"
 
 export default class RegionSummarySubmit extends React.Component {
 
@@ -62,7 +62,7 @@ export default class RegionSummarySubmit extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        handleSubmit('/v1/api/reports/regionsummaries', this.state.submitForm)
+        handleReportSubmit('/v1/api/reports/regionsummaries', this.state.submitForm)
             .then(response => {
                 this.setState({"message": {"message": "Report sent", "type": "info"}})
             })

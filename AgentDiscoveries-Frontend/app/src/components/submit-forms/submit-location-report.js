@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import { handleSubmit } from "./submit-utilities"
+import { handleReportSubmit } from "./submit-utilities"
 import { Message } from "../message"
 
 export default class LocationReportSubmit extends React.Component {
@@ -60,7 +60,7 @@ export default class LocationReportSubmit extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        handleSubmit('/v1/api/reports/locationstatuses', this.state.submitForm)
+        handleReportSubmit('/v1/api/reports/locationstatuses', this.state.submitForm)
             .then(response => {
                 this.setState({ "message": { "message": "Report sent", "type": "info" } })
             })
