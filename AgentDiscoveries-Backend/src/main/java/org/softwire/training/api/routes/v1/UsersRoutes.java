@@ -43,7 +43,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
         //TODO creating new user should have choice to also create a corresponding agent.
         //And should provide the relevant parameters
-        if(true){
+        if(false){
             Agent agent = new Agent(newUserId,"","",null,0,"");
             agentsDao.addAgent(agent);
         }
