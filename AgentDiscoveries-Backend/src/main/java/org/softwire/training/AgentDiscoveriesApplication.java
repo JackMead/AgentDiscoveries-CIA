@@ -64,6 +64,7 @@ public class AgentDiscoveriesApplication implements Runnable {
                     path("/executivesummary", this::executivesSummaryGroup);
                 });
 
+                path("/imageUpload", this::imageUploadGroup);
                 path("/agents", this::agentsRouteGroup);
                 path("/regions", this::regionsRouteGroup);
                 path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
@@ -95,6 +96,10 @@ public class AgentDiscoveriesApplication implements Runnable {
 
     private void executivesSummaryGroup() {
         post("/generate", executiveSummaryRoutes::readExecutiveSummary);
+    }
+
+    private void imageUploadGroup(){
+        put("/:id",(req, res) -> usersRoutes.updatePicture(req, res, idParamAsInt(req)), responseTransformer);
     }
 
     private void agentsRouteGroup() {

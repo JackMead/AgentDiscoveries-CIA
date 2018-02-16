@@ -30,11 +30,13 @@ public class AgentsRoutesTest {
         // Given
         int userId = 15;
         when(agentsDao.getAgentByUserId(userId)).thenReturn(Optional.empty());
+        Request mockRequest = mock(Request.class);
+        when(mockRequest.attribute("user_id")).thenReturn(userId);
 
         // When
         FailedRequestException exception = assertThrows(
                 FailedRequestException.class,
-                () -> agentsRoutes.readAgent(mock(Request.class), response, userId));
+                () -> agentsRoutes.readAgent(mockRequest, response, userId));
 
         // Then
         assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
@@ -43,12 +45,15 @@ public class AgentsRoutesTest {
     @Test
     public void readAgentReturnsAgentIfAgentExists() throws FailedRequestException {
         // Given
-        int agentId = 15;
+        int userId = 15;
         Agent mockAgent = mock(Agent.class);
-        when(agentsDao.getAgentByUserId(agentId)).thenReturn(Optional.of(mockAgent));
+        when(agentsDao.getAgentByUserId(userId)).thenReturn(Optional.of(mockAgent));
+
+        Request mockRequest = mock(Request.class);
+        when(mockRequest.attribute("user_id")).thenReturn(userId);
 
         // When
-        Agent returnedAgent = agentsRoutes.readAgent(mock(Request.class), response, agentId);
+        Agent returnedAgent = agentsRoutes.readAgent(mockRequest, response, userId);
 
         // Then
         assertEquals(mockAgent, returnedAgent);

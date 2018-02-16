@@ -5,18 +5,24 @@ import {
     FormControl,
     Button
 } from "react-bootstrap";
-import {updateAPI} from "./crud";
+import {updateAPI, updatePicture} from "./crud";
 
 export default class Profile extends React.Component {
 
     constructor() {
         super();
+        this.state = {
+            file: null
+        }
+        this.onChange = this.onChange.bind(this)
+        this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
     }
 
     render() {
         if (!this.isUserLoggedIn()) {
             return null;
         }
+        var profileSrc = window.localStorage.getItem("pictureFilepath");
         return (
             <div>
                 <Form onSubmit={this.handleAgentUpdate.bind(this)}>
@@ -31,9 +37,28 @@ export default class Profile extends React.Component {
                         <Button type="submit">Submit Changes</Button>
                     </FormGroup>
                 </Form>
-                <img src="./../userResources/android.png"/>
+                <img src={"/userResources/" + profileSrc}/>
+                <Form encType="multipart/form-data" onSubmit={this.handlePictureUpdate.bind(this)}>
+                    <FormGroup>
+                        <FormControl type="file" name="file" onChange={this.onChange}/>
+                        <Button type="submit">Update Picture</Button>
+                    </FormGroup>
+                </Form>
             </div>
         );
+    }
+
+    onChange(e) {
+        this.state.file= e.target.files[0];
+    }
+
+    handlePictureUpdate(e) {
+        e.preventDefault();
+        var userId = window.localStorage.getItem("UserId");
+        const formData = new FormData();
+        formData.append('file',this.state.file);
+
+        updatePicture("/v1/api/imageUpload", userId, formData);
     }
 
     handleAgentUpdate(e) {

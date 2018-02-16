@@ -1,11 +1,14 @@
 package org.softwire.training.models;
 
+import spark.utils.StringUtils;
+
 public class User {
 
     private int userId;
     private String username;
     private String hashedPassword;
-
+    private String pictureFilename;
+    private final String defaultPictureFilename = "default.jpg";
     public User() {
 
     }
@@ -38,4 +41,10 @@ public class User {
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
+
+    public String getPictureFilename(){
+        return StringUtils.isNotEmpty(pictureFilename)? pictureFilename: defaultPictureFilename;
+    }
+
+    public void setPictureFilename(String pictureFilename) { this.pictureFilename = pictureFilename; }
 }
