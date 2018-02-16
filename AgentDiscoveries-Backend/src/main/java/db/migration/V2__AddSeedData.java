@@ -32,7 +32,7 @@ public class V2__AddSeedData extends DaggerMigrationBase {
             int userId1 = usersDao.addUser(new User("testuser1", passwordHasher.hashPassword("badpass")));
             int userId2 = usersDao.addUser(new User("testuser2", passwordHasher.hashPassword("alsobadpass")));
             int userId3 = usersDao.addUser(new User("corrupt_user", "impossible_hash"));
-            agentsDao.addAgent(new Agent(userId1, "aName", "another", null, 0, "aCallSign"));
+            agentsDao.addAgent(new Agent(userId1, "aName", "another", LocalDate.now(), 0, "aCallSign"));
             agentsDao.addAgent(new Agent(userId2, "James", "Bond", LocalDate.now(), 0, "007"));
             agentsDao.addAgent(new Agent(userId3, "Dr", "X", LocalDate.of(2004,11,4), 0, "evil"));
         }

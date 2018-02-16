@@ -43,6 +43,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
         //TODO creating new user should have choice to also create a corresponding agent.
         //And should provide the relevant parameters
+        //Per Card https://trello.com/c/iDGPOsLq/47-admin-should-be-able-to-create-new-users-agents
         if(false){
             Agent agent = new Agent(newUserId,"","",null,0,"");
             agentsDao.addAgent(agent);

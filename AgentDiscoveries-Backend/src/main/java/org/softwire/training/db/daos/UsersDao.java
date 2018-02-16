@@ -2,12 +2,9 @@ package org.softwire.training.db.daos;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import org.softwire.training.models.Agent;
 import org.softwire.training.models.User;
 
 import javax.inject.Inject;
-import javax.swing.text.html.Option;
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class UsersDao {

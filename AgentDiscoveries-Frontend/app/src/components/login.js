@@ -101,20 +101,20 @@ export default class Login extends React.Component {
     }
 
     isUserLoggedIn(){
-        let token = window.localStorage.getItem("Token");
-        return token && true;
+        const token = window.localStorage.getItem("Token");
+        return !!token;
     }
 
     updateIsLoggedIn() {
 
-        var isLoggedIn = this.isUserLoggedIn();
+        let isLoggedIn = this.isUserLoggedIn();
         
         this.setState({ isLoggedIn: isLoggedIn,
             isLoggedInMessage: this.getIsLoggedInMessage(isLoggedIn) });
     }
 
     getIsLoggedInMessage(isLoggedIn) {
-        var isLoggedInMessage = isLoggedIn ? "User is logged in" : "User is not logged in";
+        let isLoggedInMessage = isLoggedIn ? "User is logged in" : "User is not logged in";
         return isLoggedInMessage;
     }
 
