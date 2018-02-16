@@ -30,10 +30,9 @@ export default class Profile extends React.Component {
                     <FormGroup>
                         <FormControl type="text" inputRef={callSign => this.callSign = callSign}
                                      placeholder="enter your call sign"/>
-                        <FormControl type="text" inputRef={firstName => this.firstName = firstName}
-                                     placeholder="enter your first name"/>
-                        <FormControl type="text" inputRef={lastName => this.lastName = lastName}
-                                     placeholder="enter your last name"/>
+                        <FormControl type="date" required
+                                     inputRef={dateOfBirth => this.dateOfBirth = dateOfBirth}
+                                     placeholder="enter date of birth"/>
                         <Button type="submit">Submit Changes</Button>
                     </FormGroup>
                 </Form>
@@ -49,14 +48,14 @@ export default class Profile extends React.Component {
     }
 
     onChange(e) {
-        this.state.file= e.target.files[0];
+        this.state.file = e.target.files[0];
     }
 
     handlePictureUpdate(e) {
         e.preventDefault();
         var userId = window.localStorage.getItem("UserId");
         const formData = new FormData();
-        formData.append('file',this.state.file);
+        formData.append('file', this.state.file);
 
         updatePicture("/v1/api/imageUpload", userId, formData);
     }
@@ -66,10 +65,7 @@ export default class Profile extends React.Component {
         var userId = window.localStorage.getItem("UserId");
         var requestBodyJSON = {
             "callSign": this.callSign.value,
-            "firstName": this.firstName.value,
-            "lastName": this.lastName.value,
-            "dateOfBirth": new Date().toISOString().split("T")[0],
-            "rank": 0
+            "dateOfBirth": this.dateOfBirth.value
         }
 
         updateAPI("/v1/api/agents", userId, JSON.stringify(requestBodyJSON));

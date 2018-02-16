@@ -84,19 +84,21 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
+        int userId = req.attribute("user_id");
 
-        if ((int) req.attribute("user_id") != id && (int) req.attribute("user_id") != 0) {
+        if (userId!= id && userId != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
 
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
-
-        //TODO get previous version of user, then replace fields rather than creating from scratch?
+        Optional<User> optionalUser = usersDao.getUser(userId);
+        if(!optionalUser.isPresent()){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
+        }
+        User oldUser = optionalUser.get();
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
-        if (StringUtils.isNotEmpty(req.params("pictureFilepath"))) {
-            user.setPictureFilename(req.params("pictureFilepath"));
-        }
+        user.setPictureFilename(oldUser.getPictureFilename());
         usersDao.updateUser(user);
 
         return mapModelToApiModel(user);
