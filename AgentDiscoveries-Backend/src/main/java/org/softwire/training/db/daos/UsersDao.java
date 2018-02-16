@@ -55,7 +55,7 @@ public class UsersDao {
 
     public int updateUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password , picture_filename = :picture_filename" +
+            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password , picture_filename = :picture_filename " +
                     "WHERE user_id = :user_id")
                     .bind("user_id", user.getUserId())
                     .bind("username", user.getUsername())

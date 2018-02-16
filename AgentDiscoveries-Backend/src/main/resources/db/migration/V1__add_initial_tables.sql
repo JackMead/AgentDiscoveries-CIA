@@ -2,7 +2,6 @@ create table user (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
   `hashed_password` char(128) NOT NULL,
-  `picture_filename` varchar(20),
   PRIMARY KEY `user_id` (`user_id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

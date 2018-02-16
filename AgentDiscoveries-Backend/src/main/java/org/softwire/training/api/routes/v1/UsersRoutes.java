@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 public class UsersRoutes implements EntityCRUDRoutes {
 
     private final UsersDao usersDao;
@@ -83,7 +85,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     @Override
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
 
-        if ((int) req.attribute("user_id") != id && (int) req.attribute("user_id")!= 0) {
+        if ((int) req.attribute("user_id") != id && (int) req.attribute("user_id") != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
 
@@ -101,33 +103,32 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     public UserApiModel updatePicture(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
-        int userId= req.attribute("user_id");
+        int userId = req.attribute("user_id");
 
-        if ( userId!= id && userId!= 0) {
+        if (userId != id && userId != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
 
-        //TODO All filename stuff
         req.raw().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/default"));
         Part filePart = req.raw().getPart("file");
         String fileName = filePart.getSubmittedFileName();
-        if(fileName.lastIndexOf(".")==-1){
+        if (fileName.lastIndexOf(".") == -1) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "File must have an extension");
         }
-        String extension = fileName.substring(fileName.lastIndexOf(".")+1);
-        String path = "AgentDiscoveries-Backend/src/main/resources/META-INF/resources/public/"+userId+"."+extension;
-        File tempFile =new File(path);
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String path = "AgentDiscoveries-Backend/src/main/resources/META-INF/resources/public/userResources/" + userId + "." + extension;
+        File tempFile = new File(path);
         tempFile.getParentFile().mkdirs();
         try (final InputStream in = filePart.getInputStream()) {
-            Files.copy(in, Paths.get(path));
+            Files.copy(in, Paths.get(path), REPLACE_EXISTING);
         }
         filePart.delete();
-        Optional<User> optionalUser= usersDao.getUser(userId);
-        if(!optionalUser.isPresent()) {
+        Optional<User> optionalUser = usersDao.getUser(userId);
+        if (!optionalUser.isPresent()) {
             throw new FailedRequestException(ErrorCode.NOT_FOUND, "user Id not found");
         }
         User user = optionalUser.get();
-        user.setPictureFilename(userId+"."+extension);
+        user.setPictureFilename(userId + "." + extension);
         usersDao.updateUser(user);
 
         return mapModelToApiModel(user);
