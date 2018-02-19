@@ -17,7 +17,7 @@ public class MessageProcessor {
         String messageString = message.getMessage();
         String encodedMessage = new String();
         for (int i = 0; i < messageString.length(); i++) {
-            encodedMessage += (char) (Math.floorMod((messageString.charAt(i) + codeWord.charAt(i % codeWord.length())), 128));
+            encodedMessage += (char) (Math.floorMod((messageString.charAt(i) + codeWord.charAt(i % codeWord.length()) - (int)'a'), 26) + (int)'a');
         }
 
         message.setMessage(encodedMessage);
@@ -28,7 +28,7 @@ public class MessageProcessor {
         String messageString = message.getMessage();
         String decodedMessageString = new String();
         for (int i = 0; i < messageString.length(); i++) {
-            decodedMessageString += (char) (Math.floorMod((messageString.charAt(i) - codeWord.charAt(i % codeWord.length())), 128));
+            decodedMessageString += (char) (Math.floorMod((messageString.charAt(i) - codeWord.charAt(i % codeWord.length()) - (int)'a'), 26) + (int)'a');
         }
 
         message.setMessage(decodedMessageString);

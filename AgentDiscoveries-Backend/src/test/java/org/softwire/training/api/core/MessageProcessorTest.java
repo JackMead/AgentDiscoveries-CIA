@@ -28,7 +28,7 @@ public class MessageProcessorTest {
 
     @Test
     public void EncryptsAndDecryptsMessageToStartingMessage() {
-        String startingMessageString = "Some test message! :)";
+        String startingMessageString = "hello";
         Message messageToModify = new Message(startingMessageString);
         messageProcessor.encrypt(messageToModify);
         messageProcessor.decrypt(messageToModify);
