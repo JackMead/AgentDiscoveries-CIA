@@ -5,6 +5,7 @@ public class User {
     private int userId;
     private String username;
     private String hashedPassword;
+    private boolean isAdmin;
 
     public User() {
 
@@ -38,4 +39,8 @@ public class User {
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
+
+    public boolean isAdmin(){return isAdmin;}
+
+    public void setAdmin(boolean isAdmin){this.isAdmin=isAdmin;}
 }

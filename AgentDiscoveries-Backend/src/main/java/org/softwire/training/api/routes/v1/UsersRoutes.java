@@ -48,6 +48,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
+        //TODO Check if admin
+
         return usersDao.getUser(id)
                 .map(this::mapModelToApiModel)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "User not found"));
@@ -57,6 +59,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
+        //TODO Check if admin
         if (userApiModel.getUserId() != id && userApiModel.getUserId() != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
@@ -80,6 +83,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public Object deleteEntity(Request req, Response res, int id) throws Exception {
+        //TODO Check if user or admin
+
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "User delete request should have no body");
         }

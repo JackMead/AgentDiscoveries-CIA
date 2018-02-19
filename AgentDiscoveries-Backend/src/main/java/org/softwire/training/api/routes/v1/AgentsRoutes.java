@@ -37,11 +37,15 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
+        //TODO Check if admin
+
         return agentsDao.getAgent(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
+        //TODO Check if admin
+
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
 
         if (agent.getAgentId() != id && agent.getAgentId() != 0) {
@@ -55,6 +59,8 @@ public class AgentsRoutes {
     }
 
     public Object deleteAgent(Request req, Response res, int id) throws Exception {
+        //TODO Check if admin
+
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Agent delete request should have no body");
         }
