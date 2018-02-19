@@ -38,7 +38,7 @@ export function handleEntitySubmit(apiAddress, submitForm) {
 function getTransformedData(key, value) {
     var transformedData = value;
     if (key === "locations") {
-        transformedData = value.split(/\s*/).map(function (item) {
+        transformedData = value.split(/\s/).map(function (item) {
             return parseInt(item, 10);
         });
     }

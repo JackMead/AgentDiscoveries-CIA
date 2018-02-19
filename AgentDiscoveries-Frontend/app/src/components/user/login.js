@@ -15,7 +15,7 @@ export default class Login extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            authenticationMessage: { "message": "", "type": "info"}
+            authenticationMessage: { message: "", type: "info"}
         }
     }
 
@@ -26,10 +26,10 @@ export default class Login extends React.Component {
                     <h3>Sign in</h3>
                     <Message message={this.state.authenticationMessage} />
                     <FormGroup>
-                        <FormControl type="text" inputRef={username => this.state.username = username} placeholder="enter your username" />
+                        <FormControl type="text" inputRef={username => this.username = username} placeholder="enter your username" />
                     </FormGroup>
                     <FormGroup>
-                        <FormControl type="password" inputRef={password => this.state.password = password} placeholder="enter password" />
+                        <FormControl type="password" inputRef={password => this.password = password} placeholder="enter password" />
                     </FormGroup>
                     <FormGroup>
                         <Button id="login-submit" className="button-inline" type="submit">Login</Button>
@@ -49,8 +49,8 @@ export default class Login extends React.Component {
     handleLogIn(e) {
         e.preventDefault();
         var requestBodyJSON = {
-            "username": this.state.username.value,
-            "password": this.state.password.value
+            username: this.username.value,
+            password: this.password.value
         }
 
         UserUtils.makeAuthenticationAPICall("/v1/token", requestBodyJSON)
@@ -73,15 +73,15 @@ export default class Login extends React.Component {
                 window.location.hash = "#/";
             })
             .catch(err => {
-                this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
+                this.setState({ authenticationMessage: {message: err, type: "danger"} });
             });
     }
 
     handleRegister(e) {
         e.preventDefault();
         var requestBodyJSON = {
-            "username": this.state.username.value,
-            "password": this.state.password.value
+            username: this.username.value,
+            password: this.password.value
         }
 
         UserUtils.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
@@ -98,7 +98,7 @@ export default class Login extends React.Component {
                 }
             })
             .catch(err => {
-                this.setState({ authenticationMessage: {"message": err, "type": "danger"} });
+                this.setState({ authenticationMessage: {message: err, type: "danger"} });
             });
     }
 };

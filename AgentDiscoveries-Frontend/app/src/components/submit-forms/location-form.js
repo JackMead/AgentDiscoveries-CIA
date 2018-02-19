@@ -13,9 +13,10 @@ export class CreateLocation extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            "submitForm": props.submitForm,
-            "onSubmit": props.onSubmit
+            onSubmit: props.onSubmit,
         }
+
+        this.submitForm = props.submitForm;
     }
 
     render(props) {
@@ -27,19 +28,19 @@ export class CreateLocation extends React.Component {
                     <FormGroup>
                         <ControlLabel>Site Name</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={siteName => this.state.submitForm.siteName = siteName}
+                            inputRef={siteName => this.submitForm.siteName = siteName}
                             placeholder="enter site name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Location Name</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={location => this.state.submitForm.location = location}
+                            inputRef={location => this.submitForm.location = location}
                             placeholder="enter location name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Time Zone</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={timeZone => this.state.submitForm.timeZone = timeZone}
+                            inputRef={timeZone => this.submitForm.timeZone = timeZone}
                             placeholder="enter time zone (e.g. GMT+1)"/>
                     </FormGroup>
                     <Button type="submit">Submit</Button>

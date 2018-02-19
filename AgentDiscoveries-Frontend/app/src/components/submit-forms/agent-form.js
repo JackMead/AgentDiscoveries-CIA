@@ -14,9 +14,10 @@ export class CreateAgent extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            "submitForm": props.submitForm,
-            "onSubmit": props.onSubmit
+            onSubmit: props.onSubmit
         }
+
+        this.submitForm = props.submitForm;
     }
 
     render(props) {
@@ -28,31 +29,31 @@ export class CreateAgent extends React.Component {
                     <FormGroup>
                         <ControlLabel>First Name</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={firstName => this.state.submitForm.firstName = firstName}
+                            inputRef={firstName => this.submitForm.firstName = firstName}
                             placeholder="enter first name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Last Name</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={lastName => this.state.submitForm.lastName = lastName}
+                            inputRef={lastName => this.submitForm.lastName = lastName}
                             placeholder="enter last name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Date Of Birth</ControlLabel>
                         <FormControl type="date" required
-                            inputRef={dateOfBirth => this.state.submitForm.dateOfBirth = dateOfBirth}
+                            inputRef={dateOfBirth => this.submitForm.dateOfBirth = dateOfBirth}
                             placeholder="enter date of birth" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Rank</ControlLabel>
                         <FormControl type="number" required
-                            inputRef={rank => this.state.submitForm.rank = rank}
+                            inputRef={rank => this.submitForm.rank = rank}
                             placeholder="enter rank (numeric)" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Call Sign</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={callSign => this.state.submitForm.callSign = callSign}
+                            inputRef={callSign => this.submitForm.callSign = callSign}
                             placeholder="enter call sign" />
                     </FormGroup>
                     <Button type="submit">Submit</Button>
