@@ -12,6 +12,7 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
+import java.util.Optional;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
@@ -48,7 +49,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
-        //TODO Check if admin
+        int userId = req.attribute("user_id");
+        verifyUser(userId, id);
 
         return usersDao.getUser(id)
                 .map(this::mapModelToApiModel)
@@ -59,10 +61,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
-        //TODO Check if admin
-        if (userApiModel.getUserId() != id && userApiModel.getUserId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
-        }
+        int userId = req.attribute("user_id");
+        verifyUser(userId, id);
 
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
@@ -83,7 +83,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public Object deleteEntity(Request req, Response res, int id) throws Exception {
-        //TODO Check if user or admin
+        int userId = req.attribute("user_id");
+        verifyUser(userId, id);
 
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "User delete request should have no body");
@@ -96,4 +97,15 @@ public class UsersRoutes implements EntityCRUDRoutes {
         return new Object();
     }
 
+    public void verifyUser(int userId, int affectedUserId) throws FailedRequestException{
+        if(userId!=affectedUserId){
+            Optional<User> optionalUser = usersDao.getUser(userId);
+            if(!optionalUser.isPresent()){
+                throw new FailedRequestException(ErrorCode.NOT_FOUND, "user wasn't found");
+            }
+            if(!optionalUser.get().isAdmin()){
+                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
+            }
+        }
+    }
 }
