@@ -17,13 +17,8 @@ export default class LocationReportSubmit extends React.Component {
         this.state = {
             "submitForm": {},
             "locations": [],
-            "agents": [],
             "message": { "message": "", "type": "danger" },
         }
-
-        searchAPI("v1/api/agents", "")
-            .then(response => response.json())
-            .then(response => this.setState({ "agents": response }))
 
         searchAPI("v1/api/locations", "")
             .then(response => response.json())
@@ -39,14 +34,6 @@ export default class LocationReportSubmit extends React.Component {
 
                     <Message message={this.state.message} />
 
-                    <FormGroup>
-                        <ControlLabel>Agent</ControlLabel>
-                        <FormControl componentClass="select" required
-                            inputRef={agent => this.state.submitForm.agentId = agent}
-                            placeholder="enter agent ID">
-                            {this.getAgentOptions.bind(this)()}
-                        </FormControl>
-                    </FormGroup>
                     <FormGroup>
                         <ControlLabel>Location</ControlLabel>
                         <FormControl componentClass="select" required
@@ -89,13 +76,6 @@ export default class LocationReportSubmit extends React.Component {
         return Object.keys(this.state.locations).map(key => {
             let location = this.state.locations[key];
             return <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>
-        })
-    }
-
-    getAgentOptions() {
-        return Object.keys(this.state.agents).map(key => {
-            let agent = this.state.agents[key];
-            return <option key={agent.agentId} value={agent.agentId}>{agent.firstName} {agent.lastName} ({agent.callSign})</option>
         })
     }
 };

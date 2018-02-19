@@ -1,4 +1,3 @@
-
 create table user (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
@@ -8,13 +7,15 @@ create table user (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table agent (
-  `agent_id` int NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(30),
-  `last_name` varchar(100),
+    `call_sign` varchar(20) NOT NULL,
+    `user_id` int NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
   `date_of_birth` date NOT NULL,
   `rank` int NOT NULL,
-  `call_sign` varchar(20),
-  PRIMARY KEY `agent_id` (`agent_id`)
+  PRIMARY KEY `call_sign` (`call_sign`),
+  FOREIGN KEY `user_id` (`user_id`) REFERENCES user(`user_id`) ON DELETE CASCADE,
+  UNIQUE `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table location (
@@ -40,7 +41,7 @@ create table location_region (
 create table agent_location_report (
   `report_id` int NOT NULL AUTO_INCREMENT,
   `location_id` int NOT NULL,
-  `agent_id` int NOT NULL,
+  `call_sign` varchar(20) NOT NULL,
   `status` tinyint NOT NULL,
   `report_time` datetime NOT NULL,
   `report_body` mediumtext NOT NULL,

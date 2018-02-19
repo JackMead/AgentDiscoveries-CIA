@@ -8,7 +8,7 @@ package org.softwire.training.api.models;
 public class LocationStatusReportApiModel extends ReportApiModelBase {
 
     private int locationId;
-    private int agentId;
+    private String callSign;
 
     public int getLocationId() {
         return locationId;
@@ -18,11 +18,11 @@ public class LocationStatusReportApiModel extends ReportApiModelBase {
         this.locationId = locationId;
     }
 
-    public int getAgentId() {
-        return agentId;
+    public String getCallSign() {
+        return callSign;
     }
 
-    public void setAgentId(int agentId) {
-        this.agentId = agentId;
+    public void setCallsign(String callsign) {
+        this.callSign = callsign;
     }
 }

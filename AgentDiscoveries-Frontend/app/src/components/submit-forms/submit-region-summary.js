@@ -18,7 +18,6 @@ export default class RegionSummarySubmit extends React.Component {
         this.state = {
             "submitForm": {},
             "regions": [],
-            "users": [],
             "message": {"message": "", "type": "danger"},
         }
 
@@ -26,9 +25,6 @@ export default class RegionSummarySubmit extends React.Component {
             .then(response => response.json())
             .then(response => this.setState({ "regions": response }))
 
-        searchAPI("v1/api/users", "")
-            .then(response => response.json())
-            .then(response => this.setState({ "users": response }))
     }
 
 
@@ -40,15 +36,7 @@ export default class RegionSummarySubmit extends React.Component {
                     <h3>Submit Region Summary</h3>
 
                     <Message message={this.state.message} />
-                    
-                    <FormGroup>
-                        <ControlLabel>User</ControlLabel>
-                        <FormControl componentClass="select" required
-                            inputRef={userId => this.state.submitForm.userId = userId}
-                            placeholder="enter user ID">
-                            {this.getUserOptions.bind(this)()}
-                        </FormControl>
-                    </FormGroup>
+
                     <FormGroup>
                         <ControlLabel>Region</ControlLabel>
                         <FormControl componentClass="select" required
@@ -85,13 +73,6 @@ export default class RegionSummarySubmit extends React.Component {
             .catch(error => {
                 this.setState({"message": {"message": error, "type": "danger"}});
             })
-    }
-
-    getUserOptions() {
-        return Object.keys(this.state.users).map(key => {
-            let user = this.state.users[key];
-            return <option key={user.userId} value={user.userId}>{user.username}</option>
-        })
     }
 
     getRegionOptions() {

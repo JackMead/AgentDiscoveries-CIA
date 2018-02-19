@@ -7,6 +7,7 @@ import org.softwire.training.api.models.searchcriteria.*;
 import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.LocationReportsDao;
 import org.softwire.training.db.daos.LocationsDao;
+import org.softwire.training.models.Agent;
 import org.softwire.training.models.Location;
 import org.softwire.training.models.LocationStatusReport;
 import org.softwire.training.models.LocationStatusReportWithTimeZone;
@@ -43,11 +44,14 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
 
         @Override
         public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) throws FailedRequestException {
+            Optional<Agent> optionalAgent = agentsDao.getAgentByUserId(apiModel.getUserId());
+
             // First check agent exists
-            if (!agentsDao.getAgent(apiModel.getAgentId()).isPresent()) {
+            if (!optionalAgent.isPresent()) {
                 throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Agent does not exist");
             }
 
+            Agent agent = optionalAgent.get();
             Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
 
             if (!location.isPresent()) {
@@ -60,7 +64,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
                         .toLocalDateTime();
 
                 LocationStatusReport model = new LocationStatusReport();
-                model.setAgentId(apiModel.getAgentId());
+                model.setCallSign(agent.getCallSign());
                 model.setLocationId(apiModel.getLocationId());
                 model.setStatus(apiModel.getStatus());
                 model.setReportTime(dateTimeInReportLocation);
@@ -91,7 +95,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             TimeZone locationTimeZone = TimeZone.getTimeZone(timeZone);
 
             apiModel.setReportId(model.getReportId());
-            apiModel.setAgentId(model.getAgentId());
+            apiModel.setCallsign(model.getCallSign());
             apiModel.setLocationId(model.getLocationId());
             apiModel.setStatus(model.getStatus());
             apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone.toZoneId()));
@@ -109,8 +113,8 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> apiReportSearchCriteria = new ArrayList<>();
 
             // All query parameters are optional and any combination can be specified
-            Optional.ofNullable(queryMap.get("agentId").integerValue())
-                    .ifPresent(agentId -> apiReportSearchCriteria.add(new AgentIdApiSearchCriterion(agentId)));
+            Optional.ofNullable(queryMap.get("callSign").value())
+                    .ifPresent(callSign -> apiReportSearchCriteria.add(new AgentCallSignApiSearchCriterion(callSign)));
             Optional.ofNullable(queryMap.get("locationId").integerValue())
                     .ifPresent(locationId -> apiReportSearchCriteria.add(new LocationIdApiSearchCriterion(locationId)));
 

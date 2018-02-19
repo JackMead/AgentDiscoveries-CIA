@@ -8,7 +8,6 @@ package org.softwire.training.api.models;
 public class RegionSummaryReportApiModel extends ReportApiModelBase {
 
     private int regionId;
-    private int userId;
 
     public int getRegionId() {
         return regionId;
@@ -16,13 +15,5 @@ public class RegionSummaryReportApiModel extends ReportApiModelBase {
 
     public void setRegionId(int regionId) {
         this.regionId = regionId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 }

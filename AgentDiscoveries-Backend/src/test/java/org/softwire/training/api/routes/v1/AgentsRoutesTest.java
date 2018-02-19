@@ -26,54 +26,15 @@ public class AgentsRoutesTest {
     private Response response = mock(Response.class);
 
     @Test
-    public void createAgentFailsIfAgentIdSpecifiedOnRequest() {
-        // Given
-        Agent agent = new Agent();
-        agent.setAgentId(50);
-        agent.setDateOfBirth(LocalDate.now());
-
-        Request request = RequestGenerationHelper.makeRequestWithJSONBodyForObject(agent);
-
-        // When
-        FailedRequestException exception = assertThrows(
-                FailedRequestException.class,
-                () -> agentsRoutes.createAgent(request, response));
-
-        // Then
-        assertEquals(ErrorCode.INVALID_INPUT, exception.getErrorCode());
-    }
-
-    @Test
-    public void createAgentReturnsAgentWithIdOnSuccess() throws FailedRequestException {
-        // Given
-        int newAgentId = 20;
-        Agent agent = new Agent();
-        agent.setFirstName("bob");
-        agent.setDateOfBirth(LocalDate.now());
-
-        Request request = RequestGenerationHelper.makeRequestWithJSONBodyForObject(agent);
-        when(agentsDao.addAgent(any())).thenReturn(newAgentId);
-
-        // When
-        Agent returnedAgent = agentsRoutes.createAgent(request, response);
-
-        // Then
-        assertEquals(newAgentId, returnedAgent.getAgentId());
-        assertEquals(agent.getFirstName(), returnedAgent.getFirstName());
-        assertEquals(agent.getDateOfBirth(), returnedAgent.getDateOfBirth());
-        verify(response).status(201);
-    }
-
-    @Test
     public void readAgentFailsIfAgentDoesNotExist() {
         // Given
-        int agentId = 15;
-        when(agentsDao.getAgent(agentId)).thenReturn(Optional.empty());
+        int userId = 15;
+        when(agentsDao.getAgentByUserId(userId)).thenReturn(Optional.empty());
 
         // When
         FailedRequestException exception = assertThrows(
                 FailedRequestException.class,
-                () -> agentsRoutes.readAgent(mock(Request.class), response, agentId));
+                () -> agentsRoutes.readAgent(mock(Request.class), response, userId));
 
         // Then
         assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
@@ -84,7 +45,7 @@ public class AgentsRoutesTest {
         // Given
         int agentId = 15;
         Agent mockAgent = mock(Agent.class);
-        when(agentsDao.getAgent(agentId)).thenReturn(Optional.of(mockAgent));
+        when(agentsDao.getAgentByUserId(agentId)).thenReturn(Optional.of(mockAgent));
 
         // When
         Agent returnedAgent = agentsRoutes.readAgent(mock(Request.class), response, agentId);

@@ -8,6 +8,7 @@ public class ReportBase {
     private byte status;
     private LocalDateTime reportTime;
     private String reportBody;
+    private int userId;
 
     public int getReportId() {
         return reportId;
@@ -40,4 +41,8 @@ public class ReportBase {
     public void setReportBody(String reportBody) {
         this.reportBody = reportBody;
     }
+
+    public int getUserId() { return userId; }
+
+    public void setUserId(int userId) { this.userId = userId; }
 }

@@ -8,6 +8,7 @@ public class ReportApiModelBase {
     private byte status;
     private ZonedDateTime reportTime;
     private String reportBody;
+    private int userId;
 
     public int getReportId() {
         return reportId;
@@ -40,4 +41,8 @@ public class ReportApiModelBase {
     public void setReportBody(String reportBody) {
         this.reportBody = reportBody;
     }
+
+    public int getUserId(){return userId;}
+
+    public void setUserId(int userId){this.userId=userId;}
 }

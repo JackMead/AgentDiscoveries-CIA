@@ -5,24 +5,27 @@ import org.softwire.training.api.core.PasswordHasher;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.UserApiModel;
+import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.UsersDao;
+import org.softwire.training.models.Agent;
 import org.softwire.training.models.User;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
     private final UsersDao usersDao;
+    private final AgentsDao agentsDao;
     private final PasswordHasher passwordHasher;
 
     @Inject
-    public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher) {
+    public UsersRoutes(UsersDao usersDao, AgentsDao agentsDao, PasswordHasher passwordHasher) {
         this.usersDao = usersDao;
+        this.agentsDao = agentsDao;
         this.passwordHasher = passwordHasher;
     }
 
@@ -37,6 +40,14 @@ public class UsersRoutes implements EntityCRUDRoutes {
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
 
         int newUserId = usersDao.addUser(user);
+
+        //TODO creating new user should have choice to also create a corresponding agent.
+        //And should provide the relevant parameters
+        //Per Card https://trello.com/c/iDGPOsLq/47-admin-should-be-able-to-create-new-users-agents
+        if(false){
+            Agent agent = new Agent(newUserId,"","",null,0,"");
+            agentsDao.addAgent(agent);
+        }
 
         // Set the userId and for security remove the password
         userApiModel.setPassword(null);

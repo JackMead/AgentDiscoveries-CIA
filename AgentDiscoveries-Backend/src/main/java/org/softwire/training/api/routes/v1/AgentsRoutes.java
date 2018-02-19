@@ -1,5 +1,6 @@
 package org.softwire.training.api.routes.v1;
 
+import org.apache.commons.lang3.StringUtils;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
@@ -7,7 +8,6 @@ import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.models.Agent;
 import spark.Request;
 import spark.Response;
-import spark.utils.StringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -23,22 +23,16 @@ public class AgentsRoutes {
 
     public Agent createAgent(Request req, Response res) throws FailedRequestException {
         Agent agentModel = JsonRequestUtils.readBodyAsType(req, Agent.class);
-
-        if (agentModel.getAgentId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "agentId cannot be specified on create");
-        }
-
-        int newAgentId = agentsDao.addAgent(agentModel);
+        agentsDao.addAgent(agentModel);
 
         // Create requests should return 201
-        agentModel.setAgentId(newAgentId);
         res.status(201);
 
         return agentModel;
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
-        return agentsDao.getAgent(id)
+        return agentsDao.getAgentByUserId(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
@@ -48,14 +42,8 @@ public class AgentsRoutes {
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
-
-        if (agent.getAgentId() != id && agent.getAgentId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "agentId cannot be specified differently to URI");
-        }
-
-        agent.setAgentId(id);
+        agent.setUserId(id);
         agentsDao.updateAgent(agent);
-
         return agent;
     }
 
