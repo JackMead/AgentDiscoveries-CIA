@@ -21,14 +21,19 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col-md-6 col-md-offset-3">
                 <Form onSubmit={this.handleLogIn.bind(this)}>
                     <h3>Sign in</h3>
                     <Message message={this.state.authenticationMessage} />
                     <FormGroup>
                         <FormControl type="text" inputRef={username => this.state.username = username} placeholder="enter your username" />
+                    </FormGroup>
+                    <FormGroup>
                         <FormControl type="password" inputRef={password => this.state.password = password} placeholder="enter password" />
-                        <Button id="login-submit" type="submit">Login</Button><Button onClick={this.handleRegister.bind(this)}>Register</Button>
+                    </FormGroup>
+                    <FormGroup>
+                        <Button id="login-submit" className="button-inline" type="submit">Login</Button>
+                        <Button className="button-inline" onClick={this.handleRegister.bind(this)}>Register</Button>
                     </FormGroup>
                 </Form>
             </div>
@@ -53,7 +58,12 @@ export default class Login extends React.Component {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw "Authentication error. Could not authenticate the user";
+                    console.log(response)
+                    if (response.status === 401) {
+                        throw "Incorrect username or password";
+                    } else {
+                        throw "Server error. Server cannot process the request";
+                    }
                 }
             })
             .then(response => {
@@ -80,7 +90,11 @@ export default class Login extends React.Component {
                     document.getElementById("login-submit").click(); // log in with the newly registered account
                     return response.json()
                 } else {
-                    throw "Registration error. Try using a different username";
+                    if (response.status === 500) {
+                        throw "This username is already taken";
+                    } else {
+                        throw "Server error. Server cannot process the request";
+                    }
                 }
             })
             .catch(err => {
