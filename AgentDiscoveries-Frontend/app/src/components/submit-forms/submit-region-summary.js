@@ -16,46 +16,48 @@ export default class RegionSummarySubmit extends React.Component {
     constructor() {
         super();
         this.state = {
-            "submitForm": {},
-            "regions": [],
-            "message": {"message": "", "type": "danger"},
+            regions: [],
+            message: {message: "", type: "danger"},
         }
 
         searchAPI("v1/api/regions", "")
             .then(response => response.json())
             .then(response => this.setState({ "regions": response }))
 
+        this.submitForm = {};
+        
+        this.onSubmit = this.onSubmit.bind(this);
+        this.getRegionOptions = this.getRegionOptions.bind(this);
     }
 
 
     render() {
         return (
             <div>
-                <Form className="col-md-8 col-md-offset-2" onSubmit={this.onSubmit.bind(this)}>
+                <Form className="col-md-8 col-md-offset-2" onSubmit={this.onSubmit}>
 
                     <h3>Submit Region Summary</h3>
 
                     <Message message={this.state.message} />
-
                     <FormGroup>
                         <ControlLabel>Region</ControlLabel>
                         <FormControl componentClass="select" required
-                            inputRef={regionId => this.state.submitForm.regionId = regionId}
+                            inputRef={regionId => this.submitForm.regionId = regionId}
                             placeholder="enter region ID">
-                            {this.getRegionOptions.bind(this)()}
+                            {this.getRegionOptions()}
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type="number" required
-                            inputRef={status => this.state.submitForm.status = status}
+                            inputRef={status => this.submitForm.status = status}
                             placeholder="enter status (numeric)"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Summary</ControlLabel>
                         <FormControl type="text" required
                             componentClass="textarea" rows={6}
-                            inputRef={reportBody => this.state.submitForm.reportBody = reportBody}
+                            inputRef={reportBody => this.submitForm.reportBody = reportBody}
                             placeholder="write region summary" />
                     </FormGroup>
                     <Button type="submit">Submit</Button>
@@ -66,12 +68,12 @@ export default class RegionSummarySubmit extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        handleReportSubmit('/v1/api/reports/regionsummaries', this.state.submitForm)
+        handleReportSubmit('/v1/api/reports/regionsummaries', this.submitForm)
             .then(response => {
-                this.setState({"message": {"message": "Report sent", "type": "info"}})
+                this.setState({message: {message: "Report sent", type: "info"}})
             })
             .catch(error => {
-                this.setState({"message": {"message": error, "type": "danger"}});
+                this.setState({message: {message: error, type: "danger"}});
             })
     }
 

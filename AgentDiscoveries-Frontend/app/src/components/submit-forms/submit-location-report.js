@@ -15,21 +15,25 @@ export default class LocationReportSubmit extends React.Component {
     constructor() {
         super();
         this.state = {
-            "submitForm": {},
-            "locations": [],
-            "message": { "message": "", "type": "danger" },
+            locations: [],
+            message: { message: "", type: "danger" },
         }
 
         searchAPI("v1/api/locations", "")
             .then(response => response.json())
-            .then(response => this.setState({ "locations": response }))
+            .then(response => this.setState({ locations: response }))
+
+        this.submitForm = {};
+        
+        this.onSubmit = this.onSubmit.bind(this);
+        this.getLocationOptions = this.getLocationOptions.bind(this);
     }
 
 
     render() {
         return (
             <div className="col-md-8 col-md-offset-2">
-                <Form onSubmit={this.onSubmit.bind(this)}>
+                <Form onSubmit={this.onSubmit}>
                     <h3>Submit Location Report</h3>
 
                     <Message message={this.state.message} />
@@ -37,22 +41,22 @@ export default class LocationReportSubmit extends React.Component {
                     <FormGroup>
                         <ControlLabel>Location</ControlLabel>
                         <FormControl componentClass="select" required
-                            inputRef={location => this.state.submitForm.locationId = location}
+                            inputRef={location => this.submitForm.locationId = location}
                             placeholder="enter location ID">
-                            {this.getLocationOptions.bind(this)()}
+                            {this.getLocationOptions()}
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type="number" required
-                            inputRef={status => this.state.submitForm.status = status}
+                            inputRef={status => this.submitForm.status = status}
                             placeholder="enter status (numeric)"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Report</ControlLabel>
                         <FormControl type="text" required
                             componentClass="textarea" rows={6}
-                            inputRef={reportBody => this.state.submitForm.reportBody = reportBody}
+                            inputRef={reportBody => this.submitForm.reportBody = reportBody}
                             placeholder="write report" />
                     </FormGroup>
                     <Button type="submit">Submit</Button>
@@ -63,12 +67,12 @@ export default class LocationReportSubmit extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        handleReportSubmit('/v1/api/reports/locationstatuses', this.state.submitForm)
+        handleReportSubmit('/v1/api/reports/locationstatuses', this.submitForm)
             .then(response => {
-                this.setState({ "message": { "message": "Report sent", "type": "info" } })
+                this.setState({ message: { message: "Report sent", type: "info" } })
             })
             .catch(error => {
-                this.setState({ "message": { "message": error, "type": "danger" } });
+                this.setState({ message: { "message": error, type: "danger" } });
             })
     }
 

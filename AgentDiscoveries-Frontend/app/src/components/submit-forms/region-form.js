@@ -13,9 +13,10 @@ export class CreateRegion extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            "submitForm": props.submitForm,
-            "onSubmit": props.onSubmit
+            onSubmit: props.onSubmit
         }
+
+        this.submitForm = props.submitForm;
     }
 
     render(props) {
@@ -27,13 +28,13 @@ export class CreateRegion extends React.Component {
                     <FormGroup>
                         <ControlLabel>Region Name</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={name => this.state.submitForm.name = name}
+                            inputRef={name => this.submitForm.name = name}
                             placeholder="enter region name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Location IDs</ControlLabel>
                         <FormControl type="text" required
-                            inputRef={locations => this.state.submitForm.locations = locations}
+                            inputRef={locations => this.submitForm.locations = locations}
                             placeholder="enter location IDs (separated by white space)" />
                     </FormGroup>
                     <Button type="submit">Submit</Button>

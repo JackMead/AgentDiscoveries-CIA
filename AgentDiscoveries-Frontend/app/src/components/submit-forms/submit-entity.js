@@ -18,21 +18,23 @@ export default class EntitySubmit extends React.Component {
         super();
 
         this.state = {
-            "submitForm": {},
-            "api": "locations",
-            "message": { "message": "", "type": "danger" },
+            api: "locations",
+            message: { "message": "", "type": "danger" },
         }
+
+        this.submitForm = {};
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     componentWillMount() {
         this.apiForms = {
-            "locations": <CreateLocation submitForm={this.state.submitForm} onSubmit={this.onSubmit.bind(this)} />,
-            "regions": <CreateRegion submitForm={this.state.submitForm} onSubmit={this.onSubmit.bind(this)} />,
-            "agents": <CreateAgent submitForm={this.state.submitForm} onSubmit={this.onSubmit.bind(this)} />
+            locations: <CreateLocation submitForm={this.submitForm} onSubmit={this.onSubmit} />,
+            regions: <CreateRegion submitForm={this.submitForm} onSubmit={this.onSubmit} />,
+            agents: <CreateAgent submitForm={this.submitForm} onSubmit={this.onSubmit} />
         }
         
         console.log(this.apiForms)
-        this.setState({ "form": this.apiForms[this.state.api]})
+        this.setState({ form: this.apiForms[this.state.api]})
     }
 
     render() {
@@ -66,15 +68,15 @@ export default class EntitySubmit extends React.Component {
     onSelectApi(e) {
         e.preventDefault();
         this.setState({
-            "form": this.apiForms[this.state.api.value],
-            "message": { "message": "", "type": "danger" }
+            form: this.apiForms[this.state.api.value],
+            message: { message: "", type: "danger" }
         })
     }
 
     onSubmit(e) {
         e.preventDefault();
-        handleEntitySubmit(`/v1/api/${this.state.api.value}`, this.state.submitForm)
-            .then(response => this.setState({ "message": { "message": "Entity created successfully", "type": "info" } }))
-            .catch(error => this.setState({ "message": { "message": error, "type": "danger" } }))
+        handleEntitySubmit(`/v1/api/${this.state.api.value}`, this.submitForm)
+            .then(response => this.setState({ message: { message: "Entity created successfully", type: "info" } }))
+            .catch(error => this.setState({ message: { message: error, type: "danger" } }))
     }
 };

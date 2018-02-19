@@ -77,6 +77,6 @@ export default class NavigationBar extends React.Component {
                 </NavItem>
             )
         }
-        this.setState({"authenticationElement": authenticationElement});
+        this.setState({authenticationElement: authenticationElement});
     }
 };
