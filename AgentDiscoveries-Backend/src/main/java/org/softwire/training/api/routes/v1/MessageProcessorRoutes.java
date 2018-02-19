@@ -19,15 +19,12 @@ public class MessageProcessorRoutes {
     }
 
     public Message EncryptMessage(Request req, Response res) {
-        System.out.print(req.body());
         Message message = JsonRequestUtils.readBodyAsType(req, Message.class);
         messageProcessor.encrypt(message);
-        System.out.print(message.getMessage());
         return message;
     }
 
     public Message DecryptMessage(Request req, Response res) {
-        System.out.print(req.body());
         Message message = JsonRequestUtils.readBodyAsType(req, Message.class);
         messageProcessor.decrypt(message);
         return message;
