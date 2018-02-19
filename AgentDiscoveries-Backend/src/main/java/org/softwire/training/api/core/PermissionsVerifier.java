@@ -9,11 +9,11 @@ import org.softwire.training.models.User;
 import javax.inject.Inject;
 import java.util.Optional;
 
-public class Verifier {
+public class PermissionsVerifier {
     private final UsersDao usersDao;
 
     @Inject
-    public Verifier(UsersDao usersDao) {
+    public PermissionsVerifier(UsersDao usersDao) {
         this.usersDao=usersDao;
     }
 

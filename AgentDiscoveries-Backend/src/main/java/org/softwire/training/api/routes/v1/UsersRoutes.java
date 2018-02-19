@@ -2,7 +2,7 @@ package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PasswordHasher;
-import org.softwire.training.api.core.Verifier;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.UserApiModel;
@@ -13,19 +13,18 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
     private final UsersDao usersDao;
     private final PasswordHasher passwordHasher;
-    private final Verifier verifier;
+    private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher, Verifier verifier) {
+    public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher, PermissionsVerifier permissionsVerifier) {
         this.usersDao = usersDao;
         this.passwordHasher = passwordHasher;
-        this.verifier=verifier;
+        this.permissionsVerifier = permissionsVerifier;
     }
 
     @Override
@@ -53,7 +52,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     @Override
     public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
         int userId = req.attribute("user_id");
-        if (userId != id && !verifier.isAdmin(userId)) {
+        if (userId != id && !permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 
@@ -67,7 +66,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         int userId = req.attribute("user_id");
-        if (userId != id && !verifier.isAdmin(userId)) {
+        if (userId != id && !permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 
@@ -91,7 +90,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     @Override
     public Object deleteEntity(Request req, Response res, int id) throws Exception {
         int userId = req.attribute("user_id");
-        if (userId != id && !verifier.isAdmin(userId)) {
+        if (userId != id && !permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 

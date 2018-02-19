@@ -1,7 +1,7 @@
 package org.softwire.training.api.routes.v1;
 
 import org.junit.jupiter.api.Test;
-import org.softwire.training.api.core.Verifier;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.testutils.RequestGenerationHelper;
@@ -26,8 +26,8 @@ public class AgentsRoutesTest {
 
     private AgentsDao agentsDao = mock(AgentsDao.class);
     private UsersDao usersDao = mock(UsersDao.class);
-    private Verifier verifier = new Verifier(usersDao);
-    private AgentsRoutes agentsRoutes = new AgentsRoutes(agentsDao, verifier);
+    private PermissionsVerifier permissionsVerifier = new PermissionsVerifier(usersDao);
+    private AgentsRoutes agentsRoutes = new AgentsRoutes(agentsDao, permissionsVerifier);
     private Response response = mock(Response.class);
 
     @Test

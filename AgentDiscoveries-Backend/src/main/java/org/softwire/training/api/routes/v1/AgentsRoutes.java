@@ -1,7 +1,7 @@
 package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.JsonRequestUtils;
-import org.softwire.training.api.core.Verifier;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.db.daos.AgentsDao;
@@ -15,12 +15,12 @@ import javax.inject.Inject;
 public class AgentsRoutes {
 
     private final AgentsDao agentsDao;
-    private final Verifier verifier;
+    private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public AgentsRoutes(AgentsDao agentsDao, Verifier verifier) {
+    public AgentsRoutes(AgentsDao agentsDao, PermissionsVerifier permissionsVerifier) {
         this.agentsDao = agentsDao;
-        this.verifier=verifier;
+        this.permissionsVerifier = permissionsVerifier;
     }
 
     public Agent createAgent(Request req, Response res) throws FailedRequestException {
@@ -30,7 +30,7 @@ public class AgentsRoutes {
         }
 
         int userId = req.attribute("user_id");
-        if (!verifier.isAdmin(userId)) {
+        if (!permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 
@@ -45,7 +45,7 @@ public class AgentsRoutes {
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
         int userId = req.attribute("user_id");
-        if (id!=userId && !verifier.isAdmin(userId)) {
+        if (id!=userId && !permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 
@@ -55,7 +55,7 @@ public class AgentsRoutes {
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
         int userId = req.attribute("user_id");
-        if (id!=userId && !verifier.isAdmin(userId)) {
+        if (id!=userId && !permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 
@@ -73,7 +73,7 @@ public class AgentsRoutes {
 
     public Object deleteAgent(Request req, Response res, int id) throws Exception {
         int userId = req.attribute("user_id");
-        if (!verifier.isAdmin(userId)) {
+        if (!permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
         }
 
