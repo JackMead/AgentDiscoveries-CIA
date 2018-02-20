@@ -2,12 +2,14 @@ package org.softwire.training.models;
 
 import spark.utils.StringUtils;
 
+import java.sql.Blob;
+
 public class User {
 
     private int userId;
     private String username;
     private String hashedPassword;
-    private String pictureFilename;
+    private byte[] profilePicture;
     private final String defaultPictureFilename = "default.jpg";
     public User() {
 
@@ -42,9 +44,9 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
-    public String getPictureFilename(){
-        return StringUtils.isNotEmpty(pictureFilename)? pictureFilename: defaultPictureFilename;
+    public byte[] getPicture(){
+        return profilePicture;
     }
 
-    public void setPictureFilename(String pictureFilename) { this.pictureFilename = pictureFilename; }
+    public void setPicture(byte[] picture) { this.profilePicture = picture; }
 }

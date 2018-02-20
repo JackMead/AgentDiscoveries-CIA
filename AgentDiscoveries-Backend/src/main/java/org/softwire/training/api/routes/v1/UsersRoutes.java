@@ -17,14 +17,9 @@ import javax.inject.Inject;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
@@ -98,7 +93,6 @@ public class UsersRoutes implements EntityCRUDRoutes {
         User oldUser = optionalUser.get();
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
-        user.setPictureFilename(oldUser.getPictureFilename());
         usersDao.updateUser(user);
 
         return mapModelToApiModel(user);
@@ -114,26 +108,23 @@ public class UsersRoutes implements EntityCRUDRoutes {
         req.raw().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/default"));
         Part filePart = req.raw().getPart("file");
         String fileName = filePart.getSubmittedFileName();
-        if (fileName.lastIndexOf(".") == -1) {
+        if (StringUtils.isEmpty(fileName) || fileName.lastIndexOf(".") == -1) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "File must have an extension");
         }
         String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-        String path = "AgentDiscoveries-Backend/src/main/resources/META-INF/resources/public/userResources/" + userId + "." + extension;
-        File tempFile = new File(path);
-        tempFile.getParentFile().mkdirs();
+        //TODO save extension and serve with picture
         try (final InputStream in = filePart.getInputStream()) {
-            Files.copy(in, Paths.get(path), REPLACE_EXISTING);
+            usersDao.updateUserPicture(userId, in);
+        }catch(Exception e){
+            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "failed to update image");
+        }
+
+        Optional<User> user = usersDao.getUser(userId);
+        if(!user.isPresent()){
+            throw new FailedRequestException(ErrorCode.NOT_FOUND, "no such user found");
         }
         filePart.delete();
-        Optional<User> optionalUser = usersDao.getUser(userId);
-        if (!optionalUser.isPresent()) {
-            throw new FailedRequestException(ErrorCode.NOT_FOUND, "user Id not found");
-        }
-        User user = optionalUser.get();
-        user.setPictureFilename(userId + "." + extension);
-        usersDao.updateUser(user);
-
-        return mapModelToApiModel(user);
+        return mapModelToApiModel(user.get());
     }
 
     private UserApiModel mapModelToApiModel(User user) {

@@ -1,2 +1,2 @@
 alter table user
-add `picture_filename` varchar(20)
+add `profile_picture` blob
