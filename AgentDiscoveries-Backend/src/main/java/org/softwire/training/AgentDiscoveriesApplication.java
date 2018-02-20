@@ -38,6 +38,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject RegionSummaryReportsRoutes regionSummaryReportsRoutes;
     @Inject UsersRoutes usersRoutes;
     @Inject ExecutiveSummaryRoutes executiveSummaryRoutes;
+    @Inject MessageProcessorRoutes messageProcessorRoutes;
 
     @Override
     public void run() {
@@ -71,6 +72,9 @@ public class AgentDiscoveriesApplication implements Runnable {
                 setupBasicEntityCrudRoutes("/locations", locationsRoutes);
                 get("/locations", locationsRoutes::readEntities, responseTransformer);
                 setupBasicEntityCrudRoutes("/users", usersRoutes);
+
+                post("/decodemessage", messageProcessorRoutes::DecryptMessage, responseTransformer);
+                post("/encodemessage", messageProcessorRoutes::EncryptMessage, responseTransformer);
 
                 // API endpoint to initiate shutdown
                 put("/operations/shutdown", this::shutdown);
