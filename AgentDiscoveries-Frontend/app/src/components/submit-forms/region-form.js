@@ -6,7 +6,6 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import { handleSubmit } from "./submit-utilities"
 
 export class CreateRegion extends React.Component {
 

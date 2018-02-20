@@ -17,12 +17,14 @@ export default class Login extends React.Component {
         this.state = {
             authenticationMessage: { message: "", type: "info"}
         }
+
+        this.handleLogIn = this.handleLogIn.bind(this);
     }
 
     render() {
         return (
             <div className="col-md-6 col-md-offset-3">
-                <Form onSubmit={this.handleLogIn.bind(this)}>
+                <Form onSubmit={this.handleLogIn}>
                     <h3>Sign in</h3>
                     <Message message={this.state.authenticationMessage} />
                     <FormGroup>
@@ -32,8 +34,7 @@ export default class Login extends React.Component {
                         <FormControl type="password" inputRef={password => this.password = password} placeholder="enter password" />
                     </FormGroup>
                     <FormGroup>
-                        <Button id="login-submit" className="button-inline" type="submit">Login</Button>
-                        <Button className="button-inline" onClick={this.handleRegister.bind(this)}>Register</Button>
+                        <Button id="login-submit" type="submit">Login</Button>
                     </FormGroup>
                 </Form>
             </div>
@@ -77,28 +78,4 @@ export default class Login extends React.Component {
             });
     }
 
-    handleRegister(e) {
-        e.preventDefault();
-        var requestBodyJSON = {
-            username: this.username.value,
-            password: this.password.value
-        }
-
-        UserUtils.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById("login-submit").click(); // log in with the newly registered account
-                    return response.json()
-                } else {
-                    if (response.status === 500) {
-                        throw "This username is already taken";
-                    } else {
-                        throw "Server error. Server cannot process the request";
-                    }
-                }
-            })
-            .catch(err => {
-                this.setState({ authenticationMessage: {message: err, type: "danger"} });
-            });
-    }
 };

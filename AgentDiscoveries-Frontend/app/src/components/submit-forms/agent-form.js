@@ -7,8 +7,6 @@ import {
     ControlLabel
 } from "react-bootstrap";
 import { searchAPI } from "../crud"
-import { handleSubmit } from "./submit-utilities"
-import { Message } from "../message"
 
 export class CreateAgent extends React.Component {
 

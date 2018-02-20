@@ -11,6 +11,7 @@ import { Message } from "../message"
 import { CreateLocation } from "./location-form"
 import { CreateRegion } from "./region-form"
 import { CreateAgent } from "./agent-form"
+import { CreateUser } from "./user-form"
 
 export default class EntitySubmit extends React.Component {
 
@@ -30,9 +31,10 @@ export default class EntitySubmit extends React.Component {
         this.apiForms = {
             locations: <CreateLocation submitForm={this.submitForm} onSubmit={this.onSubmit} />,
             regions: <CreateRegion submitForm={this.submitForm} onSubmit={this.onSubmit} />,
+            users: <CreateUser submitForm={this.submitForm} onSubmit={this.onSubmit} />,
             agents: <CreateAgent submitForm={this.submitForm} onSubmit={this.onSubmit} />
         }
-        
+
         this.setState({ form: this.apiForms[this.state.api]})
     }
 
