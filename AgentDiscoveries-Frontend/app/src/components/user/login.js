@@ -59,7 +59,6 @@ export default class Login extends React.Component {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.log(response)
                     if (response.status === 401) {
                         throw "Incorrect username or password";
                     } else {
