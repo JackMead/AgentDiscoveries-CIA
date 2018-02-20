@@ -28,11 +28,7 @@ public class AgentsRoutes {
         if (agentModel.getAgentId() != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "agentId cannot be specified on create");
         }
-
-        int userId = req.attribute("user_id");
-        if (!permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyPermission(req);
 
         int newAgentId = agentsDao.addAgent(agentModel);
 
@@ -44,20 +40,14 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
-        int userId = req.attribute("user_id");
-        if (id!=userId && !permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyPermission(req);
 
         return agentsDao.getAgent(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
-        int userId = req.attribute("user_id");
-        if (id!=userId && !permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyPermission(req);
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
 
@@ -72,10 +62,7 @@ public class AgentsRoutes {
     }
 
     public Object deleteAgent(Request req, Response res, int id) throws Exception {
-        int userId = req.attribute("user_id");
-        if (!permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyPermission(req);
 
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Agent delete request should have no body");
@@ -86,5 +73,12 @@ public class AgentsRoutes {
         res.status(204);
 
         return new Object();
+    }
+
+    public void verifyPermission(Request req) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if (!permissionsVerifier.isAdmin(userId)) {
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
     }
 }

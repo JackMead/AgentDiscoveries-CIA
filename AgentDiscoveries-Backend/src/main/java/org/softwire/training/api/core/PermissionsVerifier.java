@@ -14,14 +14,12 @@ public class PermissionsVerifier {
 
     @Inject
     public PermissionsVerifier(UsersDao usersDao) {
-        this.usersDao=usersDao;
+        this.usersDao = usersDao;
     }
 
     public boolean isAdmin(int userId) throws FailedRequestException {
         Optional<User> optionalUser = usersDao.getUser(userId);
-        if (!optionalUser.isPresent()) {
-            throw new FailedRequestException(ErrorCode.NOT_FOUND, "user wasn't found");
-        }
-        return optionalUser.get().isAdmin();
+        return optionalUser.map(User::isAdmin)
+                .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "User not found"));
     }
 }
