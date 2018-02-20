@@ -98,6 +98,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     }
 
     private void agentsRouteGroup() {
+        post("", (req, res) -> agentsRoutes.createAgent(req, res), responseTransformer);
         get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> agentsRoutes.deleteAgent(req, res, idParamAsInt(req)), responseTransformer);
@@ -170,4 +171,3 @@ public class AgentDiscoveriesApplication implements Runnable {
         }
     }
 }
-

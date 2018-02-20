@@ -6,6 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
+import { searchAPI } from "../crud"
 import { handleSubmit } from "./submit-utilities"
 import { Message } from "../message"
 
@@ -14,10 +15,16 @@ export class CreateAgent extends React.Component {
     constructor(props) {
         super();
         this.state = {
+            users: [],
             onSubmit: props.onSubmit
         }
 
+        searchAPI("v1/api/users", "")
+            .then(response => response.json())
+            .then(response => this.setState({ users: response }))
+
         this.submitForm = props.submitForm;
+        this.getUserOptions = this.getUserOptions.bind(this);
     }
 
     render(props) {
@@ -26,6 +33,14 @@ export class CreateAgent extends React.Component {
                 <Form onSubmit={this.state.onSubmit}>
                     <h3>Create Agent</h3>
 
+                    <FormGroup>
+                        <ControlLabel>User</ControlLabel>
+                        <FormControl componentClass="select" required
+                            inputRef={userId => this.submitForm.userId = userId}
+                            placeholder="enter user ID">
+                            {this.getUserOptions()}
+                        </FormControl>
+                    </FormGroup>
                     <FormGroup>
                         <ControlLabel>First Name</ControlLabel>
                         <FormControl type="text" required
@@ -60,5 +75,12 @@ export class CreateAgent extends React.Component {
                 </Form>
             </div>
         );
+    }
+
+    getUserOptions() {
+        return Object.keys(this.state.users).map(key => {
+            let user = this.state.users[key];
+            return <option key={user.userId} value={user.userId}>{user.username}</option>
+        })
     }
 }

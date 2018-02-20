@@ -33,7 +33,6 @@ export default class EntitySubmit extends React.Component {
             agents: <CreateAgent submitForm={this.submitForm} onSubmit={this.onSubmit} />
         }
         
-        console.log(this.apiForms)
         this.setState({ form: this.apiForms[this.state.api]})
     }
 

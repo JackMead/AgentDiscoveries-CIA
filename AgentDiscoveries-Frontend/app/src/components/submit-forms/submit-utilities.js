@@ -1,4 +1,4 @@
-import { createAPI } from "../crud"
+import { createAPI, updateAPI } from "../crud"
 
 export function handleReportSubmit(apiAddress, submitForm) {
     let bodyJSON = {};
@@ -19,13 +19,7 @@ export function handleReportSubmit(apiAddress, submitForm) {
 }
 
 export function handleEntitySubmit(apiAddress, submitForm) {
-    let bodyJSON = {};
-    Object.keys(submitForm).forEach((key) => {
-        if (submitForm[key]) {
-            bodyJSON[key] = getTransformedData(key, submitForm[key].value);
-        }
-    });
-
+    let bodyJSON = getBodyJSON(submitForm);
     var requestBody = JSON.stringify(bodyJSON);
     return createAPI(apiAddress, requestBody)
         .then(response => {
@@ -33,6 +27,16 @@ export function handleEntitySubmit(apiAddress, submitForm) {
                 throw ("Server could not create the entity. Make sure all fields are correct")
             }
         })
+}
+
+function getBodyJSON(submitForm) {
+    var bodyJSON = {}
+    Object.keys(submitForm).forEach((key) => {
+        if (submitForm[key]) {
+            bodyJSON[key] = getTransformedData(key, submitForm[key].value);
+        }
+    });
+    return bodyJSON
 }
 
 function getTransformedData(key, value) {
