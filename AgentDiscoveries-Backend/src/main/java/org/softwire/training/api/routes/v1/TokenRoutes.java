@@ -14,9 +14,6 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
-import javax.sql.rowset.serial.SerialBlob;
-import java.sql.Blob;
-import java.sql.ResultSet;
 import java.util.Optional;
 
 public class TokenRoutes {

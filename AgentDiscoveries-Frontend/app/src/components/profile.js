@@ -81,6 +81,6 @@ export default class Profile extends React.Component {
 
     isUserLoggedIn() {
         let token = window.localStorage.getItem("Token");
-        return token && true;
+        return !!token;
     }
 };

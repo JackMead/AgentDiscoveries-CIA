@@ -52,10 +52,8 @@ export default class Login extends React.Component {
             .then(response => {
                 let token = response.token;
                 let userId = response.userId;
-                let pictureFilepath = response.pictureFilepath;
                 window.localStorage.setItem("Token", token);
                 window.localStorage.setItem("UserId", userId);
-                window.localStorage.setItem("pictureFilepath", pictureFilepath);
                 this.updateIsLoggedIn();
                 if (!response.errorCode){
                     this.setState({authenticationMessage: "Signed in successfully"});

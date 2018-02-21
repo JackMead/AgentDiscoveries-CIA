@@ -12,7 +12,6 @@ public class UserApiModel {
     private int userId;
     private String username;
     private String password;
-    private byte[] profilePicture;
 
     public String getUsername() {
         return username;
@@ -37,8 +36,4 @@ public class UserApiModel {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    public byte[] getProfilePicture(){return profilePicture;}
-
-    public void setProfilePicture(byte[] profilePicture){this.profilePicture=profilePicture;}
 }
