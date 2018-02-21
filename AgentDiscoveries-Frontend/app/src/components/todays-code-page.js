@@ -1,17 +1,17 @@
-import * as React from "react";
+import * as React from "react"
 import {
     Form,
     FormGroup,
     FormControl,
     Button,
     ControlLabel
-} from "react-bootstrap";
+} from "react-bootstrap"
 import { createAPI } from "./crud"
 
 export class TodaysCodePage extends React.Component {
 
     constructor() {
-        super();
+        super()
         this.state = {
             "message": {},
             "result": ""
@@ -43,17 +43,17 @@ export class TodaysCodePage extends React.Component {
             </div>
 
             
-        );
+        )
     }
 
     handleEncode(e) {
-        e.preventDefault();
-        this.handleRequest("v1/api/encodemessage");
+        e.preventDefault()
+        this.handleRequest("v1/api/encodemessage")
     }
 
     handleDecode(e) {
-        e.preventDefault();
-        this.handleRequest("v1/api/decodemessage");
+        e.preventDefault()
+        this.handleRequest("v1/api/decodemessage")
     }
 
     handleRequest(api) {

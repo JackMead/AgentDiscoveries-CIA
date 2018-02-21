@@ -1,26 +1,26 @@
-import * as React from "react";
+import * as React from "react"
 import {
     Navbar,
     Nav,
     NavItem,
     NavDropdown,
     MenuItem
-} from "react-bootstrap";
-import {Link} from "react-router-dom";
+} from "react-bootstrap"
+import {Link} from "react-router-dom"
 import { logOut, isLoggedIn } from "./user/user-utilities"
 
 export default class NavigationBar extends React.Component {
 
     componentWillMount() {
-        this.setAuthenticationElement();
+        this.setAuthenticationElement()
     }
 
     componentDidMount() {
-        window.addEventListener("login", this.setAuthenticationElement.bind(this));
+        window.addEventListener("login", this.setAuthenticationElement.bind(this))
     }
 
     componentWillUnmount() {
-        window.removeEventListener("login", this.setAuthenticationElement.bind(this));
+        window.removeEventListener("login", this.setAuthenticationElement.bind(this))
     }
 
     render() {
@@ -54,14 +54,14 @@ export default class NavigationBar extends React.Component {
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-        );
+        )
     }
 
     handleLogOut(e) {
-        e.preventDefault();
-        logOut();
-        window.dispatchEvent(new CustomEvent('login'));
-        window.location.hash = "#/";
+        e.preventDefault()
+        logOut()
+        window.dispatchEvent(new CustomEvent('login'))
+        window.location.hash = "#/"
     }
 
     setAuthenticationElement() {
@@ -78,6 +78,6 @@ export default class NavigationBar extends React.Component {
                 </NavItem>
             )
         }
-        this.setState({authenticationElement: authenticationElement});
+        this.setState({authenticationElement: authenticationElement})
     }
-};
+}

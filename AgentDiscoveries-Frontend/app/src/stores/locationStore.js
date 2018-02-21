@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 import { searchAPI } from '../components/crud'
 import dispatcher from '../dispatcher'
 
@@ -10,7 +10,7 @@ class LocationStore extends EventEmitter {
 
     getAll() {
         console.log(this.locations)
-        return this.locations;
+        return this.locations
     }
 
     addLocation(location) {
@@ -29,7 +29,7 @@ class LocationStore extends EventEmitter {
             })
             .then(response => {
                 this.locations = response
-                this.emit("change");
+                this.emit("change")
             })
             .catch(error => {
                 console.log(error)

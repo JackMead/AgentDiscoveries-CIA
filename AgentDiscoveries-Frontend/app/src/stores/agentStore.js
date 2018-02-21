@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 import { searchAPI } from '../components/crud'
 import dispatcher from '../dispatcher'
 
@@ -10,7 +10,7 @@ class AgentStore extends EventEmitter {
 
     getAll() {
         console.log(this.agents)
-        return this.agents;
+        return this.agents
     }
 
     addAgent(agent) {
@@ -29,7 +29,7 @@ class AgentStore extends EventEmitter {
             })
             .then(response => {
                 this.agents = response
-                this.emit("change");
+                this.emit("change")
             })
             .catch(error => {
                 console.log(error)
