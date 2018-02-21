@@ -31,10 +31,10 @@ export default class EntitySubmit extends React.Component {
         this.state = {
             api: "locations",
             entities: {
-                locations: [],
-                regions: [],
-                agents: [],
-                users: []
+                locations: LocationStore.getAll(),
+                regions: RegionStore.getAll(),
+                agents: AgentStore.getAll(),
+                users: UserStore.getAll()
             },
             message: { "message": "", "type": "danger" },
         }

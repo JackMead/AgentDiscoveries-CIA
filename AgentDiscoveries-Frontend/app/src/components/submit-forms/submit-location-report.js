@@ -19,7 +19,7 @@ export default class LocationReportSubmit extends React.Component {
     constructor() {
         super()
         this.state = {
-            locations: [],
+            locations: LocationStore.getAll(),
             message: { message: "", type: "danger" },
         }
 

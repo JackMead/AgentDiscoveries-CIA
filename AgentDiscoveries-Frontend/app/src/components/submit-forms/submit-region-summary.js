@@ -19,7 +19,7 @@ export default class RegionSummarySubmit extends React.Component {
     constructor() {
         super()
         this.state = {
-            regions: [],
+            regions: RegionStore.getAll(),
             message: {message: "", type: "danger"},
         }
 
