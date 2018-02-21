@@ -9,7 +9,6 @@ class UserStore extends EventEmitter {
     }
 
     getAll() {
-        console.log(this.users)
         return this.users
     }
 

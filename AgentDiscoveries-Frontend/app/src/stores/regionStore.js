@@ -9,7 +9,6 @@ class RegionStore extends EventEmitter {
     }
 
     getAll() {
-        console.log(this.regions)
         return this.regions
     }
 

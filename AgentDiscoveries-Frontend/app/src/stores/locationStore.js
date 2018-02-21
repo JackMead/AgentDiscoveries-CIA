@@ -9,7 +9,6 @@ class LocationStore extends EventEmitter {
     }
 
     getAll() {
-        console.log(this.locations)
         return this.locations
     }
 

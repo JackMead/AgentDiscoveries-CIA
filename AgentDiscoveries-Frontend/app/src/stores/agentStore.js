@@ -9,7 +9,6 @@ class AgentStore extends EventEmitter {
     }
 
     getAll() {
-        console.log(this.agents)
         return this.agents
     }
 
