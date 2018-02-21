@@ -41,6 +41,9 @@ public class PictureRoutes {
         String fileName = filePart.getSubmittedFileName();
         String extension = "";
         byte[] contents = null;
+        if(filePart.getSize()>1024*1024){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "picture is larger than 1MB");
+        }
 
         try (final InputStream in = filePart.getInputStream()) {
             extension = fileName.substring(fileName.lastIndexOf(".") + 1);

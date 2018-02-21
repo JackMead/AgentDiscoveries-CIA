@@ -3,7 +3,8 @@ import {
     Form,
     FormGroup,
     FormControl,
-    Button
+    Button,
+    ControlLabel
 } from "react-bootstrap";
 import {updateAPI, updatePicture, readAPI} from "./crud";
 
@@ -13,7 +14,8 @@ export default class Profile extends React.Component {
         super();
         this.state = {
             file: null,
-            imgSrc: ""
+            imgSrc: "",
+            imageUploadMessage: ""
         }
         this.onChange = this.onChange.bind(this)
         this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
@@ -36,6 +38,7 @@ export default class Profile extends React.Component {
                 </Form>
                 <img src={this.state.imgSrc} onError={(e)=>{e.target.src='/userResources/default.jpg'}}/>
                 <Form encType="multipart/form-data" onSubmit={this.handlePictureUpdate.bind(this)}>
+                    <ControlLabel bsStyle="warning">{this.state.imageUploadMessage}</ControlLabel>
                     <FormGroup>
                         <FormControl accept="image/png, image/jpeg" type="file" name="file" onChange={this.onChange}/>
                         <Button type="submit">Update Picture</Button>
@@ -51,6 +54,12 @@ export default class Profile extends React.Component {
 
     handlePictureUpdate(e) {
         e.preventDefault();
+        if(this.state.file.size>1024*1024){
+            this.setState({imageUploadMessage:"File must be less than 1MB"});
+            return
+        }
+        this.setState({imageUploadMessage:""});
+
         var userId = window.localStorage.getItem("UserId");
         const formData = new FormData();
         formData.append('file', this.state.file);
@@ -75,7 +84,7 @@ export default class Profile extends React.Component {
                 let binaryData = response.imageBytes;
                 let fileType = response.fileType;
                 let base64String = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
-                this.state.imgSrc = "data:image/"+fileType+";base64,"+base64String;
+                this.setState({imgSrc : "data:image/"+fileType+";base64,"+base64String});
             })
     }
 
