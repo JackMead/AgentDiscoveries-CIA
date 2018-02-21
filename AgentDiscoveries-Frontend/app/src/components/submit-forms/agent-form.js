@@ -13,14 +13,10 @@ export class CreateAgent extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            users: [],
+            users: props.entities.users,
             onSubmit: props.onSubmit
         }
-
-        searchAPI("v1/api/users", "")
-            .then(response => response.json())
-            .then(response => this.setState({ users: response }))
-
+        console.log(props)
         this.submitForm = props.submitForm;
         this.getUserOptions = this.getUserOptions.bind(this);
     }
