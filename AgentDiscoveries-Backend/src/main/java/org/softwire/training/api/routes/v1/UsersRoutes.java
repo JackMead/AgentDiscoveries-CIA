@@ -14,11 +14,8 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
-import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Optional;
 
 public class UsersRoutes implements EntityCRUDRoutes {
@@ -96,35 +93,6 @@ public class UsersRoutes implements EntityCRUDRoutes {
         usersDao.updateUser(user);
 
         return mapModelToApiModel(user);
-    }
-
-    public UserApiModel updatePicture(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
-        int userId = req.attribute("user_id");
-
-        if (userId != id && userId != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
-        }
-
-        req.raw().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/default"));
-        Part filePart = req.raw().getPart("file");
-        String fileName = filePart.getSubmittedFileName();
-        if (StringUtils.isEmpty(fileName) || fileName.lastIndexOf(".") == -1) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "File must have an extension");
-        }
-        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-        //TODO save extension and serve with picture
-        try (final InputStream in = filePart.getInputStream()) {
-            usersDao.updateUserPicture(userId, in);
-        }catch(Exception e){
-            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "failed to update image");
-        }
-
-        Optional<User> user = usersDao.getUser(userId);
-        if(!user.isPresent()){
-            throw new FailedRequestException(ErrorCode.NOT_FOUND, "no such user found");
-        }
-        filePart.delete();
-        return mapModelToApiModel(user.get());
     }
 
     private UserApiModel mapModelToApiModel(User user) {

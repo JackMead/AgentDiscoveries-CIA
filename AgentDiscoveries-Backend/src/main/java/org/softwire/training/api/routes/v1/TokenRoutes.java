@@ -65,9 +65,6 @@ public class TokenRoutes {
     private TokenResponseApiModel generateToken(User user) {
         // Use the user_id as the subject for the issued token
         TokenIssuer.IssuedToken issuedToken = tokenIssuer.generateToken(Integer.toString(user.getUserId()));
-        Optional<byte[]> blob = usersDao.getPicture(user.getUserId());
-        //Deal with none existence later.
-        byte[] image = blob.get();
-        return new TokenResponseApiModel(issuedToken.getToken(), issuedToken.getExpiryInstant().toString(), user.getUserId(), image);
+        return new TokenResponseApiModel(issuedToken.getToken(), issuedToken.getExpiryInstant().toString(), user.getUserId());
     }
 }

@@ -38,6 +38,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject RegionSummaryReportsRoutes regionSummaryReportsRoutes;
     @Inject UsersRoutes usersRoutes;
     @Inject ExecutiveSummaryRoutes executiveSummaryRoutes;
+    @Inject PictureRoutes pictureRoutes;
 
     @Override
     public void run() {
@@ -64,7 +65,7 @@ public class AgentDiscoveriesApplication implements Runnable {
                     path("/executivesummary", this::executivesSummaryGroup);
                 });
 
-                path("/imageUpload", this::imageUploadGroup);
+                path("/images", this::imageGroup);
                 path("/agents", this::agentsRouteGroup);
                 path("/regions", this::regionsRouteGroup);
                 path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
@@ -98,8 +99,10 @@ public class AgentDiscoveriesApplication implements Runnable {
         post("/generate", executiveSummaryRoutes::readExecutiveSummary);
     }
 
-    private void imageUploadGroup(){
-        put("/:id",(req, res) -> usersRoutes.updatePicture(req, res, idParamAsInt(req)), responseTransformer);
+    private void imageGroup() {
+        get("/:id", (req, res) -> pictureRoutes.readProfilePicture(req, res, idParamAsInt(req)), responseTransformer);
+        put("/:id", (req, res) -> pictureRoutes.updatePicture(req, res, idParamAsInt(req)), responseTransformer);
+        delete("/:id", (req, res) -> pictureRoutes.deletePicture(req, res, idParamAsInt(req)), responseTransformer );
     }
 
     private void agentsRouteGroup() {
@@ -113,7 +116,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         delete("/:id", (req, res) -> regionsRoutes.deleteRegion(req, res, idParamAsInt(req)), responseTransformer);
     }
 
-    private void reportsRouteGroup(ReportsRoutesBase<?, ?, ? > reportsRoutes) {
+    private void reportsRouteGroup(ReportsRoutesBase<?, ?, ?> reportsRoutes) {
         post("", reportsRoutes::createReport, responseTransformer);
         get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);

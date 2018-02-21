@@ -5,7 +5,7 @@ import {
     FormControl,
     Button
 } from "react-bootstrap";
-import {updateAPI, updatePicture} from "./crud";
+import {updateAPI, updatePicture, readAPI} from "./crud";
 
 export default class Profile extends React.Component {
 
@@ -13,7 +13,7 @@ export default class Profile extends React.Component {
         super();
         this.state = {
             file: null,
-            imgSrc: "/userResources/default.jpg"
+            imgSrc: ""
         }
         this.onChange = this.onChange.bind(this)
         this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
@@ -31,16 +31,13 @@ export default class Profile extends React.Component {
                     <FormGroup>
                         <FormControl type="text" inputRef={callSign => this.callSign = callSign}
                                      placeholder="enter your call sign"/>
-                        <FormControl type="date" required
-                                     inputRef={dateOfBirth => this.dateOfBirth = dateOfBirth}
-                                     placeholder="enter date of birth"/>
                         <Button type="submit">Submit Changes</Button>
                     </FormGroup>
                 </Form>
-                <img src={this.state.imgSrc}/>
+                <img src={this.state.imgSrc} onError={(e)=>{e.target.src='/userResources/default.jpg'}}/>
                 <Form encType="multipart/form-data" onSubmit={this.handlePictureUpdate.bind(this)}>
                     <FormGroup>
-                        <FormControl type="file" name="file" onChange={this.onChange}/>
+                        <FormControl accept="image/png, image/jpeg" type="file" name="file" onChange={this.onChange}/>
                         <Button type="submit">Update Picture</Button>
                     </FormGroup>
                 </Form>
@@ -58,52 +55,30 @@ export default class Profile extends React.Component {
         const formData = new FormData();
         formData.append('file', this.state.file);
 
-        updatePicture("/v1/api/imageUpload", userId, formData);
-        this.getProfileSrc();
+        updatePicture("/v1/api/images", userId, formData)
+            .then(this.getProfileSrc());
     }
 
     handleAgentUpdate(e) {
         e.preventDefault();
         var userId = window.localStorage.getItem("UserId");
         var requestBodyJSON = {
-            "callSign": this.callSign.value,
-            "dateOfBirth": this.dateOfBirth.value
+            "callSign": this.callSign.value
         }
-
         updateAPI("/v1/api/agents", userId, JSON.stringify(requestBodyJSON));
     }
 
     getProfileSrc() {
-        //TODO change backend so you can just ask for a picture
-        var requestBodyJSON = {
-            "username": "testuser1",
-            "password": "badpass"
-        }
-
-        let src = this.makeAuthenticationAPICall("/v1/token", requestBodyJSON)
-            .then(response => response.json())
+        var userId = window.localStorage.getItem("UserId");
+        readAPI("/v1/api/images", userId).then(response => response.json())
             .then(response => {
-                let binaryData = response.picture;
+                let binaryData = response.imageBytes;
+                let fileType = response.fileType;
                 let base64String = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
-                console.log(binaryData);
-                console.log(base64String);
-                this.state.imgSrc = "data:image/png;base64,"+base64String;
+                this.state.imgSrc = "data:image/"+fileType+";base64,"+base64String;
             })
     }
 
-    makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
-        var requestBody = JSON.stringify(requestBodyJSON);
-        return fetch(apiAddress, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: requestBody
-        });
-    }
-
-    //TODO later change to check if user is an agent.
     isUserLoggedIn() {
         let token = window.localStorage.getItem("Token");
         return token && true;

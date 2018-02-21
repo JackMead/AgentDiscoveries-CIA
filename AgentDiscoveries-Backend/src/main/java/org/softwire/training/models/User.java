@@ -9,8 +9,7 @@ public class User {
     private int userId;
     private String username;
     private String hashedPassword;
-    private byte[] profilePicture;
-    private final String defaultPictureFilename = "default.jpg";
+
     public User() {
 
     }
@@ -43,10 +42,4 @@ public class User {
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
-
-    public byte[] getPicture(){
-        return profilePicture;
-    }
-
-    public void setPicture(byte[] picture) { this.profilePicture = picture; }
 }
