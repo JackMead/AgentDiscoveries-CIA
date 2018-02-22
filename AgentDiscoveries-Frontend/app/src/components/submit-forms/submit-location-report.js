@@ -13,6 +13,7 @@ import { searchAPI } from "../crud"
 import * as LocationActions from "../../actions/locationActions"
 import LocationStore from "../../stores/locationStore"
 
+const EXTERNAL_API = "http://35.177.80.2/"
 
 export default class LocationReportSubmit extends React.Component {
 
@@ -26,6 +27,7 @@ export default class LocationReportSubmit extends React.Component {
         this.submitForm = {}
         
         this.onSubmit = this.onSubmit.bind(this)
+        this.onSubmitToExternal = this.onSubmitToExternal.bind(this)
         this.updateLocations = this.updateLocations.bind(this)
         this.getLocationOptions = this.getLocationOptions.bind(this)
     }
@@ -68,7 +70,8 @@ export default class LocationReportSubmit extends React.Component {
                             inputRef={reportBody => this.submitForm.reportBody = reportBody}
                             placeholder="write report" />
                     </FormGroup>
-                    <Button type="submit">Submit</Button>
+                    <Button className="form-section-inline" type="submit">Submit</Button>
+                    <Button className="form-section-inline" type="button" onClick={this.onSubmitToExternal}>Submit to External</Button>
                 </Form>
             </div>
         )
@@ -82,6 +85,17 @@ export default class LocationReportSubmit extends React.Component {
             })
             .catch(error => {
                 this.setState({ message: { "message": error, type: "danger" } })
+            })
+    }
+
+    onSubmitToExternal(e) {
+        e.preventDefault()
+        handleReportSubmit(`${EXTERNAL_API}/api/reports/locationstatuses`, this.submitForm)
+            .then(response => {
+                this.setState({ message: { message: "Report sent", type: "info" } })
+            })
+            .catch(error => {
+                this.setState({ message: { "message": `Error when submitting to external API ${error}`, type: "danger" } })
             })
     }
 

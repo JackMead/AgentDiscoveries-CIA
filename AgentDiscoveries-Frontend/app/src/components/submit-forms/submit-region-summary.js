@@ -14,6 +14,8 @@ import { searchAPI } from "../crud"
 import RegionStore from "../../stores/regionStore"
 import * as RegionActions from "../../actions/regionActions"
 
+const EXTERNAL_API = "http://35.177.80.2/"
+
 export default class RegionSummarySubmit extends React.Component {
 
     constructor() {
@@ -30,6 +32,7 @@ export default class RegionSummarySubmit extends React.Component {
         this.submitForm = {}
         
         this.onSubmit = this.onSubmit.bind(this)
+        this.onSubmitToExternal = this.onSubmitToExternal.bind(this)
         this.updateRegions = this.updateRegions.bind(this)
         this.getRegionOptions = this.getRegionOptions.bind(this)
     }
@@ -72,7 +75,8 @@ export default class RegionSummarySubmit extends React.Component {
                             inputRef={reportBody => this.submitForm.reportBody = reportBody}
                             placeholder="write region summary" />
                     </FormGroup>
-                    <Button type="submit">Submit</Button>
+                    <Button className="form-section-inline" type="submit">Submit</Button>
+                    <Button className="form-section-inline" type="button" onClick={this.onSubmitToExternal}>Submit to External</Button>
                 </Form>
             </div>
         )
@@ -89,6 +93,17 @@ export default class RegionSummarySubmit extends React.Component {
             })
     }
 
+    onSubmitToExternal(e) {
+        e.preventDefault()
+        handleReportSubmit(`${EXTERNAL_API}/api/reports/regionsummaries`, this.submitForm)
+            .then(response => {
+                this.setState({ message: { message: "Report sent to external API", type: "info" } })
+            })
+            .catch(error => {
+                this.setState({ message: { "message": `When submitting to external API: ${error}`, type: "danger" } })
+            })
+    }
+    
     updateRegions() {
         this.setState({
             regions: RegionStore.getAll()
