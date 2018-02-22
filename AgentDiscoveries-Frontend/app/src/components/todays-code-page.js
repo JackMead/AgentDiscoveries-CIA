@@ -28,6 +28,7 @@ export class TodaysCodePage extends React.Component {
                     <FormGroup>
                         <ControlLabel>Message</ControlLabel>
                         <FormControl type="text" required
+                            componentClass="textarea" rows={6}
                             inputRef={message => this.state.message.message = message}
                             placeholder="enter message" />
                     </FormGroup>
