@@ -95,12 +95,12 @@ export default class RegionSummarySubmit extends React.Component {
 
     onSubmitToExternal(e) {
         e.preventDefault()
-        handleReportSubmit(`${EXTERNAL_API}/api/reports/regionsummaries`, this.submitForm)
+        handleReportSubmit(`${EXTERNAL_API}/reports`, this.submitForm)
             .then(response => {
                 this.setState({ message: { message: "Report sent to external API", type: "info" } })
             })
             .catch(error => {
-                this.setState({ message: { "message": `When submitting to external API: ${error}`, type: "danger" } })
+                this.setState({ message: { "message": `Failed submitting to external API. ${error}`, type: "danger" } })
             })
     }
     

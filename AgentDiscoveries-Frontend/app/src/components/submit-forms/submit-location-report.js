@@ -90,12 +90,12 @@ export default class LocationReportSubmit extends React.Component {
 
     onSubmitToExternal(e) {
         e.preventDefault()
-        handleReportSubmit(`${EXTERNAL_API}/api/reports/locationstatuses`, this.submitForm)
+        handleReportSubmit(`${EXTERNAL_API}/reports`, this.submitForm)
             .then(response => {
                 this.setState({ message: { message: "Report sent", type: "info" } })
             })
             .catch(error => {
-                this.setState({ message: { "message": `Error when submitting to external API ${error}`, type: "danger" } })
+                this.setState({ message: { "message": `Failed submitting to external API. ${error}`, type: "danger" } })
             })
     }
 
