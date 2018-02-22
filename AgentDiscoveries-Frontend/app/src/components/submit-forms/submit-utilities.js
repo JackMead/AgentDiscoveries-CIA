@@ -19,10 +19,13 @@ export function handleReportSubmit(apiAddress, submitForm) {
 
 export function handleExternalReportSubmit(submitForm) {
     let bodyJSON = {}
-    
-    bodyJSON.agentId = 1 //TODO: set this to the agent's actual ID
-    bodyJSON.reportBody = submitForm.reportBody.value
-    bodyJSON.locationId = submitForm.locationId.value
+    try {
+        bodyJSON.agentId = 1 //TODO: set this to the agent's actual ID
+        bodyJSON.reportBody = submitForm.reportBody.value
+        bodyJSON.locationId = submitForm.locationId.value
+    } catch (e) {
+        throw "Can not submit this report format to the external API"
+    }
     var requestBody = JSON.stringify(bodyJSON)
     return createAPI(`${EXTERNAL_API}/reports`, requestBody)
         .then(response => {
