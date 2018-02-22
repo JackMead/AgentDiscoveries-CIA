@@ -14,7 +14,9 @@ import RegionSummarySearch from "./search-forms/search-region-summaries"
 import LocationReportSubmit from "./submit-forms/submit-location-report"
 import RegionSummarySubmit from "./submit-forms/submit-region-summary"
 import EntitySubmit from "./submit-forms/submit-entity"
+import Entities from "./admin/entities-view"
 import { TodaysCodePage} from "./todays-code-page"
+
 
 export default class App extends React.Component {
 
@@ -29,8 +31,10 @@ export default class App extends React.Component {
                         <Route path="/search/region" render={() => <Page><RegionSummarySearch /></Page>} />
                         <Route path="/submit/location" render={() => <Page><LocationReportSubmit /></Page>} />
                         <Route path="/submit/region" render={() => <Page><RegionSummarySubmit /></Page>} />
-                        <Route path="/admin/entities" render={() => <Page><EntitySubmit /></Page>} />
+                        <Route path="/admin/add-entity" render={() => <Page><EntitySubmit /></Page>} />
+                        <Route path="/admin/entities" render={() => <Page><Entities /></Page>} />
                         <Route path="/message" render={() => <Page><TodaysCodePage /></Page>} />
+                        
                     </Switch>
                 </Router>
             </React.Fragment>

@@ -1,18 +1,6 @@
 import * as React from "react"
-import {
-    Form,
-    FormGroup,
-    FormControl,
-    Button,
-    ControlLabel
-} from "react-bootstrap"
-import { handleEntitySubmit } from "./submit-utilities"
-import { Message } from "../message"
-import { CreateLocation } from "./location-form"
-import { CreateRegion } from "./region-form"
-import { CreateAgent } from "./agent-form"
-import { CreateUser } from "./user-form"
 
+import Entity from './entity'
 import * as LocationActions from '../../actions/locationActions'
 import * as RegionActions from '../../actions/regionActions'
 import * as AgentActions from '../../actions/agentActions'
@@ -23,28 +11,25 @@ import RegionStore from '../../stores/regionStore'
 import AgentStore from '../../stores/agentStore'
 import UserStore from '../../stores/userStore'
 
-export default class EntitySubmit extends React.Component {
+export default class Entities extends React.Component {
 
     constructor() {
         super()
 
         this.state = {
-            api: "locations",
+            api: "users",
             entities: {
                 locations: LocationStore.getAll(),
                 regions: RegionStore.getAll(),
                 agents: AgentStore.getAll(),
                 users: UserStore.getAll()
             },
-            message: { "message": "", "type": "danger" },
         }
         this.submitForm = {}
         this.apiForms = []
 
-        this.onSubmit = this.onSubmit.bind(this)
-        this.onSelectApi = this.onSelectApi.bind(this)
+        this.getEntities = this.getEntities.bind(this)
 
-        this.setUpEntityForms = this.setUpEntityForms.bind(this)
         this.updateStores = this.updateStores.bind(this)
         this.registerStoreListeners = this.registerStoreListeners.bind(this)
         this.deregisterStoreListeners = this.deregisterStoreListeners.bind(this)
@@ -54,9 +39,8 @@ export default class EntitySubmit extends React.Component {
         this.updateAgents = this.updateAgents.bind(this)
         this.updateUsers = this.updateUsers.bind(this)
     }
-    
+
     componentWillMount() {
-        this.setUpEntityForms()
         this.updateStores()
         this.registerStoreListeners()
     }
@@ -68,54 +52,18 @@ export default class EntitySubmit extends React.Component {
     render() {
         return (
             <div className="col-md-8 col-md-offset-2">
-            
-                <Message message={this.state.message} />
-
-                <Form onChange={this.onSelectApi}>
-                    <FormGroup>
-                        <ControlLabel>Api</ControlLabel>
-                        <FormControl componentClass="select"
-                            placeholder="select"
-                            inputRef={api => this.state.api = api}>
-                            {this.getFormApiOptions()}
-                        </FormControl>
-                    </FormGroup>
-                </Form>
-
-                {this.state.form}
+                <h3>Entities</h3>
+                {this.getEntities()}
             </div>
         )
     }
 
-    getFormApiOptions() {
-        return Object.keys(this.apiForms).map(key => {
-            return <option key={key} value={key}>{key}</option>
+    getEntities() {
+        let entities = this.state.entities[this.state.api]
+        console.log("entities", entities)
+        return Object.keys(entities).map(key => {
+            return <Entity entity={entities[key]} />
         })
-    }
-
-    onSelectApi(e) {
-        e.preventDefault()
-        this.setState({
-            form: this.apiForms[this.state.api.value],
-            message: { message: "", type: "danger" }
-        })
-    }
-
-    onSubmit(e) {
-        e.preventDefault()
-        handleEntitySubmit(`/v1/api/${this.state.api.value}`, this.submitForm)
-            .then(response => this.setState({ message: { message: "Entity created successfully", type: "info" } }))
-            .catch(error => this.setState({ message: { message: error, type: "danger" } }))
-    }
-
-    setUpEntityForms() {
-        this.apiForms = {
-            locations: <CreateLocation submitForm={this.submitForm} onSubmit={this.onSubmit} />,
-            regions: <CreateRegion submitForm={this.submitForm} onSubmit={this.onSubmit} />,
-            users: <CreateUser submitForm={this.submitForm} onSubmit={this.onSubmit} />,
-            agents: <CreateAgent submitForm={this.submitForm} onSubmit={this.onSubmit} entities={this.state.entities}/>
-        }
-        this.setState({ form: this.apiForms[this.state.api] })
     }
 
     updateStores() {
