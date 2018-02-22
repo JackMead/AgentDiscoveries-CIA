@@ -31,8 +31,12 @@ export default class App extends React.Component {
                         <Route path="/search/region" render={() => <Page><RegionSummarySearch /></Page>} />
                         <Route path="/submit/location" render={() => <Page><LocationReportSubmit /></Page>} />
                         <Route path="/submit/region" render={() => <Page><RegionSummarySubmit /></Page>} />
+
                         <Route path="/admin/add-entity" render={() => <Page><EntitySubmit /></Page>} />
-                        <Route path="/admin/entities" render={() => <Page><Entities /></Page>} />
+                        <Route path="/admin/entities/locations" render={() => <Page><Entities api="locations" /></Page>} />
+                        <Route path="/admin/entities/regions" render={() => <Page><Entities api="regions" /></Page>} />
+                        <Route path="/admin/entities/users" render={() => <Page><Entities api="users" /></Page>} />
+
                         <Route path="/message" render={() => <Page><TodaysCodePage /></Page>} />
                         
                     </Switch>

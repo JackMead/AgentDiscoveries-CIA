@@ -3,25 +3,30 @@ import React from 'react'
 export default class Entities extends React.Component {
     constructor(props) {
         super()
-        this.entity = props.entity;
-        this.getEntityRows = this.getEntityRows.bind(this)
+        this.state = {
+            entity: props.entity
+        }
+        this.getEntityRow = this.getEntityRow.bind(this)
+    }
+
+    componentWillReceiveProps(props) {
+        this.setState({
+            entity: props.entity
+        })
     }
 
     render(props) {
         return (
-            <div>
-                {this.getEntityRows()}
-            </div>
+            <tr key={`entity-${this.state.entity[0]}`}>
+                {this.getEntityRow()}
+            </tr>
         )
     }
 
-    getEntityRows() {
-        return Object.keys(this.entity).map((key) => {
-            console.log("entity", this.entity)
+    getEntityRow() {
+        return Object.keys(this.state.entity).map((key) => {
                 return (
-                    <div>
-                        {key}: {this.entity[key]}
-                    </div>
+                    <td>{this.state.entity[key]}</td>
                 )
             }
         )

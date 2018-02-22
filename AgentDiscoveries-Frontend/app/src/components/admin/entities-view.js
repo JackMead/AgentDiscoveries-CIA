@@ -1,4 +1,5 @@
 import * as React from "react"
+import { Table } from 'react-bootstrap'
 
 import Entity from './entity'
 import * as LocationActions from '../../actions/locationActions'
@@ -13,11 +14,11 @@ import UserStore from '../../stores/userStore'
 
 export default class Entities extends React.Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         this.state = {
-            api: "users",
+            api: props.api,
             entities: {
                 locations: LocationStore.getAll(),
                 regions: RegionStore.getAll(),
@@ -25,10 +26,12 @@ export default class Entities extends React.Component {
                 users: UserStore.getAll()
             },
         }
-        this.submitForm = {}
-        this.apiForms = []
 
-        this.getEntities = this.getEntities.bind(this)
+        this.submitForm = {}
+
+        this.getTable = this.getTable.bind(this)
+        this.getTableHeader = this.getTableHeader.bind(this)
+        this.getTableBody = this.getTableBody.bind(this)
 
         this.updateStores = this.updateStores.bind(this)
         this.registerStoreListeners = this.registerStoreListeners.bind(this)
@@ -49,21 +52,54 @@ export default class Entities extends React.Component {
         this.deregisterStoreListeners()
     }
 
+    componentWillReceiveProps(props) {
+        this.setState({
+            api: props.api
+        })
+    }
+
     render() {
         return (
             <div className="col-md-8 col-md-offset-2">
-                <h3>Entities</h3>
-                {this.getEntities()}
+                <h3>{this.state.api}</h3>
+                {this.getTable()}
             </div>
         )
     }
+    
+    getTable() {
+        if (this.state.entities[this.state.api].length > 0) {
+            return (
+                <Table striped condensed>
+                    {this.getTableHeader()}
+                    {this.getTableBody()}
+                </Table>
+            )
+        } 
+    }
 
-    getEntities() {
+    getTableHeader() {
+        let entity = this.state.entities[this.state.api][0]
+        return (
+            <thead>
+                <tr>
+                    {Object.keys(entity).map(key => {
+                        return <th key={key}>{key}</th>
+                    })}
+                </tr>
+            </thead>
+        )
+    }
+
+    getTableBody() {
         let entities = this.state.entities[this.state.api]
-        console.log("entities", entities)
-        return Object.keys(entities).map(key => {
-            return <Entity entity={entities[key]} />
-        })
+        return (
+            <tbody>
+                {Object.values(entities).map(val => {
+                    return <Entity entity={val} />
+                })}
+            </tbody>
+        )
     }
 
     updateStores() {
