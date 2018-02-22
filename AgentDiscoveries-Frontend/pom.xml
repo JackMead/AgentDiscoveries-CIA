@@ -6,6 +6,9 @@
     <artifactId>agentdiscoveries-frontend</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <properties>
+        <skip.integration.tests>true</skip.integration.tests>
+    </properties>
     <profiles>
 
         <profile>
@@ -39,6 +42,7 @@
             <id>integration-test</id>
             <properties>
                 <skip.unit.tests>true</skip.unit.tests>
+                <skip.integration.tests>false</skip.integration.tests>
             </properties>
         </profile>
       </profiles>
@@ -80,8 +84,20 @@
                         </goals>
 
                         <configuration>
-                            <arguments>test</arguments>
+                            <arguments>test app/test</arguments>
                             <skip>${skip.unit.tests}</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>npm integration test</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <arguments>run-script end-to-end-test</arguments>
+                            <skip>${skip.integration.tests}</skip>
                         </configuration>
                     </execution>
 
