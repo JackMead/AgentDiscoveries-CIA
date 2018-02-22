@@ -6,14 +6,12 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap"
-import { handleReportSubmit } from "./submit-utilities"
+import { handleReportSubmit, handleExternalReportSubmit } from "./submit-utilities"
 import { Message } from "../message"
 import { searchAPI } from "../crud"
 
 import * as LocationActions from "../../actions/locationActions"
 import LocationStore from "../../stores/locationStore"
-
-const EXTERNAL_API = "http://35.177.80.2"
 
 export default class LocationReportSubmit extends React.Component {
 
@@ -90,12 +88,12 @@ export default class LocationReportSubmit extends React.Component {
 
     onSubmitToExternal(e) {
         e.preventDefault()
-        handleReportSubmit(`${EXTERNAL_API}/reports`, this.submitForm)
+        handleExternalReportSubmit(this.submitForm)
             .then(response => {
                 this.setState({ message: { message: "Report sent", type: "info" } })
             })
             .catch(error => {
-                this.setState({ message: { "message": `Failed submitting to external API. ${error}`, type: "danger" } })
+                this.setState({ message: { "message": error, type: "danger" } })
             })
     }
 

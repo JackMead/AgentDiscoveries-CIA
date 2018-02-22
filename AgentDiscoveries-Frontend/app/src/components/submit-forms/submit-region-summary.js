@@ -14,8 +14,6 @@ import { searchAPI } from "../crud"
 import RegionStore from "../../stores/regionStore"
 import * as RegionActions from "../../actions/regionActions"
 
-const EXTERNAL_API = "http://35.177.80.2"
-
 export default class RegionSummarySubmit extends React.Component {
 
     constructor() {
@@ -95,12 +93,12 @@ export default class RegionSummarySubmit extends React.Component {
 
     onSubmitToExternal(e) {
         e.preventDefault()
-        handleReportSubmit(`${EXTERNAL_API}/reports`, this.submitForm)
+        handleExternalReportSubmit(this.submitForm)
             .then(response => {
-                this.setState({ message: { message: "Report sent to external API", type: "info" } })
+                this.setState({ message: { message: "Report sent", type: "info" } })
             })
             .catch(error => {
-                this.setState({ message: { "message": `Failed submitting to external API. ${error}`, type: "danger" } })
+                this.setState({ message: { "message": error, type: "danger" } })
             })
     }
     
