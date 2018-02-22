@@ -20,7 +20,7 @@ export class TodaysCodePage extends React.Component {
 
     render(props) {
         return (
-            <div className="col-md-8">
+            <div className="col-md-8 col-md-offset-2">
                 <Form>
 
                     <h3>Encode/decode message with today's secret</h3>
@@ -32,7 +32,7 @@ export class TodaysCodePage extends React.Component {
                             placeholder="enter message" />
                     </FormGroup>
 
-                    <Button type="submit" onClick={this.handleEncode.bind(this)}>Encode</Button>
+                    <Button className='right-margin' type="submit" onClick={this.handleEncode.bind(this)}>Encode</Button>
                     <Button type="submit" onClick={this.handleDecode.bind(this)}>Decode</Button>
                 </Form>
 
