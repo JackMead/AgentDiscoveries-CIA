@@ -13,7 +13,7 @@ import { searchAPI } from "../crud"
 import * as LocationActions from "../../actions/locationActions"
 import LocationStore from "../../stores/locationStore"
 
-const EXTERNAL_API = "http://35.177.80.2/"
+const EXTERNAL_API = "http://35.177.80.2"
 
 export default class LocationReportSubmit extends React.Component {
 

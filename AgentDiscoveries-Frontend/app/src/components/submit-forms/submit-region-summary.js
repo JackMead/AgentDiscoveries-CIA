@@ -14,7 +14,7 @@ import { searchAPI } from "../crud"
 import RegionStore from "../../stores/regionStore"
 import * as RegionActions from "../../actions/regionActions"
 
-const EXTERNAL_API = "http://35.177.80.2/"
+const EXTERNAL_API = "http://35.177.80.2"
 
 export default class RegionSummarySubmit extends React.Component {
 
