@@ -29,7 +29,7 @@ class UserStore extends EventEmitter {
             .then(response => {
                 response.forEach(val => {
                     delete val.hashedPassword // we don't want this to be rendered
-                });
+                })
                 this.users = response
                 this.emit("change")
             })
