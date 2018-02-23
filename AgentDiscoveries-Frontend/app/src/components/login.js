@@ -76,7 +76,7 @@ export default class Login extends React.Component {
         this.makeAuthenticationAPICall("/v1/makeuser", requestBodyJSON)
             .then(response => response.json())
             .then(response => {
-                let token = response.token;
+                const token = response.token;
                 window.localStorage.setItem("Token", token);
                 if (!response.errorCode) {
                     this.updateIsLoggedIn();
@@ -104,7 +104,7 @@ export default class Login extends React.Component {
     }
 
     isUserLoggedIn(){
-        let token = window.localStorage.getItem("Token");
+        const token = window.localStorage.getItem("Token");
         return token && true;
     }
 

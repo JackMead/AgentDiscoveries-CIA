@@ -1,19 +1,19 @@
 package org.softwire.training.api.models;
 
 public class PictureApiModel{
-    private byte[] imageBytes;
-    private String fileType;
+    private byte[] pictureBytes;
+    private String contentType;
     private int userId;
 
-    public PictureApiModel(byte[] imageBytes, String fileType, int userId) {
-        this.fileType=fileType;
-        this.imageBytes=imageBytes;
-        this.userId=userId;
+    public PictureApiModel(byte[] pictureBytes, String contentType, int userId) {
+        this.contentType = contentType;
+        this.pictureBytes = pictureBytes;
+        this.userId = userId;
     }
 
-    public byte[] getImageBytes(){return imageBytes;}
+    public byte[] getPictureBytes(){return pictureBytes;}
 
-    public String getFileType(){return fileType;}
+    public String getContentType(){return contentType;}
 
     public int getUserId(){return userId;}
 }

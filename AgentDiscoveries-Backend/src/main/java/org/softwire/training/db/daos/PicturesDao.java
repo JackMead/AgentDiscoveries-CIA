@@ -15,10 +15,9 @@ public class PicturesDao {
 
     public Optional<PictureApiModel> getPicture(int userId) {
         try (Handle handle = jdbi.open()) {
-            RowMapper<PictureApiModel> byteMapper = (rs, ctx) -> new PictureApiModel(rs.getBytes("image"), rs.getString("file_type"), rs.getInt("user_id"));
             return handle.createQuery("SELECT * FROM profile_picture WHERE user_id = :userId")
                     .bind("userId", userId)
-                    .map(byteMapper)
+                    .map((rs, ctx) -> new PictureApiModel(rs.getBytes("image"), rs.getString("content_type"), rs.getInt("user_id")))
                     .findFirst();
         }
     }
@@ -26,12 +25,12 @@ public class PicturesDao {
 
     public int createOrUpdateUserPicture(int userId, Blob blob, String fileType) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO profile_picture (image, file_type, user_id) "+
-                    "VALUES(:image , :file_type , :user_id) "+
-                    "ON DUPLICATE KEY UPDATE image = :image , file_type = :file_type")
+            return handle.createUpdate("INSERT INTO profile_picture (image, content_type, user_id) "+
+                    "VALUES(:image , :content_type , :user_id) "+
+                    "ON DUPLICATE KEY UPDATE image = :image , content_type = :content_type")
                     .bind("user_id", userId)
                     .bind("image", blob)
-                    .bind("file_type", fileType)
+                    .bind("content_type", fileType)
                     .execute();
         }
     }

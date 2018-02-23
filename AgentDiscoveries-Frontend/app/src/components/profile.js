@@ -21,11 +21,14 @@ export default class Profile extends React.Component {
         this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
     }
 
+    componentDidMount(){
+        this.getProfileSrc();
+    }
+
     render() {
         if (!this.isUserLoggedIn()) {
             return null;
         }
-        this.getProfileSrc();
         return (
             <div>
                 <Form onSubmit={this.handleAgentUpdate.bind(this)}>
@@ -64,7 +67,7 @@ export default class Profile extends React.Component {
         const formData = new FormData();
         formData.append('file', this.state.file);
 
-        updatePicture("/v1/api/images", userId, formData)
+        updatePicture("/v1/api/pictures", userId, formData)
             .then(this.getProfileSrc());
     }
 
@@ -79,17 +82,17 @@ export default class Profile extends React.Component {
 
     getProfileSrc() {
         var userId = window.localStorage.getItem("UserId");
-        readAPI("/v1/api/images", userId).then(response => response.json())
+        readAPI("/v1/api/pictures", userId).then(response => response.json())
             .then(response => {
-                let binaryData = response.imageBytes;
-                let fileType = response.fileType;
-                let base64String = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
-                this.setState({imgSrc : "data:image/"+fileType+";base64,"+base64String});
+                const contentType = response.content_type;
+                const binaryData = response;
+                const base64String = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
+                this.setState({imgSrc : "data:"+contentType+";base64,"+base64String});
             })
     }
 
     isUserLoggedIn() {
-        let token = window.localStorage.getItem("Token");
+        const token = window.localStorage.getItem("Token");
         return !!token;
     }
 };

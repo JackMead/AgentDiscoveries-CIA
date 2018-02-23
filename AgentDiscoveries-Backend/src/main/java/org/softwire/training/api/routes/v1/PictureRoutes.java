@@ -2,11 +2,11 @@ package org.softwire.training.api.routes.v1;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.configuration2.Configuration;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.PictureApiModel;
 import org.softwire.training.db.daos.PicturesDao;
-import org.softwire.training.db.daos.UsersDao;
 import spark.Request;
 import spark.Response;
 
@@ -18,16 +18,19 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class PictureRoutes {
-    private final UsersDao usersDao;
     private final PicturesDao picturesDao;
+    private final Configuration configuration;
 
     @Inject
-    public PictureRoutes(PicturesDao picturesDao, UsersDao usersDao) {
+    public PictureRoutes(PicturesDao picturesDao, Configuration configuration) {
         this.picturesDao = picturesDao;
-        this.usersDao = usersDao;
+        this.configuration = configuration;
     }
 
     public PictureApiModel updatePicture(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
@@ -38,30 +41,34 @@ public class PictureRoutes {
 
         req.raw().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/default"));
         Part filePart = req.raw().getPart("file");
-        String fileName = filePart.getSubmittedFileName();
-        String extension = "";
-        byte[] contents = null;
-        if(filePart.getSize()>1024*1024){
+        if (filePart.getSize() > configuration.getInt("database.picture.bytes.limit")) {
+            filePart.delete();
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "picture is larger than 1MB");
         }
 
+        String contentType = filePart.getContentType();
+        ArrayList<String> allowedContentTypes = getAllowedContentTypes();
+        if (!allowedContentTypes.contains(contentType)) {
+            filePart.delete();
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "file is not a valid type");
+        }
+
         try (final InputStream in = filePart.getInputStream()) {
-            extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-            contents= IOUtils.toByteArray(in);
-            Blob blob = new SerialBlob(contents);
-            picturesDao.createOrUpdateUserPicture(userId, blob, extension);
+            picturesDao.createOrUpdateUserPicture(userId, getBlobFromInputStream(in), contentType);
         } catch (Exception e) {
-            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "failed to update image");
+            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "failed to update picture");
         } finally {
             filePart.delete();
         }
 
-        return new PictureApiModel(contents, extension, userId);
+        return new PictureApiModel(new byte[]{}, contentType, userId);
     }
 
-    public PictureApiModel readProfilePicture(Request req, Response res, int id) throws FailedRequestException {
-        Optional<PictureApiModel> optionalImageBytes = picturesDao.getPicture(req.attribute("user_id"));
-        return optionalImageBytes.orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "No image found for user"));
+    public byte[] readProfilePicture(Request req, Response res, int id) throws FailedRequestException {
+        Optional<PictureApiModel> optionalPicture = picturesDao.getPicture(req.attribute("user_id"));
+        PictureApiModel pictureApiModel = optionalPicture.orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "No picture found for user"));
+        res.type(pictureApiModel.getContentType());
+        return pictureApiModel.getPictureBytes();
     }
 
     public Object deletePicture(Request req, Response res, int id) throws Exception {
@@ -79,5 +86,20 @@ public class PictureRoutes {
         res.status(204);
 
         return new Object();
+    }
+
+    private ArrayList<String> getAllowedContentTypes(){
+        String[] allowedContent = configuration.getStringArray("database.picture.allowed.content.types");
+        return new ArrayList<String>(Arrays.asList(allowedContent));
+    }
+
+    private Blob getBlobFromInputStream(InputStream in) throws IOException, SQLException {
+        byte[] contents = IOUtils.toByteArray(in);
+        return new SerialBlob(contents);
+    }
+
+    private String getFileExtension(Part filePart) {
+        String fileName = filePart.getSubmittedFileName();
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
