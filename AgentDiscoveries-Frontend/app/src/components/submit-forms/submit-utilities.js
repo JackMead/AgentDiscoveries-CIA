@@ -1,4 +1,4 @@
-import { createAPI, updateAPI } from "../crud"
+import { createAPI, createAPIExternal, updateAPI } from "../crud"
 
 const EXTERNAL_API = "http://35.177.80.2"
 
@@ -27,7 +27,7 @@ export function handleExternalReportSubmit(submitForm) {
         throw "Can not submit this report format to the external API"
     }
     var requestBody = JSON.stringify(bodyJSON)
-    return createAPI(`${EXTERNAL_API}/reports`, requestBody)
+    return createAPIExternal(`${EXTERNAL_API}/reports`, requestBody)
         .then(response => {
             if (!response.ok) {
                 if (response.status === 400) {

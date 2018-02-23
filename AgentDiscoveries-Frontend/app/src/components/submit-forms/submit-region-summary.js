@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap"
 
 import { Message } from "../message"
-import { handleReportSubmit, handleExternalReportSubmit } from "./submit-utilities"
+import { handleReportSubmit } from "./submit-utilities"
 import { searchAPI } from "../crud"
 
 import RegionStore from "../../stores/regionStore"
@@ -30,7 +30,6 @@ export default class RegionSummarySubmit extends React.Component {
         this.submitForm = {}
         
         this.onSubmit = this.onSubmit.bind(this)
-        this.onSubmitToExternal = this.onSubmitToExternal.bind(this)
         this.updateRegions = this.updateRegions.bind(this)
         this.getRegionOptions = this.getRegionOptions.bind(this)
     }
@@ -74,7 +73,6 @@ export default class RegionSummarySubmit extends React.Component {
                             placeholder="write region summary" />
                     </FormGroup>
                     <Button className="form-section-inline" type="submit">Submit</Button>
-                    <Button className="form-section-inline" type="button" onClick={this.onSubmitToExternal}>Submit to External</Button>
                 </Form>
             </div>
         )
@@ -88,17 +86,6 @@ export default class RegionSummarySubmit extends React.Component {
             })
             .catch(error => {
                 this.setState({message: {message: error, type: "danger"}})
-            })
-    }
-
-    onSubmitToExternal(e) {
-        e.preventDefault()
-        handleExternalReportSubmit(this.submitForm)
-            .then(response => {
-                this.setState({ message: { message: "Report sent", type: "info" } })
-            })
-            .catch(error => {
-                this.setState({ message: { "message": error, type: "danger" } })
             })
     }
     
