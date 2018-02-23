@@ -13,7 +13,8 @@ import LocationReportSearch from "./search-forms/search-location-reports"
 import RegionSummarySearch from "./search-forms/search-region-summaries"
 import LocationReportSubmit from "./submit-forms/submit-location-report"
 import RegionSummarySubmit from "./submit-forms/submit-region-summary"
-import EntitySubmit from "./submit-forms/submit-entity"
+import AddEntity from "./admin/add-entity"
+import EditEntity from "./admin/edit-entity"
 import Entities from "./admin/entities-view"
 import { TodaysCodePage} from "./todays-code-page"
 
@@ -32,10 +33,17 @@ export default class App extends React.Component {
                         <Route path="/submit/location" render={() => <Page><LocationReportSubmit /></Page>} />
                         <Route path="/submit/region" render={() => <Page><RegionSummarySubmit /></Page>} />
 
-                        <Route path="/admin/add-entity" render={() => <Page><EntitySubmit /></Page>} />
-                        <Route path="/admin/entities/locations" render={() => <Page><Entities api="locations" /></Page>} />
-                        <Route path="/admin/entities/regions" render={() => <Page><Entities api="regions" /></Page>} />
-                        <Route path="/admin/entities/users" render={() => <Page><Entities api="users" /></Page>} />
+                        <Route path="/admin/locations" render={() => <Page><Entities api="locations" /></Page>} />
+                        <Route path="/admin/regions" render={() => <Page><Entities api="regions" /></Page>} />
+                        <Route path="/admin/users" render={() => <Page><Entities api="users" /></Page>} />
+
+                        <Route path="/admin/locations/add" render={() => <Page><AddEntity api="locations"/></Page>} />
+                        <Route path="/admin/regions/add" render={() => <Page><AddEntity api="regions"/></Page>} />
+                        <Route path="/admin/users/add" render={() => <Page><AddEntity api="users"/></Page>} />
+
+                        <Route path="/admin/locations/edit/:id" render={() => <Page><EditEntity api="locations" /></Page>} />
+                        <Route path="/admin/regions/edit/:id" render={() => <Page><EditEntity api="regions" /></Page>} />
+                        <Route path="/admin/users/edit/:id" render={() => <Page><EditEntity api="users" /></Page>} />
 
                         <Route path="/message" render={() => <Page><TodaysCodePage /></Page>} />
                         

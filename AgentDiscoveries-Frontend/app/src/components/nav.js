@@ -49,12 +49,9 @@ export default class NavigationBar extends React.Component {
                         </NavDropdown>
                         <NavItem componentClass={Link} href="/message" to="/message" eventKey={4}>Today's Message</NavItem>
                         <NavDropdown eventKey={5} title="Admin" id="basic-nav-dropdown">
-                            <MenuItem componentClass={Link} href="/admin/add-entity" to="/admin/add-entity" eventKey={5.1}>Add Entity</MenuItem>
-                            <NavDropdown eventKey={5.1} title="View Entities" id="basic-nav-dropdown">
-                                <MenuItem componentClass={Link} href="/admin/entities/locations" to="/admin/entities/locations" eventKey={5.11}>Locations</MenuItem>
-                                <MenuItem componentClass={Link} href="/admin/entities/regions" to="/admin/entities/regions" eventKey={5.12}>Regions</MenuItem>
-                                <MenuItem componentClass={Link} href="/admin/entities/users" to="/admin/entities/users" eventKey={5.13}>Users</MenuItem>
-                            </NavDropdown>
+                            <MenuItem componentClass={Link} href="/admin/locations" to="/admin/locations" eventKey={5.1}>Locations</MenuItem>
+                            <MenuItem componentClass={Link} href="/admin/regions" to="/admin/regions" eventKey={5.1}>Regions</MenuItem>
+                            <MenuItem componentClass={Link} href="/admin/users" to="/admin/users" eventKey={5.1}>Users</MenuItem>
                         </NavDropdown>
                     </Nav>
                     <Nav pullRight>

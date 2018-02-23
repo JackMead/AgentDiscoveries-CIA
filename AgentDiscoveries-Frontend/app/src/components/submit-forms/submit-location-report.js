@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap"
-import { handleReportSubmit } from "./submit-utilities"
+import { handleReportSubmit } from "../utilities/submit-utilities"
 import { Message } from "../message"
 import { searchAPI } from "../crud"
 

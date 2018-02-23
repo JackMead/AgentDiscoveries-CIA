@@ -7,7 +7,7 @@ import {
     ControlLabel
 } from "react-bootstrap"
 
-export class CreateUser extends React.Component {
+export class AddUser extends React.Component {
     
     constructor(props) {
         super()

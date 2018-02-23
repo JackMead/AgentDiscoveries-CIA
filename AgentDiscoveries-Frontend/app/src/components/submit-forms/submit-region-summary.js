@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap"
 
 import { Message } from "../message"
-import { handleReportSubmit } from "./submit-utilities"
+import { handleReportSubmit } from "../utilities/submit-utilities"
 import { searchAPI } from "../crud"
 
 import RegionStore from "../../stores/regionStore"

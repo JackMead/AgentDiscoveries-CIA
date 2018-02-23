@@ -7,7 +7,7 @@ import {
     ControlLabel
 } from "react-bootstrap"
 
-export class CreateLocation extends React.Component {
+export class AddLocation extends React.Component {
 
     constructor(props) {
         super()

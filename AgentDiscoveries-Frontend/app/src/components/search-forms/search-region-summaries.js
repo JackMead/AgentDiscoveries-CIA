@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap"
 import {Message} from "../message"
 
-import * as SearchUtils from "./search-utilities"
+import * as SearchUtils from "../utilities/search-utilities"
 import SearchResult from "./search-result"
 export default class RegionSummariesSearch extends React.Component {
 

@@ -7,7 +7,7 @@ import {
     ControlLabel
 } from "react-bootstrap"
 
-export class CreateRegion extends React.Component {
+export class AddRegion extends React.Component {
 
     constructor(props) {
         super()

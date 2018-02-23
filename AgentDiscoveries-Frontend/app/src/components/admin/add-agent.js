@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap"
 import { searchAPI } from "../crud"
 
-export class CreateAgent extends React.Component {
+export class AddAgent extends React.Component {
 
     constructor(props) {
         super()

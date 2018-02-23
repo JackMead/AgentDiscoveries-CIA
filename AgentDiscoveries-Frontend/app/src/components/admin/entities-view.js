@@ -1,7 +1,8 @@
 import * as React from "react"
-import { Table } from 'react-bootstrap'
-
+import { Table, Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom' 
 import Entity from './entity'
+
 import * as LocationActions from '../../actions/locationActions'
 import * as RegionActions from '../../actions/regionActions'
 import * as AgentActions from '../../actions/agentActions'
@@ -32,11 +33,11 @@ export default class Entities extends React.Component {
         this.getTable = this.getTable.bind(this)
         this.getTableHeader = this.getTableHeader.bind(this)
         this.getTableBody = this.getTableBody.bind(this)
-
-        this.updateStores = this.updateStores.bind(this)
+        
         this.registerStoreListeners = this.registerStoreListeners.bind(this)
         this.deregisterStoreListeners = this.deregisterStoreListeners.bind(this)
 
+        this.updateStores = this.updateStores.bind(this)
         this.updateLocations = this.updateLocations.bind(this)
         this.updateRegions = this.updateRegions.bind(this)
         this.updateAgents = this.updateAgents.bind(this)
@@ -62,6 +63,11 @@ export default class Entities extends React.Component {
         return (
             <div className="col-md-8 col-md-offset-2">
                 <h3>{this.state.api}</h3>
+                <Link to={`/admin/${this.state.api}/add`}>
+                    <Button type="button">
+                        {`Add ${this.state.api}`}
+                    </Button>
+                </Link>
                 {this.getTable()}
             </div>
         )
@@ -96,7 +102,7 @@ export default class Entities extends React.Component {
         return (
             <tbody>
                 {Object.values(entities).map(val => {
-                    return <Entity entity={val} />
+                    return <Entity entity={val} type={this.state.api}/>
                 })}
             </tbody>
         )
