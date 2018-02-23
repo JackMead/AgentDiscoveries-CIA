@@ -1,7 +1,8 @@
 package db.migration;
 
+import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.api.core.PasswordHasher;
-import org.softwire.training.db.daos.UsersDao;
 import org.softwire.training.models.User;
 
 import javax.inject.Inject;
@@ -15,14 +16,39 @@ public class V2__AddSeedData extends DaggerMigrationBase {
 
     public static class V2__AddSeedDataDaggerMigrationModule implements DaggerMigrationModule {
 
-        @Inject UsersDao usersDao;
         @Inject PasswordHasher passwordHasher;
+        @Inject Jdbi jdbi;
 
         @Override
         public void runMigration() {
-            usersDao.addUser(new User("testuser1", passwordHasher.hashPassword("badpass")));
-            usersDao.addUser(new User("testuser2", passwordHasher.hashPassword("alsobadpass")));
-            usersDao.addUser(new User("corrupt_user", "impossible_hash"));
+            addUser(new V2MigrationUser("testuser1", passwordHasher.hashPassword("badpass")));
+            addUser(new V2MigrationUser("testuser2", passwordHasher.hashPassword("alsobadpass")));
+            addUser(new V2MigrationUser("corrupt_user", "impossible_hash"));
+        }
+
+        public int addUser(V2MigrationUser user) {
+            try (Handle handle = jdbi.open()) {
+                return handle.createUpdate("INSERT INTO user (username, hashed_password) " +
+                        "VALUES (:username, :hashed_password)")
+                        .bind("username", user.getUsername())
+                        .bind("hashed_password", user.getHashedPassword())
+                        .execute();
+            }
+        }
+
+        private class V2MigrationUser{
+            private String username;
+            private String hashedPassword;
+            public V2MigrationUser(String username, String hashedPassword){
+                this.username=username;
+                this.hashedPassword=hashedPassword;
+            }
+
+            public String getHashedPassword() {return hashedPassword;}
+
+            public String getUsername() {return username;}
         }
     }
+
+
 }

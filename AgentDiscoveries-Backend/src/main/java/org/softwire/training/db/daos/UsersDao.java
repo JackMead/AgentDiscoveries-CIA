@@ -32,10 +32,11 @@ public class UsersDao {
 
     public int addUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO user (username, hashed_password) " +
-                    "VALUES (:username, :hashed_password)")
+            return handle.createUpdate("INSERT INTO user (username, hashed_password, admin) " +
+                    "VALUES (:username, :hashed_password, :admin)")
                     .bind("username", user.getUsername())
                     .bind("hashed_password", user.getHashedPassword())
+                    .bind("admin", user.isAdmin())
                     .executeAndReturnGeneratedKeys("user_id")
                     .mapTo(Integer.class)
                     .findOnly();
