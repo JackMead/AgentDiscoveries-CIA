@@ -21,7 +21,7 @@ export default class Profile extends React.Component {
         this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.getProfileSrc();
     }
 
@@ -39,7 +39,9 @@ export default class Profile extends React.Component {
                         <Button type="submit">Submit Changes</Button>
                     </FormGroup>
                 </Form>
-                <img src={this.state.imgSrc} onError={(e)=>{e.target.src='/userResources/default.jpg'}}/>
+                <img src={this.state.imgSrc} onError={(e) => {
+                    e.target.src = '/userResources/default.jpg'
+                }}/>
                 <Form encType="multipart/form-data" onSubmit={this.handlePictureUpdate.bind(this)}>
                     <ControlLabel bsStyle="warning">{this.state.imageUploadMessage}</ControlLabel>
                     <FormGroup>
@@ -57,11 +59,11 @@ export default class Profile extends React.Component {
 
     handlePictureUpdate(e) {
         e.preventDefault();
-        if(this.state.file.size>1024*1024){
-            this.setState({imageUploadMessage:"File must be less than 1MB"});
+        if (this.state.file.size > 1024 * 1024) {
+            this.setState({imageUploadMessage: "File must be less than 1MB"});
             return
         }
-        this.setState({imageUploadMessage:""});
+        this.setState({imageUploadMessage: ""});
 
         var userId = window.localStorage.getItem("UserId");
         const formData = new FormData();
@@ -82,13 +84,12 @@ export default class Profile extends React.Component {
 
     getProfileSrc() {
         var userId = window.localStorage.getItem("UserId");
-        readAPI("/v1/api/pictures", userId).then(response => response.json())
-            .then(response => {
-                const contentType = encodeURI(response.content_type);
-                const binaryData = response;
-                const base64String = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
-                this.setState({imgSrc : "data:"+contentType+";base64,"+base64String});
+        readAPI("/v1/api/pictures", userId)
+            .then(response => response.blob())
+            .then(blob => {
+                this.setState({imgSrc: URL.createObjectURL(blob)});
             })
+
     }
 
     isUserLoggedIn() {

@@ -103,7 +103,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     }
 
     private void picturesRouteGroup() {
-        get("/:id", (req, res) -> pictureRoutes.readProfilePicture(req, res, idParamAsInt(req)), responseTransformer);
+        get("/:id", (req, res) -> pictureRoutes.readProfilePicture(req, res, idParamAsInt(req)));
         put("/:id", (req, res) -> pictureRoutes.updatePicture(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> pictureRoutes.deletePicture(req, res, idParamAsInt(req)), responseTransformer );
     }
