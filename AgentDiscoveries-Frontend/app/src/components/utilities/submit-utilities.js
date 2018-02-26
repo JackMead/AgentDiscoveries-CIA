@@ -29,6 +29,17 @@ export function handleEntitySubmit(apiAddress, submitForm) {
         })
 }
 
+export function handleEntityEdit(apiAddress, id, submitForm) {
+    let bodyJSON = getBodyJSON(submitForm)
+    var requestBody = JSON.stringify(bodyJSON)
+    return updateAPI(apiAddress, id, requestBody)
+        .then(response => {
+            if (response.status >= 400) {
+                throw ("Server could not update the entity. Make sure all fields are correct")
+            }
+        })
+}
+
 function getBodyJSON(submitForm) {
     var bodyJSON = {}
     Object.keys(submitForm).forEach((key) => {

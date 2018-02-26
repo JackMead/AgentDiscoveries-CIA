@@ -24,10 +24,14 @@ export class AddUser extends React.Component {
                 <Form onSubmit={this.state.onSubmit}>
                     <h3>Create User</h3>
                     <FormGroup>
-                        <FormControl type="text" inputRef={username => this.submitForm.username = username} placeholder="enter username" />
+                        <FormControl type="text" required
+                        inputRef={username => this.submitForm.username = username}
+                        placeholder="enter username" />
                     </FormGroup>
                     <FormGroup>
-                        <FormControl type="password" inputRef={password => this.submitForm.password = password} placeholder="enter password" />
+                        <FormControl type="password" required
+                        inputRef={password => this.submitForm.password = password}
+                        placeholder="enter password" />
                     </FormGroup>
                     <Button type="submit">Submit</Button>
                 </Form>

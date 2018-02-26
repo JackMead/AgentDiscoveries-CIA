@@ -13,7 +13,9 @@ export class EditLocation extends React.Component {
         super()
         this.state = {
             onSubmit: props.onSubmit,
+            id: props.id
         }
+
         this.submitForm = props.submitForm
     }
 
@@ -21,27 +23,24 @@ export class EditLocation extends React.Component {
         return (
             <div className="col-md-12">
                 <Form onSubmit={this.state.onSubmit}>
-                    <h3>Create Location</h3>
+                    <h3>Edit Location {this.state.id}</h3>
 
                     <FormGroup>
                         <ControlLabel>Site Name</ControlLabel>
                         <FormControl type="text" required
                             inputRef={siteName => this.submitForm.siteName = siteName}
-                            defaultValue={this.props.location.siteName}
                             placeholder="enter site name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Location Name</ControlLabel>
                         <FormControl type="text" required
                             inputRef={location => this.submitForm.location = location}
-                            defaultValue={this.props.location.location}
                             placeholder="enter location name" />
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Time Zone</ControlLabel>
                         <FormControl type="text" required
                             inputRef={timeZone => this.submitForm.timeZone = timeZone}
-                            defaultValue={this.props.timeZone.timeZone}
                             placeholder="enter time zone (e.g. GMT+1)" />
                     </FormGroup>
                     <Button type="submit">Submit</Button>

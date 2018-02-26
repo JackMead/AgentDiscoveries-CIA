@@ -44,7 +44,6 @@ export default class AddEntity extends React.Component {
     render() {
         return (
             <div className="col-md-8 col-md-offset-2">
-            
                 <Message message={this.state.message} />
                 {this.state.form}
             </div>
@@ -53,8 +52,9 @@ export default class AddEntity extends React.Component {
 
     onSubmit(e) {
         e.preventDefault()
-        handleEntitySubmit(`/v1/api/${this.state.api.value}`, this.submitForm)
-            .then(response => this.setState({ message: { message: "Entity created successfully", type: "info" } }))
+        console.log(this.state)
+        handleEntitySubmit(`/v1/api/${this.state.api}`, this.submitForm)
+            .then(response => window.location.hash = `#/admin/${this.state.api}`)
             .catch(error => this.setState({ message: { message: error, type: "danger" } }))
     }
 

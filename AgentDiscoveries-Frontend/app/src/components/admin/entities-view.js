@@ -76,7 +76,7 @@ export default class Entities extends React.Component {
     getTable() {
         if (this.state.entities[this.state.api].length > 0) {
             return (
-                <Table striped condensed>
+                <Table key="{this.state.api}-table" striped >
                     {this.getTableHeader()}
                     {this.getTableBody()}
                 </Table>

@@ -2,19 +2,23 @@ import React from 'react'
 import { Button } from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 
-export default class Entities extends React.Component {
+export default class Entity extends React.Component {
     constructor(props) {
         super()
         this.state = {
             type: props.type,
-            id: props.id,
+            id: Object.values(props.entity)[0],  // this assumes that id is the first JSON value
             entity: props.entity
         }
+
         this.getEntityRow = this.getEntityRow.bind(this)
+        this.getEditButton = this.getEditButton.bind(this)
     }
 
     componentWillReceiveProps(props) {
         this.setState({
+            type: props.type,
+            id: Object.values(props.entity)[0],  // this assumes that id is the first JSON value
             entity: props.entity
         })
     }
@@ -24,9 +28,7 @@ export default class Entities extends React.Component {
             <tr key={`entity-${this.state.entity[0]}`}>
                 {this.getEntityRow()}
                 <td>
-                    <Link to={`/admin/${this.state.type}/${this.state.id}`}>
-                        <Button type='button'>Edit</Button>
-                    </Link>
+                    {this.getEditButton()}
                 </td>
             </tr>
         )
@@ -39,5 +41,15 @@ export default class Entities extends React.Component {
                 )
             }
         )
+    }
+
+    getEditButton() {
+        if (this.state.type !== "regions") {
+            return (
+                <Link to={`/admin/${this.state.type}/edit/${this.state.id}`}>
+                    <Button type='button'>Edit</Button>
+                </Link>
+            )
+        }
     }
 }
