@@ -28,10 +28,10 @@ export default class Login extends React.Component {
                     <h3>Sign in</h3>
                     <Message message={this.state.authenticationMessage} />
                     <FormGroup>
-                        <FormControl type="text" inputRef={username => this.username = username} placeholder="enter your username" />
+                        <FormControl id="user-name-input" type="text" inputRef={username => this.username = username} placeholder="enter your username" />
                     </FormGroup>
                     <FormGroup>
-                        <FormControl type="password" inputRef={password => this.password = password} placeholder="enter password" />
+                        <FormControl id="password-input" type="password" inputRef={password => this.password = password} placeholder="enter password" />
                     </FormGroup>
                     <FormGroup>
                         <Button id="login-submit" type="submit">Login</Button>
