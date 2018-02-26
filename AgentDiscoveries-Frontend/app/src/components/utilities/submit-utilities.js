@@ -32,6 +32,7 @@ export function handleEntitySubmit(apiAddress, submitForm) {
 export function handleEntityEdit(apiAddress, id, submitForm) {
     let bodyJSON = getBodyJSON(submitForm)
     var requestBody = JSON.stringify(bodyJSON)
+    
     return updateAPI(apiAddress, id, requestBody)
         .then(response => {
             if (response.status >= 400) {

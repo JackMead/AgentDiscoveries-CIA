@@ -9,17 +9,15 @@ import {
 
 import { Message } from "../message"
 import { handleReportSubmit } from "../utilities/submit-utilities"
+import { getAll } from "../utilities/get-utilities"
 import { searchAPI } from "../crud"
-
-import RegionStore from "../../stores/regionStore"
-import * as RegionActions from "../../actions/regionActions"
 
 export default class RegionSummarySubmit extends React.Component {
 
     constructor() {
         super()
         this.state = {
-            regions: RegionStore.getAll(),
+            regions: [],
             message: {message: "", type: "danger"},
         }
 
@@ -30,18 +28,21 @@ export default class RegionSummarySubmit extends React.Component {
         this.submitForm = {}
         
         this.onSubmit = this.onSubmit.bind(this)
-        this.updateRegions = this.updateRegions.bind(this)
         this.getRegionOptions = this.getRegionOptions.bind(this)
     }
 
     componentWillMount() {
-        RegionActions.updateRegions()
-        RegionStore.on("change", this.updateRegions)
+        getAll('regions')
+            .then(results =>
+                this.setState({
+                    regions: results
+                })
+            )
+            .catch(err => {
+                console.log(err)
+            })
     }
 
-    componentWillUnmount() {
-        RegionStore.removeListener("change", this.updateRegions)
-    }
 
     render() {
         return (
@@ -87,12 +88,6 @@ export default class RegionSummarySubmit extends React.Component {
             .catch(error => {
                 this.setState({message: {message: error, type: "danger"}})
             })
-    }
-
-    updateRegions() {
-        this.setState({
-            regions: RegionStore.getAll()
-        })
     }
 
     getRegionOptions() {

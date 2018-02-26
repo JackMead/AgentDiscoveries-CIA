@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap"
 
 import { handleEntityEdit } from "../utilities/submit-utilities"
+import { getEntity } from "../utilities/get-utilities"
 import { Message } from "../message"
 import { EditLocation } from "./edit-location"
 import { EditUser } from "./edit-user"
@@ -20,6 +21,7 @@ export default class EditEntity extends React.Component {
         this.state = {
             api: props.api,
             id: props.match.params.id,
+            entity: {},
             message: { "message": "", "type": "danger" },
         }
         this.submitForm = {}
@@ -30,7 +32,16 @@ export default class EditEntity extends React.Component {
     }
 
     componentWillMount() {
-        this.setUpEntityForms()
+        getEntity(this.state.api, this.state.id)
+            .then(result => {
+                this.setState({
+                    entity: result
+                })
+            })
+            .then(_ => {
+                this.setUpEntityForms()
+            })
+        console.log(this.state)
     }
 
     componentWillReceiveProps(props) {
@@ -58,8 +69,8 @@ export default class EditEntity extends React.Component {
 
     setUpEntityForms() {
         this.apiForms = {
-            locations: <EditLocation submitForm={this.submitForm} id={this.state.id} onSubmit={this.onSubmit} />,
-            users: <EditUser submitForm={this.submitForm} id={this.state.id} onSubmit={this.onSubmit} />
+            locations: <EditLocation submitForm={this.submitForm} entity = {this.state.entity} id={this.state.id} onSubmit={this.onSubmit} />,
+            users: <EditUser submitForm={this.submitForm} entity={this.state.entity} id={this.state.id} onSubmit={this.onSubmit} />
         }
         this.setState({ form: this.apiForms[this.state.api] })
     }

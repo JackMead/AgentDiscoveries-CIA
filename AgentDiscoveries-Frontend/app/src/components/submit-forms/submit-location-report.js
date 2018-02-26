@@ -7,11 +7,9 @@ import {
     ControlLabel
 } from "react-bootstrap"
 import { handleReportSubmit } from "../utilities/submit-utilities"
+import { getAll } from "../utilities/get-utilities"
 import { Message } from "../message"
 import { searchAPI } from "../crud"
-
-import * as LocationActions from "../../actions/locationActions"
-import LocationStore from "../../stores/locationStore"
 
 
 export default class LocationReportSubmit extends React.Component {
@@ -19,24 +17,26 @@ export default class LocationReportSubmit extends React.Component {
     constructor() {
         super()
         this.state = {
-            locations: LocationStore.getAll(),
+            locations: [],
             message: { message: "", type: "danger" },
         }
 
         this.submitForm = {}
         
         this.onSubmit = this.onSubmit.bind(this)
-        this.updateLocations = this.updateLocations.bind(this)
         this.getLocationOptions = this.getLocationOptions.bind(this)
     }
 
     componentWillMount() {
-        LocationActions.updateLocations()
-        LocationStore.on("change", this.updateLocations)
-    }
-
-    componentWillUnmount() {
-        LocationStore.removeListener("change", this.updateLocations)
+        getAll('locations')
+            .then(results => {
+                this.setState(
+                    {locations: results}
+                )
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     render() {
@@ -83,12 +83,6 @@ export default class LocationReportSubmit extends React.Component {
             .catch(error => {
                 this.setState({ message: { "message": error, type: "danger" } })
             })
-    }
-
-    updateLocations() {
-        this.setState({
-            locations: LocationStore.getAll()
-        })
     }
     
     getLocationOptions() {

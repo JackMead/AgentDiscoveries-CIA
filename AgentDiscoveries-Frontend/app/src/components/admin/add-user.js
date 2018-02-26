@@ -12,7 +12,7 @@ export class AddUser extends React.Component {
     constructor(props) {
         super()
         this.state = {
-            onSubmit: props.onSubmit,
+            onSubmit: props.onSubmit
         }
 
         this.submitForm = props.submitForm

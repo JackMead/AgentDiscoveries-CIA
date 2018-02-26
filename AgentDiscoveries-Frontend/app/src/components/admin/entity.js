@@ -25,9 +25,9 @@ export default class Entity extends React.Component {
 
     render(props) {
         return (
-            <tr key={`entity-${this.state.entity[0]}`}>
+            <tr key={Object.values(this.state.entity)[0]}>
                 {this.getEntityRow()}
-                <td>
+                <td key='edit'>
                     {this.getEditButton()}
                 </td>
             </tr>
@@ -37,7 +37,7 @@ export default class Entity extends React.Component {
     getEntityRow() {
         return Object.keys(this.state.entity).map((key) => {
                 return (
-                    <td>{this.state.entity[key]}</td>
+                    <td key={key}>{this.state.entity[key]}</td>
                 )
             }
         )

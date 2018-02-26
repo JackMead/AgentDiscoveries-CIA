@@ -13,7 +13,8 @@ export class EditUser extends React.Component {
         super()
         this.state = {
             onSubmit: props.onSubmit,
-            id: props.id
+            id: props.id,
+            entity: props.entity
         }
 
         this.submitForm = props.submitForm
@@ -28,6 +29,7 @@ export class EditUser extends React.Component {
 
                         <FormGroup>
                             <FormControl type="text" required
+                            value={this.state.entity.username}
                             inputRef={username => this.submitForm.username = username}
                             placeholder="enter username" />
                         </FormGroup>
