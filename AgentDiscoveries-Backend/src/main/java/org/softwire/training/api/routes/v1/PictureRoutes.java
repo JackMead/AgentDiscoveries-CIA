@@ -41,7 +41,7 @@ public class PictureRoutes {
 
         req.raw().setAttribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/default"));
         Part filePart = req.raw().getPart("file");
-        if (filePart.getSize() > configuration.getInt("database.picture.bytes.limit")) {
+        if (filePart.getSize() > configuration.getInt("database.picture.bytes-limit")) {
             filePart.delete();
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "picture is larger than 1MB");
         }
@@ -89,7 +89,7 @@ public class PictureRoutes {
     }
 
     private ArrayList<String> getAllowedContentTypes(){
-        String[] allowedContent = configuration.getStringArray("database.picture.allowed.content.types");
+        String[] allowedContent = configuration.getStringArray("database.picture.allowed-content-types");
         return new ArrayList<String>(Arrays.asList(allowedContent));
     }
 

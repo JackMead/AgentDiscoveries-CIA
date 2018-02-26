@@ -84,7 +84,7 @@ export default class Profile extends React.Component {
         var userId = window.localStorage.getItem("UserId");
         readAPI("/v1/api/pictures", userId).then(response => response.json())
             .then(response => {
-                const contentType = response.content_type;
+                const contentType = encodeURI(response.content_type);
                 const binaryData = response;
                 const base64String = btoa(String.fromCharCode(...new Uint8Array(binaryData)));
                 this.setState({imgSrc : "data:"+contentType+";base64,"+base64String});
