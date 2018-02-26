@@ -15,7 +15,7 @@ describe("login-page", () => {
 
     before(function () {
         const chromeOptions = new chrome.Options();
-        chromeOptions.addArguments('headless','disable-gpu');
+        chromeOptions.addArguments('headless', 'disable-gpu');
         driver = new webdriver.Builder()
             .forBrowser('chrome')
             .setChromeOptions(chromeOptions)
@@ -30,82 +30,84 @@ describe("login-page", () => {
     it('loads', function (done) {
         this.timeout(5000);
         driver.get(loginUrl)
-            .then(driver.getPageSource()
-                .then(result => {
-                    driver.getTitle().then(res => {
-                        expect(res).to.equal("Agent Discoveries")
-                        done();
-                    })
-                }))
+            .then(() => {
+                return driver.getTitle()
+            })
+            .then(res => {
+                expect(res).to.equal("Agent Discoveries")
+                done();
+            })
     });
 
     it('has a submit button', function (done) {
         this.timeout(5000);
         driver.get(loginUrl)
-            .then(_ => {
-                const element = driver.findElement(webdriver.By.id('login-submit'));
-                driver.wait(webdriver.until.elementIsVisible(element), 5000)
-                    .then(_ => {
-                        let el = driver.findElement(webdriver.By.id('login-submit'));
-                        el.then(element => {
-                            element.getTagName().then(tag => {
-                                expect(tag).to.equal('button');
-                                done();
-                            })
-                        })
-                    })
-            })
-    });
-
-    it('cannot log in without credentials', function (done) {
-        this.timeout(8000);
-        driver.get(loginUrl)
             .then(() => {
                 const element = driver.findElement(webdriver.By.id('login-submit'));
                 driver.wait(webdriver.until.elementIsVisible(element), 5000)
-                    .then(() => {
-                        element.click().then(_ => {
-                            driver.getCurrentUrl().then(url => {
-                                expect(url).to.equal(loginUrl);
-                                done();
-                            })
-                        })
-                    })
+            })
+            .then(() => {
+                return driver.findElement(webdriver.By.id('login-submit'));
+            })
+            .then(element => {
+                return element.getTagName()
+            })
+            .then(tag => {
+                expect(tag).to.equal('button');
+                done();
             })
     });
 
-    it('can log in with credentials', function (done) {
-        this.timeout(8000);
+    it('does not change page on attempt to log in without credentials', function (done) {
+        this.timeout(5000);
+        const element = driver.findElement(webdriver.By.id('login-submit'));
+        driver.get(loginUrl)
+            .then(() => {
+                driver.wait(webdriver.until.elementIsVisible(element), 5000)
+            })
+            .then(() => {
+                element.click()
+            })
+            .then(() => {
+                return driver.getCurrentUrl()
+            })
+            .then(url => {
+                expect(url).to.equal(loginUrl);
+                done();
+            })
+    });
+
+    it('changes page on logging in with credentials', function (done) {
+        this.timeout(5000);
         const searchUrl = url + "/#/search/location";
-        //CLEAN
+        const userNameInput = driver.findElement(webdriver.By.id('user-name-input'));
+
         driver.get(loginUrl)
             .then(() => {
-                const userNameInput = driver.findElement(webdriver.By.id('user-name-input'));
                 driver.wait(webdriver.until.elementIsVisible(userNameInput), 5000)
-                    .then(() => {
-                        userNameInput.sendKeys("testuser1")
-                            .then(_ => {
-                                const passwordInput = driver.findElement(webdriver.By.id("password-input"));
-                                passwordInput
-                                    .then(_ => {
-                                        passwordInput.sendKeys("badpass")
-                                            .then(_ => {
-                                                const submitButton = driver.findElement(webdriver.By.id('login-submit'));
-                                                submitButton
-                                                    .then(_ => {
-                                                        submitButton.click()
-                                                            .then(_ => {
-                                                                driver.wait(webdriver.until.urlIs(searchUrl))
-                                                                    .then(_ => {
-                                                                        done();
-                                                                    })
-                                                            })
-                                                    })
-                                            })
-                                    })
-                            })
-                    })
             })
-    })
-});
+            .then(() => {
+                userNameInput.sendKeys("testuser1")
+            })
+            .then(() => {
+                return driver.findElement(webdriver.By.id("password-input"));
+            })
+            .then(passwordInput => {
+                passwordInput.sendKeys("badpass")
+            })
+            .then(() => {
+                return driver.findElement(webdriver.By.id('login-submit'));
+            })
+            .then(submitButton => {
+                submitButton.click()
+            })
+            .then(() => {
+                driver.wait(webdriver.until.urlIs(searchUrl))
+            })
+            .then(() => {
+                done();
+            })
+    });
+})
+;
 
