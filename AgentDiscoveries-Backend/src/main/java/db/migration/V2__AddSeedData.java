@@ -21,32 +21,19 @@ public class V2__AddSeedData extends DaggerMigrationBase {
 
         @Override
         public void runMigration() {
-            addUser(new V2MigrationUser("testuser1", passwordHasher.hashPassword("badpass")));
-            addUser(new V2MigrationUser("testuser2", passwordHasher.hashPassword("alsobadpass")));
-            addUser(new V2MigrationUser("corrupt_user", "impossible_hash"));
+            addUser("testuser1", passwordHasher.hashPassword("badpass"));
+            addUser("testuser2", passwordHasher.hashPassword("alsobadpass"));
+            addUser("corrupt_user", "impossible_hash");
         }
 
-        public int addUser(V2MigrationUser user) {
+        public int addUser(String userName, String hashedPassword) {
             try (Handle handle = jdbi.open()) {
                 return handle.createUpdate("INSERT INTO user (username, hashed_password) " +
                         "VALUES (:username, :hashed_password)")
-                        .bind("username", user.getUsername())
-                        .bind("hashed_password", user.getHashedPassword())
+                        .bind("username", userName)
+                        .bind("hashed_password", hashedPassword)
                         .execute();
             }
-        }
-
-        private class V2MigrationUser{
-            private String username;
-            private String hashedPassword;
-            public V2MigrationUser(String username, String hashedPassword){
-                this.username=username;
-                this.hashedPassword=hashedPassword;
-            }
-
-            public String getHashedPassword() {return hashedPassword;}
-
-            public String getUsername() {return username;}
         }
     }
 

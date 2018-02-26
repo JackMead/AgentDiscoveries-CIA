@@ -21,33 +21,18 @@ public class V5__AddAdminUser extends DaggerMigrationBase {
 
         @Override
         public void runMigration() {
-            addUser(new V5MigrationUser("admin", passwordHasher.hashPassword("adminpass"), true));
+            addUser("admin", passwordHasher.hashPassword("adminpass"), true);
         }
 
-        public int addUser(V5MigrationUser user) {
+        public int addUser(String userName, String hashedPassword, boolean isAdmin) {
             try (Handle handle = jdbi.open()) {
                 return handle.createUpdate("INSERT INTO user (username, hashed_password, admin) " +
                         "VALUES (:username, :hashed_password, :admin)")
-                        .bind("username", user.getUsername())
-                        .bind("hashed_password", user.getHashedPassword())
-                        .bind("admin", user.isAdmin())
+                        .bind("username", userName)
+                        .bind("hashed_password", hashedPassword)
+                        .bind("admin", isAdmin)
                         .execute();
             }
-        }
-
-        private class V5MigrationUser{
-            private String username;
-            private String hashedPassword;
-            private boolean isAdmin;
-            public V5MigrationUser(String username, String hashedPassword, boolean isAdmin){
-                this.username=username;
-                this.hashedPassword=hashedPassword;
-                this.isAdmin=isAdmin;
-            }
-
-            public String getHashedPassword() {return hashedPassword;}
-            public String getUsername() {return username;}
-            public boolean isAdmin() { return isAdmin; }
         }
     }
 }
