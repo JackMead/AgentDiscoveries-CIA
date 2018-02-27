@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from "react"
 
-import NavigationBar from "./nav";
+import NavigationBar from "./nav"
 
 export default class Page extends React.Component {
     render() {
@@ -11,6 +11,6 @@ export default class Page extends React.Component {
                     {this.props.children}
                 </div>
             </React.Fragment>
-        );
+        )
     }
-};
+}
