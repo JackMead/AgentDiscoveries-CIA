@@ -31,68 +31,24 @@ public class AgentsRoutesTest {
     private Response response = mock(Response.class);
 
     @Test
-    public void createAgentFailsIfAgentIdSpecifiedOnRequest() throws FailedRequestException{
-        // Given
-        Agent agent = new Agent();
-        agent.setAgentId(50);
-        agent.setDateOfBirth(LocalDate.now());
-
-        Request request = RequestGenerationHelper.makeRequestWithJSONBodyForObject(agent);
-        when(request.attribute("user_id")).thenReturn(0);
-
-        // When
-        FailedRequestException exception = assertThrows(
-                FailedRequestException.class,
-                () -> agentsRoutes.createAgent(request, response));
-
-        // Then
-        assertEquals(ErrorCode.INVALID_INPUT, exception.getErrorCode());
-    }
-
-    @Test
-    public void createAgentReturnsAgentWithIdOnSuccess() throws FailedRequestException {
-        // Given
-        int newAgentId = 20;
-        Agent agent = new Agent();
-        agent.setFirstName("bob");
-        agent.setDateOfBirth(LocalDate.now());
-        User admin = new User();
-        admin.setAdmin(true);
-
-        Request request = RequestGenerationHelper.makeRequestWithJSONBodyForObject(agent);
-        when(agentsDao.addAgent(any())).thenReturn(newAgentId);
-        when(request.attribute("user_id")).thenReturn(0);
-        when(usersDao.getUser(0)).thenReturn(Optional.of(admin));
-
-        // When
-        Agent returnedAgent = agentsRoutes.createAgent(request, response);
-
-        // Then
-        assertEquals(newAgentId, returnedAgent.getAgentId());
-        assertEquals(agent.getFirstName(), returnedAgent.getFirstName());
-        assertEquals(agent.getDateOfBirth(), returnedAgent.getDateOfBirth());
-        verify(response).status(201);
-    }
-
-    @Test
     public void readAgentFailsIfAgentDoesNotExist() {
         // Given
         Agent agent = new Agent();
         agent.setFirstName("bob");
         agent.setDateOfBirth(LocalDate.now());
-        int agentId = 15;
+        int userId = 15;
         User admin = new User();
         admin.setAdmin(true);
         Request request = RequestGenerationHelper.makeRequestWithJSONBodyForObject(agent);
 
-        when(agentsDao.getAgent(agentId)).thenReturn(Optional.empty());
+        when(agentsDao.getAgentByUserId(userId)).thenReturn(Optional.empty());
         when(request.attribute("user_id")).thenReturn(0);
         when(usersDao.getUser(0)).thenReturn(Optional.of(admin));
 
         // When
         FailedRequestException exception = assertThrows(
                 FailedRequestException.class,
-                () -> agentsRoutes.readAgent(request, response, agentId));
+                () -> agentsRoutes.readAgent(request, response, userId));
 
         // Then
         assertEquals(ErrorCode.NOT_FOUND, exception.getErrorCode());
@@ -101,7 +57,7 @@ public class AgentsRoutesTest {
     @Test
     public void readAgentReturnsAgentIfAgentExists() throws FailedRequestException {
         // Given
-        int agentId = 15;
+        int userId = 15;
         User admin = new User();
         admin.setAdmin(true);
         Agent agent = new Agent();
@@ -109,12 +65,12 @@ public class AgentsRoutesTest {
         agent.setDateOfBirth(LocalDate.now());
         Request request = RequestGenerationHelper.makeRequestWithJSONBodyForObject(agent);
 
-        when(agentsDao.getAgent(agentId)).thenReturn(Optional.of(agent));
+        when(agentsDao.getAgentByUserId(userId)).thenReturn(Optional.of(agent));
         when(request.attribute("user_id")).thenReturn(0);
         when(usersDao.getUser(0)).thenReturn(Optional.of(admin));
 
         // When
-        Agent returnedAgent = agentsRoutes.readAgent(request, response, agentId);
+        Agent returnedAgent = agentsRoutes.readAgent(request, response, userId);
 
         // Then
         assertEquals(agent, returnedAgent);

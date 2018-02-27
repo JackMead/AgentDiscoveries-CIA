@@ -1,5 +1,7 @@
 package org.softwire.training.api.models;
 
+import java.sql.Blob;
+
 /**
  * The UserApiModel is a version of the domain model with a password field instead of a hashed password.
  *

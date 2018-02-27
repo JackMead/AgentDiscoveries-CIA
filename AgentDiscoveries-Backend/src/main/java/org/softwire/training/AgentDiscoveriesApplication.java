@@ -2,7 +2,10 @@ package org.softwire.training;
 
 import dagger.ObjectGraph;
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.JdbiException;
@@ -39,6 +42,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject UsersRoutes usersRoutes;
     @Inject ExecutiveSummaryRoutes executiveSummaryRoutes;
     @Inject MessageProcessorRoutes messageProcessorRoutes;
+    @Inject PictureRoutes pictureRoutes;
 
     @Override
     public void run() {
@@ -65,6 +69,7 @@ public class AgentDiscoveriesApplication implements Runnable {
                     path("/executivesummary", this::executivesSummaryGroup);
                 });
 
+                path("/pictures", this::picturesRouteGroup);
                 path("/agents", this::agentsRouteGroup);
                 path("/regions", this::regionsRouteGroup);
                 path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
@@ -101,6 +106,12 @@ public class AgentDiscoveriesApplication implements Runnable {
         post("/generate", executiveSummaryRoutes::readExecutiveSummary);
     }
 
+    private void picturesRouteGroup() {
+        get("/:id", (req, res) -> pictureRoutes.readProfilePicture(req, res, idParamAsInt(req)));
+        put("/:id", (req, res) -> pictureRoutes.updatePicture(req, res, idParamAsInt(req)), responseTransformer);
+        delete("/:id", (req, res) -> pictureRoutes.deletePicture(req, res, idParamAsInt(req)), responseTransformer );
+    }
+
     private void agentsRouteGroup() {
         post("", (req, res) -> agentsRoutes.createAgent(req, res), responseTransformer);
         get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
@@ -116,7 +127,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("", (req, res) -> regionsRoutes.readRegions(req, res), responseTransformer);
     }
 
-    private void reportsRouteGroup(ReportsRoutesBase<?, ?, ? > reportsRoutes) {
+    private void reportsRouteGroup(ReportsRoutesBase<?, ?, ?> reportsRoutes) {
         post("", reportsRoutes::createReport, responseTransformer);
         get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);
@@ -169,7 +180,11 @@ public class AgentDiscoveriesApplication implements Runnable {
 
     private static Configuration getConfiguration(File configFile) {
         try {
-            return new Configurations().properties(configFile);
+            FileBasedConfigurationBuilder<PropertiesConfiguration> builder =new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
+                    .configure(new Parameters().properties()
+                    .setFile(configFile)
+                    .setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
+            return builder.getConfiguration();
         } catch (ConfigurationException exception) {
             throw new RuntimeException("Invalid configuration", exception);
         }

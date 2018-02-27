@@ -8,6 +8,7 @@ import {
 import Login from "./user/login"
 import Home from "./home"
 import Page from "./page"
+import Profile from "./profile";
 
 import LocationReportSearch from "./search-forms/search-location-reports"
 import RegionSummarySearch from "./search-forms/search-region-summaries"
@@ -45,6 +46,7 @@ export default class App extends React.Component {
                         <Route path="/admin/users/edit/:id" render={(props) => <Page><EditEntity api="users" {...props} /></Page>} />
 
                         <Route path="/message" render={() => <Page><TodaysCodePage /></Page>} />
+                        <Route path="/profile" render={() => <Page><Profile /></Page>} />
                         
                     </Switch>
                 </Router>

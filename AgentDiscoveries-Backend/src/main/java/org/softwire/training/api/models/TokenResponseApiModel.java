@@ -4,9 +4,11 @@ public class TokenResponseApiModel {
 
     private String token;
     private String expires;
+    private int userId;
 
-    public TokenResponseApiModel(String token, String expires) {
+    public TokenResponseApiModel(String token, String expires, int userId) {
         this.token = token;
+        this.userId = userId;
         this.expires = expires;
     }
 
@@ -17,4 +19,6 @@ public class TokenResponseApiModel {
     public String getExpires() {
         return expires;
     }
+
+    public int getUserId(){return userId;}
 }

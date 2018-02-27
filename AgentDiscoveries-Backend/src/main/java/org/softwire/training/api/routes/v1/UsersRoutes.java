@@ -16,6 +16,9 @@ import spark.utils.StringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.util.Optional;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
@@ -25,7 +28,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher, PermissionsVerifier permissionsVerifier) {
+    public UsersRoutes(UsersDao usersDao, AgentsDao agentsDao, PasswordHasher passwordHasher, PermissionsVerifier permissionsVerifier) {
         this.usersDao = usersDao;
         this.agentsDao = agentsDao;
         this.passwordHasher = passwordHasher;
@@ -64,10 +67,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
-        int userId = req.attribute("user_id");
-        if (userId != id && !permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyIsAdminOrRelevantUser(req, id);
 
         return usersDao.getUser(id)
                 .map(this::mapModelToApiModel)
@@ -75,7 +75,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public List<User> readEntities(Request req, Response res){
+    public List<User> readEntities(Request req, Response res) throws FailedRequestException {
+        verifyAdminPermission(req);
         return usersDao.getUsers();
     }
 
@@ -83,14 +84,15 @@ public class UsersRoutes implements EntityCRUDRoutes {
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
-        int userId = req.attribute("user_id");
-        if (userId != id && !permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyIsAdminOrRelevantUser(req, id);
 
+        Optional<User> optionalUser = usersDao.getUser(id);
+        if(!optionalUser.isPresent()){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
+        }
+        User oldUser = optionalUser.get();
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
-
         usersDao.updateUser(user);
 
         return mapModelToApiModel(user);
@@ -107,10 +109,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public Object deleteEntity(Request req, Response res, int id) throws Exception {
-        int userId = req.attribute("user_id");
-        if (userId != id && !permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "user doesn't have valid permissions");
-        }
+        verifyAdminPermission(req);
 
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "User delete request should have no body");
@@ -121,6 +120,18 @@ public class UsersRoutes implements EntityCRUDRoutes {
         res.status(204);
 
         return new Object();
+    }  
+
+    public void verifyAdminPermission(Request req) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if (!permissionsVerifier.isAdmin(userId)) {
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
     }
 
+    public void verifyIsAdminOrRelevantUser(Request req, int id) throws FailedRequestException{
+       if(!permissionsVerifier.isAdminOrRelevantAgent(req, id)){
+           throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+       }
+   }
 }
