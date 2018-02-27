@@ -21,6 +21,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>1.2.2</dropwizard.version>
         <mainClass>org.softwire.training.AgentDiscoveriesApplication</mainClass>
+        <webdriver.chrome>./src/main/resources/chromedriver.exe</webdriver.chrome>
     </properties>
 
     <profiles>
@@ -170,6 +171,18 @@
             <artifactId>htmlunit-driver</artifactId>
             <version>2.29.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>24.0-jre</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -259,6 +272,26 @@
                         <version>5.0.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <skipTests>${skip.integration.tests}</skipTests>
+                    <systemPropertyVariables>
+                        <target.address>${target.address}</target.address>
+                        <webdriver.chrome.driver>${webdriver.chrome}</webdriver.chrome.driver>
+                    </systemPropertyVariables>
+                </configuration>
+                <version>2.20.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
