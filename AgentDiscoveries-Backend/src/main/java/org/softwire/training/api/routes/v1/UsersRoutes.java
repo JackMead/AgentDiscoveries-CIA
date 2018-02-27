@@ -2,6 +2,7 @@ package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PasswordHasher;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.UserApiModel;
@@ -21,16 +22,19 @@ public class UsersRoutes implements EntityCRUDRoutes {
     private final UsersDao usersDao;
     private final AgentsDao agentsDao;
     private final PasswordHasher passwordHasher;
+    private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public UsersRoutes(UsersDao usersDao, AgentsDao agentsDao, PasswordHasher passwordHasher) {
+    public UsersRoutes(UsersDao usersDao, AgentsDao agentsDao, PasswordHasher passwordHasher, PermissionsVerifier permissionsVerifier) {
         this.usersDao = usersDao;
         this.agentsDao = agentsDao;
         this.passwordHasher = passwordHasher;
+        this.permissionsVerifier = permissionsVerifier;
     }
 
     @Override
     public UserApiModel createEntity(Request req, Response res) throws FailedRequestException {
+
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         if (userApiModel.getUserId() != 0) {
@@ -61,6 +65,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
+        verifyIsAdminOrRelevantUser(req, id);
+
         return usersDao.getUser(id)
                 .map(this::mapModelToApiModel)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "User not found"));
@@ -73,11 +79,9 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
-        UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
+        verifyIsAdminOrRelevantUser(req, id);
 
-        if (userApiModel.getUserId() != id && userApiModel.getUserId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
-        }
+        UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
@@ -98,6 +102,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public Object deleteEntity(Request req, Response res, int id) throws Exception {
+        verifyAdminPermission(req);
+
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "User delete request should have no body");
         }
@@ -109,4 +115,16 @@ public class UsersRoutes implements EntityCRUDRoutes {
         return new Object();
     }
 
+    public void verifyIsAdminOrRelevantUser(Request req, int id) throws FailedRequestException{
+        if(!permissionsVerifier.isAdminOrRelevantAgent(req, id)){
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
+    }
+
+    public void verifyAdminPermission(Request req) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if (!permissionsVerifier.isAdmin(userId)) {
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
+    }
 }
