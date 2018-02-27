@@ -1,6 +1,6 @@
 
 export function createAPI(apiAddress, requestBodyJSON) {
-    var tokenHeader = getTokenHeader()
+    var tokenHeader = getTokenHeader();
     
     return fetch(apiAddress, {
         method: 'POST',
@@ -10,12 +10,12 @@ export function createAPI(apiAddress, requestBodyJSON) {
             'Content-Type': 'application/json',
         },
         body: requestBodyJSON
-    })
+    });
 }
 
 export function searchAPI(apiAddress, searchString) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}?${searchString}`
+    var tokenHeader = getTokenHeader();
+    var requestAddress = `${apiAddress}?${searchString}`;
     return fetch(requestAddress, {
         method: 'GET',
         headers: {
@@ -23,11 +23,11 @@ export function searchAPI(apiAddress, searchString) {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
-    })
+    });
 }
 
 export function readAPI(apiAddress, id) {
-    var tokenHeader = getTokenHeader()
+    var tokenHeader = getTokenHeader();
     var requestAddress = `${apiAddress}/${id}`
 
     return fetch(requestAddress, {
@@ -37,13 +37,13 @@ export function readAPI(apiAddress, id) {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
-    })
+    });
 }
 
 
 export function updateAPI(apiAddress, id, requestBodyJSON) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}/${id}`
+    var tokenHeader = getTokenHeader();
+    var requestAddress = `${apiAddress}/${id}`;
 
     return fetch(requestAddress, {
         method: 'PUT',
@@ -53,12 +53,12 @@ export function updateAPI(apiAddress, id, requestBodyJSON) {
             'Content-Type': 'application/json',
         },
         body: requestBodyJSON
-    })
+    });
 }
 
 export function deleteAPI(apiAddress, id) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}/${id}`
+    var tokenHeader = getTokenHeader();
+    var requestAddress = `${apiAddress}/${id}`;
 
     return fetch(requestAddress, {
         method: 'DELETE',
@@ -67,9 +67,9 @@ export function deleteAPI(apiAddress, id) {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
-    })
+    });
 }
 
 function getTokenHeader() {
-    return `Bearer ${window.localStorage.getItem("Token")}`
+    return `Bearer ${window.localStorage.getItem("Token")}`;
 }

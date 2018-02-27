@@ -1,5 +1,5 @@
 
-import * as React from "react"
+import * as React from "react";
 
 export default class SearchResult extends React.Component {
     render() {
@@ -21,7 +21,7 @@ export default class SearchResult extends React.Component {
             )
         })
 
-        return resultsHTML
+        return resultsHTML;
     }
 
 
@@ -32,6 +32,6 @@ export default class SearchResult extends React.Component {
     }
 
     getResultsHeader(results) {
-        return results.length > 0 ? (results.length === 1 ? <h3>{`${results.length} result`}</h3> : <h3>{`${results.length} results`}</h3>) : ""
+        return results.length > 0 ? (results.length === 1 ? <h3>{`${results.length} result`}</h3> : <h3>{`${results.length} results`}</h3>) : "";
     }
 }

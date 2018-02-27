@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import { Alert } from "react-bootstrap"
 
 export class Message extends React.Component {
@@ -9,11 +9,11 @@ export class Message extends React.Component {
                 <Alert bsStyle={this.props.message.type} className={`${this.props.message.type}-message`}>
                     {this.props.message.message}
                 </Alert>
-            )
+            );
         } else {
             return (
                 <div></div>
             )
         }
     }
-}
+};

@@ -1,24 +1,28 @@
-import * as React from "react"
+import * as React from "react";
 import {
     Form,
     FormGroup,
     FormControl,
     Button,
     ControlLabel
-} from "react-bootstrap"
+} from "react-bootstrap";
 import { searchAPI } from "../crud"
 
-export class AddAgent extends React.Component {
+export class CreateAgent extends React.Component {
 
     constructor(props) {
-        super()
+        super();
         this.state = {
-            users: props.entities.users,
+            users: [],
             onSubmit: props.onSubmit
         }
-        
-        this.submitForm = props.submitForm
-        this.getUserOptions = this.getUserOptions.bind(this)
+
+        searchAPI("v1/api/users", "")
+            .then(response => response.json())
+            .then(response => this.setState({ users: response }))
+
+        this.submitForm = props.submitForm;
+        this.getUserOptions = this.getUserOptions.bind(this);
     }
 
     render(props) {
@@ -68,12 +72,12 @@ export class AddAgent extends React.Component {
                     <Button type="submit">Submit</Button>
                 </Form>
             </div>
-        )
+        );
     }
 
     getUserOptions() {
         return Object.keys(this.state.users).map(key => {
-            let user = this.state.users[key]
+            let user = this.state.users[key];
             return <option key={user.userId} value={user.userId}>{user.username}</option>
         })
     }
