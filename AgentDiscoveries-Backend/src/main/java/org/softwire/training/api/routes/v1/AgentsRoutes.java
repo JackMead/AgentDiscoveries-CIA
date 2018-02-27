@@ -2,6 +2,7 @@ package org.softwire.training.api.routes.v1;
 
 import org.apache.commons.lang3.StringUtils;
 import org.softwire.training.api.core.JsonRequestUtils;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.db.daos.AgentsDao;
@@ -15,15 +16,22 @@ import java.util.List;
 public class AgentsRoutes {
 
     private final AgentsDao agentsDao;
+    private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public AgentsRoutes(AgentsDao agentsDao) {
+    public AgentsRoutes(AgentsDao agentsDao, PermissionsVerifier permissionsVerifier) {
         this.agentsDao = agentsDao;
+        this.permissionsVerifier = permissionsVerifier;
     }
 
     public Agent createAgent(Request req, Response res) throws FailedRequestException {
         Agent agentModel = JsonRequestUtils.readBodyAsType(req, Agent.class);
-        agentsDao.addAgent(agentModel);
+        if (agentModel.getAgentId() != 0) {
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "agentId cannot be specified on create");
+        }
+        verifyAdminPermission(req);
+
+        int newAgentId = agentsDao.addAgent(agentModel);
 
         // Create requests should return 201
         res.status(201);
@@ -32,7 +40,9 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
-        return agentsDao.getAgentByUserId(id)
+        verifyAdminPermission(req);
+
+        return agentsDao.getAgent(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
@@ -41,6 +51,8 @@ public class AgentsRoutes {
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
+        verifyAdminPermission(req);
+
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
         agent.setUserId(id);
         agentsDao.updateAgent(agent);
@@ -48,6 +60,8 @@ public class AgentsRoutes {
     }
 
     public Object deleteAgent(Request req, Response res, int id) throws Exception {
+        verifyAdminPermission(req);
+
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Agent delete request should have no body");
         }
@@ -57,5 +71,12 @@ public class AgentsRoutes {
         res.status(204);
 
         return new Object();
+    }
+
+    public void verifyAdminPermission(Request req) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if (!permissionsVerifier.isAdmin(userId)) {
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
     }
 }

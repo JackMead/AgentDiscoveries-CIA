@@ -41,10 +41,11 @@ public class UsersDao {
 
     public int addUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO user (username, hashed_password) " +
-                    "VALUES (:username, :hashed_password)")
+            return handle.createUpdate("INSERT INTO user (username, hashed_password, admin) " +
+                    "VALUES (:username, :hashed_password, :admin)")
                     .bind("username", user.getUsername())
                     .bind("hashed_password", user.getHashedPassword())
+                    .bind("admin", user.isAdmin())
                     .executeAndReturnGeneratedKeys("user_id")
                     .mapTo(Integer.class)
                     .findOnly();
@@ -61,11 +62,12 @@ public class UsersDao {
 
     public int updateUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password " +
+            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password , admin = :admin " +
                     "WHERE user_id = :user_id")
                     .bind("user_id", user.getUserId())
                     .bind("username", user.getUsername())
                     .bind("password", user.getHashedPassword())
+                    .bind("admin", user.isAdmin())
                     .execute();
         }
     }
