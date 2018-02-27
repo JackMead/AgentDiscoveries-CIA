@@ -48,6 +48,7 @@ export default class NavigationBar extends React.Component {
                             <MenuItem componentClass={Link} href="/submit/region" to="/submit/region" eventKey={3.2}>Region Summary</MenuItem>
                         </NavDropdown>
                         <MenuItem componentClass={Link} href="/message" to="/message" eventKey={4}>Today's Message</MenuItem>
+                        <MenuItem componentClass={Link} href="/profile" to="/profile" eventKey={5}>Profile</MenuItem>
                     </Nav>
                     <Nav pullRight>
                         {this.state.authenticationElement}

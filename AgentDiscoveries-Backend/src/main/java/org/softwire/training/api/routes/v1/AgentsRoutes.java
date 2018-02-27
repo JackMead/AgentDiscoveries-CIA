@@ -12,6 +12,8 @@ import spark.Response;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.Optional;
 
 public class AgentsRoutes {
 
@@ -37,7 +39,6 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
-
         verifyIsAdminOrRelevantAgent(req, id);
         return agentsDao.getAgentByUserId(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
@@ -49,10 +50,16 @@ public class AgentsRoutes {
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
+
         verifyIsAdminOrRelevantAgent(req, id);
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
-        agent.setUserId(id);
+        Optional<Agent> optionalAgent = agentsDao.getAgentByUserId(id);
+        if (!optionalAgent.isPresent()) {
+            throw new FailedRequestException(ErrorCode.NOT_FOUND, "user Id not found");
+        }
+        Agent oldAgent = optionalAgent.get();
+        agent = mergeAgents(agent, oldAgent);
         agentsDao.updateAgent(agent);
         return agent;
     }
@@ -82,5 +89,30 @@ public class AgentsRoutes {
         if (!permissionsVerifier.isAdmin(userId)) {
             throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
         }
+    }
+
+    private Agent mergeAgents(Agent newAgentDetails, Agent oldAgentDetails){
+        int newRank = newAgentDetails.getRank();
+        String newCallSign = newAgentDetails.getCallSign();
+        String newFirstName = newAgentDetails.getFirstName();
+        String newLastName = newAgentDetails.getLastName();
+        LocalDate newDateOfBirth = newAgentDetails.getDateOfBirth();
+
+        if(newRank!=0){
+            oldAgentDetails.setRank(newRank);
+        }
+        if(StringUtils.isNotEmpty(newCallSign)){
+            oldAgentDetails.setCallSign(newCallSign);
+        }
+        if(StringUtils.isNotEmpty(newFirstName)){
+            oldAgentDetails.setCallSign(newFirstName);
+        }
+        if(StringUtils.isNotEmpty(newLastName)){
+            oldAgentDetails.setCallSign(newLastName);
+        }
+        if(newDateOfBirth!=null){
+            oldAgentDetails.setDateOfBirth(newDateOfBirth);
+        }
+        return oldAgentDetails;
     }
 }

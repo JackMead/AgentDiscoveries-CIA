@@ -56,6 +56,19 @@ export function updateAPI(apiAddress, id, requestBodyJSON) {
     });
 }
 
+export function updatePicture(apiAddress,id, requestBodyJSON){
+    var tokenHeader = getTokenHeader();
+    var requestAddress = `${apiAddress}/${id}`;
+
+    return fetch(requestAddress, {
+        method: 'PUT',
+        headers: {
+            'Authorization': tokenHeader,
+        },
+        body: requestBodyJSON
+    });
+}
+
 export function deleteAPI(apiAddress, id) {
     var tokenHeader = getTokenHeader();
     var requestAddress = `${apiAddress}/${id}`;

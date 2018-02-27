@@ -45,6 +45,7 @@ public class AgentsRoutesTest {
         when(request.attribute("user_id")).thenReturn(0);
         when(usersDao.getUser(0)).thenReturn(Optional.of(admin));
 
+
         // When
         FailedRequestException exception = assertThrows(
                 FailedRequestException.class,

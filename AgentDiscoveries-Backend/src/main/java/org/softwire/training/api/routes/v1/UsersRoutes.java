@@ -16,6 +16,9 @@ import spark.utils.StringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
+import javax.servlet.ServletException;
+import java.io.IOException;
+import java.util.Optional;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
@@ -73,7 +76,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public List<User> readEntities(Request req, Response res){
+    public List<User> readEntities(Request req, Response res) throws FailedRequestException {
+        verifyAdminPermission(req);
         return usersDao.getUsers();
     }
 
@@ -82,10 +86,13 @@ public class UsersRoutes implements EntityCRUDRoutes {
         verifyIsAdminOrRelevantUser(req, id);
 
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
-
+        Optional<User> optionalUser = usersDao.getUser(id);
+        if(!optionalUser.isPresent()){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
+        }
+        User oldUser = optionalUser.get();
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
         user.setUserId(id);
-
         usersDao.updateUser(user);
 
         return mapModelToApiModel(user);
