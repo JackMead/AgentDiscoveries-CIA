@@ -11,7 +11,6 @@ import { handleEntitySubmit } from "../utilities/submit-utilities"
 import { Message } from "../message"
 import { AddLocation } from "./add-location"
 import { AddRegion } from "./add-region"
-import { AddAgent } from "./add-agent"
 import { AddUser } from "./add-user"
 
 
@@ -28,6 +27,8 @@ export default class AddEntity extends React.Component {
         this.apiForms = []
 
         this.onSubmit = this.onSubmit.bind(this)
+        this.onSubmitUser = this.onSubmitUser.bind(this)
+        this.getUserForm = this.getUserForm.bind(this)
         this.setUpEntityForms = this.setUpEntityForms.bind(this)
     }
 
@@ -58,12 +59,28 @@ export default class AddEntity extends React.Component {
             .catch(error => this.setState({ message: { message: error, type: "danger" } }))
     }
 
+    onSubmitUser(e) {
+        e.preventDefault()
+        var userForm = this.getUserForm()
+        console.log(userForm)
+        if (this.submitForm.agent.checked) {
+            var agentForm = this.submitForm.agentForm
+            console.log(agentForm)
+        }
+    }
+
+    getUserForm() {
+        var userForm = Object.assign({}, this.submitForm)
+        delete userForm.agent
+        delete userForm.agentForm
+        return userForm
+    }
+
     setUpEntityForms() {
         this.apiForms = {
             locations: <AddLocation submitForm={this.submitForm} onSubmit={this.onSubmit} />,
             regions: <AddRegion submitForm={this.submitForm} onSubmit={this.onSubmit} />,
-            users: <AddUser submitForm={this.submitForm} onSubmit={this.onSubmit} />,
-            agents: <AddAgent submitForm={this.submitForm} onSubmit={this.onSubmit}/>
+            users: <AddUser submitForm={this.submitForm} onSubmit={this.onSubmitUser} />
         }
         this.setState({ form: this.apiForms[this.state.api] })
     }
