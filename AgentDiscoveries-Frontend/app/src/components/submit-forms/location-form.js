@@ -1,21 +1,21 @@
-import * as React from "react"
+import * as React from "react";
 import {
     Form,
     FormGroup,
     FormControl,
     Button,
     ControlLabel
-} from "react-bootstrap"
+} from "react-bootstrap";
 
-export class AddLocation extends React.Component {
+export class CreateLocation extends React.Component {
 
     constructor(props) {
-        super()
+        super();
         this.state = {
             onSubmit: props.onSubmit,
         }
 
-        this.submitForm = props.submitForm
+        this.submitForm = props.submitForm;
     }
 
     render(props) {
@@ -45,6 +45,6 @@ export class AddLocation extends React.Component {
                     <Button type="submit">Submit</Button>
                 </Form>
             </div>
-        )
+        );
     }
 }

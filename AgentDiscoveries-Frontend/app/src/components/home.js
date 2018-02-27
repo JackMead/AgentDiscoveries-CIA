@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from "react";
 
-import { Redirect } from "react-router-dom"
+import { Redirect } from "react-router-dom";
 
 export default class Home extends React.Component {
     render() {
@@ -8,6 +8,6 @@ export default class Home extends React.Component {
             <div>
                <Redirect to="/login"/>
             </div>
-        )
+        );
     }
-}
+};

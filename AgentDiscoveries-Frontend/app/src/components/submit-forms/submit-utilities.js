@@ -1,14 +1,14 @@
 import { createAPI, updateAPI } from "../crud"
 
 export function handleReportSubmit(apiAddress, submitForm) {
-    let bodyJSON = {}
+    let bodyJSON = {};
     Object.keys(submitForm).forEach((key) => {
-        bodyJSON[key] = getTransformedData(key, submitForm[key].value)
-    })
+        bodyJSON[key] = getTransformedData(key, submitForm[key].value);
+    });
 
-    bodyJSON.reportTime = new Date().toJSON()
+    bodyJSON.reportTime = new Date().toJSON();
 
-    var requestBody = JSON.stringify(bodyJSON)
+    var requestBody = JSON.stringify(bodyJSON);
 
     return createAPI(apiAddress, requestBody)
         .then(response => {
@@ -19,8 +19,8 @@ export function handleReportSubmit(apiAddress, submitForm) {
 }
 
 export function handleEntitySubmit(apiAddress, submitForm) {
-    let bodyJSON = getBodyJSON(submitForm)
-    var requestBody = JSON.stringify(bodyJSON)
+    let bodyJSON = getBodyJSON(submitForm);
+    var requestBody = JSON.stringify(bodyJSON);
     return createAPI(apiAddress, requestBody)
         .then(response => {
             if (response.status !== 201) {
@@ -29,34 +29,22 @@ export function handleEntitySubmit(apiAddress, submitForm) {
         })
 }
 
-export function handleEntityEdit(apiAddress, id, submitForm) {
-    let bodyJSON = getBodyJSON(submitForm)
-    var requestBody = JSON.stringify(bodyJSON)
-    
-    return updateAPI(apiAddress, id, requestBody)
-        .then(response => {
-            if (response.status >= 400) {
-                throw ("Server could not update the entity. Make sure all fields are correct")
-            }
-        })
-}
-
 function getBodyJSON(submitForm) {
     var bodyJSON = {}
     Object.keys(submitForm).forEach((key) => {
         if (submitForm[key]) {
-            bodyJSON[key] = getTransformedData(key, submitForm[key].value)
+            bodyJSON[key] = getTransformedData(key, submitForm[key].value);
         }
-    })
+    });
     return bodyJSON
 }
 
 function getTransformedData(key, value) {
-    var transformedData = value
+    var transformedData = value;
     if (key === "locations") {
         transformedData = value.split(/\s/).map(function (item) {
-            return parseInt(item, 10)
-        })
+            return parseInt(item, 10);
+        });
     }
-    return transformedData
+    return transformedData;
 }

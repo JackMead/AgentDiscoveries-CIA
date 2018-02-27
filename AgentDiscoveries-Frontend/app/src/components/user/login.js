@@ -1,11 +1,11 @@
-import * as React from "react"
+import * as React from "react";
 import {
     Form,
     FormGroup,
     FormControl,
     Button,
     ControlLabel
-} from "react-bootstrap"
+} from "react-bootstrap";
 import { Message } from "../message"
 import * as UserUtils from "./user-utilities"
 import * as CRUD from "../crud"
@@ -13,12 +13,12 @@ import * as CRUD from "../crud"
 export default class Login extends React.Component {
 
     constructor(props) {
-        super()
+        super();
         this.state = {
             authenticationMessage: { message: "", type: "info"}
         }
 
-        this.handleLogIn = this.handleLogIn.bind(this)
+        this.handleLogIn = this.handleLogIn.bind(this);
     }
 
     render() {
@@ -38,17 +38,17 @@ export default class Login extends React.Component {
                     </FormGroup>
                 </Form>
             </div>
-        )
+        );
     }
 
     componentWillMount() {
         if (UserUtils.isLoggedIn()) {
-            window.location.hash = "#/search/location"
+            window.location.hash = "#/search/location";
         }
     }
     
     handleLogIn(e) {
-        e.preventDefault()
+        e.preventDefault();
         var requestBodyJSON = {
             username: this.username.value,
             password: this.password.value
@@ -57,24 +57,24 @@ export default class Login extends React.Component {
         UserUtils.makeAuthenticationAPICall("/v1/token", requestBodyJSON)
             .then(response => {
                 if (response.ok) {
-                    return response.json()
+                    return response.json();
                 } else {
                     if (response.status === 401) {
-                        throw "Incorrect username or password"
+                        throw "Incorrect username or password";
                     } else {
-                        throw "Server error. Server cannot process the request"
+                        throw "Server error. Server cannot process the request";
                     }
                 }
             })
             .then(response => {
-                let token = response.token
-                window.localStorage.setItem("Token", token)
-                window.dispatchEvent(new Event("login"))
-                window.location.hash = "#/"
+                let token = response.token;
+                window.localStorage.setItem("Token", token);
+                window.dispatchEvent(new Event("login"));
+                window.location.hash = "#/";
             })
             .catch(err => {
-                this.setState({ authenticationMessage: {message: err, type: "danger"} })
-            })
+                this.setState({ authenticationMessage: {message: err, type: "danger"} });
+            });
     }
 
-}
+};
