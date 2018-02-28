@@ -32,7 +32,6 @@ export default class EditEntity extends React.Component {
       .then(_ => {
         this.setUpEntityForms();
       });
-    console.log(this.state);
   }
 
   componentWillReceiveProps (props) {

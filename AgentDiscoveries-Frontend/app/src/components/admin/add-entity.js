@@ -45,7 +45,6 @@ export default class AddEntity extends React.Component {
 
   onSubmit (e) {
     e.preventDefault();
-    console.log(this.state);
     handleEntitySubmit(`/v1/api/${this.state.api}`, this.submitForm)
       .then(window.location.hash = `#/admin/${this.state.api}`)
       .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
@@ -69,7 +68,6 @@ export default class AddEntity extends React.Component {
   submitAgent (userId) {
     let agentForm = this.submitForm.agentForm;
     agentForm.userId = { value: userId };
-    console.log(agentForm);
     handleEntitySubmit(`/v1/api/agents`, agentForm)
       .then(window.location.hash = `#/admin/${this.state.api}`)
       .catch(error => this.setState({ message: { message: `${error.message}. Created the user, but could not create the agent`, type: 'danger' } }));

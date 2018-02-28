@@ -4,7 +4,9 @@ import {
   FormGroup,
   FormControl,
   Button,
-  ControlLabel
+  ButtonGroup,
+  ControlLabel,
+  Image
 } from 'react-bootstrap';
 import {updateAPI, updatePicture, readAPI} from './crud';
 
@@ -13,7 +15,7 @@ export default class Profile extends React.Component {
     super();
     this.state = {
       file: null,
-      imgSrc: '/userResources/default.jpg',
+      imgSrc: 'http://clipground.com/images/placeholder-clipart-5.jpg',
       imageUploadMessage: ''
     };
 
@@ -34,16 +36,20 @@ export default class Profile extends React.Component {
           <FormGroup>
             <FormControl type='text' inputRef={callSign => { this.callSign = callSign }}
               placeholder='enter your call sign' />
-            <Button type='submit'>Submit Changes</Button>
           </FormGroup>
+          <ButtonGroup>
+            <Button type='submit'>Submit Changes</Button>
+          </ButtonGroup>
         </Form>
-        <img src={this.state.imgSrc} />
+        <Image className='img-md' src={this.state.imgSrc} />
         <Form encType='multipart/form-data' onSubmit={this.handlePictureUpdate}>
           <ControlLabel bsStyle='warning'>{this.state.imageUploadMessage}</ControlLabel>
           <FormGroup>
             <FormControl accept='image/png, image/jpeg' type='file' name='file' onChange={this.onChange} />
-            <Button type='submit'>Update Picture</Button>
           </FormGroup>
+          <ButtonGroup>
+            <Button type='submit'>Update Picture</Button>
+          </ButtonGroup>
         </Form>
       </div>
     );
@@ -84,7 +90,6 @@ export default class Profile extends React.Component {
     const userId = window.localStorage.getItem('UserId');
     readAPI('/v1/api/pictures', userId)
       .then(response => {
-        console.log(response);
         if (response.ok) {
           response.blob();
         } else {
