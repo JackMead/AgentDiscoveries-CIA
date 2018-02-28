@@ -23,6 +23,13 @@ export default class RegionSummariesSearch extends React.Component {
         this.onChange = this.onChange.bind(this)
     }
 
+    componentDidMount() {
+        SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.searchForm)
+            .then(results => {
+                this.setState({ results: results, message: { message: "", type: "danger" } })
+            })
+    }
+
     render() {
         return (
             <div className="col-md-8 col-md-offset-2">
@@ -41,7 +48,7 @@ export default class RegionSummariesSearch extends React.Component {
                         <ControlLabel>User</ControlLabel>
                         <FormControl type="text"
                             inputRef={userId => this.searchForm.userId = userId}
-                            placeholder="enter region ID" />
+                            placeholder="enter user ID" />
                     </FormGroup>
                     <FormGroup className="form-inline">
                         <ControlLabel className="right-margin">From</ControlLabel>
@@ -51,8 +58,7 @@ export default class RegionSummariesSearch extends React.Component {
 
                         <ControlLabel className="right-margin">To</ControlLabel>
                         <FormControl className="right-margin" type="datetime-local"
-                            inputRef={toTime => this.searchForm.toTime = toTime}
-                            defaultValue={SearchUtils.getFormDate(new Date())} />
+                            inputRef={toTime => this.searchForm.toTime = toTime} />
                     </FormGroup>
                 </Form>
 
