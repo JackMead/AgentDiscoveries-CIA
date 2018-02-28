@@ -1,10 +1,7 @@
 import { createAPI, updateAPI } from "../crud"
 
 export function handleReportSubmit(apiAddress, submitForm) {
-    let bodyJSON = {};
-    Object.keys(submitForm).forEach((key) => {
-        bodyJSON[key] = getTransformedData(key, submitForm[key].value);
-    });
+    let bodyJSON = getBodyJSON(submitForm);
 
     bodyJSON.reportTime = new Date().toJSON();
 
@@ -29,7 +26,7 @@ export function handleEntitySubmit(apiAddress, submitForm) {
         })
 }
 
-function getBodyJSON(submitForm) {
+export function getBodyJSON(submitForm) {
     var bodyJSON = {}
     Object.keys(submitForm).forEach((key) => {
         if (submitForm[key]) {

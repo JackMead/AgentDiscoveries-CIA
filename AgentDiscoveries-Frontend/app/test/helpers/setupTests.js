@@ -19,3 +19,14 @@ Object.keys(document.defaultView).forEach((property) => {
 global.navigator = {
     userAgent: 'node.js'
 };
+
+window.localStorage={};
+window.localStorage.setItem = function (key, val) {
+    this[key] = val + '';
+}
+window.localStorage.getItem = function (key) {
+    return this[key];
+}
+window.localStorage.clear = function(key){
+    delete this[key];
+}

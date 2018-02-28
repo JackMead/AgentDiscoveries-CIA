@@ -1,4 +1,3 @@
-
 export function makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
     var requestBody = JSON.stringify(requestBodyJSON);
     return fetch(apiAddress, {
@@ -19,4 +18,10 @@ export function isLoggedIn() {
 export function logOut() {
     console.log("logging out");
     window.localStorage.clear("Token");
+    window.localStorage.clear("UserId");
+}
+
+export function logIn(token, userId) {
+    window.localStorage.setItem("Token", token);
+    window.localStorage.setItem("UserId", userId);
 }

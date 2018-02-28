@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server --hot --inline",
-    "test": "mocha --require babel-register app/test/helpers/setupTests.js app/test/*.js"
+    "test": "mocha --require babel-register app/test/helpers/setupTests.js app/test/**/*.js"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +29,7 @@
     "node-sass": "^4.7.2",
     "react-test-renderer": "^16.2.0",
     "sass-loader": "^6.0.6",
+    "sinon": "^4.4.2",
     "style-loader": "^0.20.1",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1"
