@@ -36,31 +36,31 @@ export default class RegionSummariesSearch extends React.Component {
 
           <Message message={this.state.message} />
 
-                    <Message message={this.state.message} />
-                    
-                    <FormGroup>
-                        <ControlLabel>Region</ControlLabel>
-                        <FormControl type="text"
-                            inputRef={regionId => this.searchForm.regionId = regionId}
-                            placeholder="enter region ID" />
-                    </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>User</ControlLabel>
-                        <FormControl type="text"
-                            inputRef={userId => this.searchForm.userId = userId}
-                            placeholder="enter user ID" />
-                    </FormGroup>
-                    <FormGroup className="form-inline">
-                        <ControlLabel className="rm-3">From</ControlLabel>
-                        <FormControl className="rm-3" type="datetime-local"
-                            inputRef={fromTime => this.searchForm.fromTime = fromTime}
-                            defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))} />
+          <Message message={this.state.message} />
 
-                        <ControlLabel className="rm-3">To</ControlLabel>
-                        <FormControl className="rm-3" type="datetime-local"
-                            inputRef={toTime => this.searchForm.toTime = toTime} />
-                    </FormGroup>
-                </Form>
+          <FormGroup>
+            <ControlLabel>Region</ControlLabel>
+            <FormControl type='text'
+              inputRef={regionId => { this.searchForm.regionId = regionId }}
+              placeholder='enter region ID' />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>User</ControlLabel>
+            <FormControl type='text'
+              inputRef={userId => { this.searchForm.userId = userId }}
+              placeholder='enter user ID' />
+          </FormGroup>
+          <FormGroup className='form-inline'>
+            <ControlLabel className='rm-3'>From</ControlLabel>
+            <FormControl className='rm-3' type='datetime-local'
+              inputRef={fromTime => { this.searchForm.fromTime = fromTime }}
+              defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))} />
+
+            <ControlLabel className='rm-3'>To</ControlLabel>
+            <FormControl className='rm-3' type='datetime-local'
+              inputRef={toTime => { this.searchForm.toTime = toTime }} />
+          </FormGroup>
+        </Form>
 
         <SearchResult results={this.state.results} />
       </div>
@@ -73,6 +73,6 @@ export default class RegionSummariesSearch extends React.Component {
       .then(results => {
         this.setState({ results: results, message: { message: '', type: 'danger' } })
       })
-      .catch(error => this.setState({ message: { message: error, type: 'danger' } }))
+      .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }))
   }
 }

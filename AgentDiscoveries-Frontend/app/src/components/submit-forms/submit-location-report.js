@@ -47,7 +47,7 @@ export default class LocationReportSubmit extends React.Component {
           <FormGroup>
             <ControlLabel>Location</ControlLabel>
             <FormControl componentClass='select' required
-              inputRef={location => this.submitForm.locationId = location}
+              inputRef={location => { this.submitForm.locationId = location }}
               placeholder='enter location ID'>
               {this.getLocationOptions()}
             </FormControl>
@@ -55,14 +55,14 @@ export default class LocationReportSubmit extends React.Component {
           <FormGroup>
             <ControlLabel>Status</ControlLabel>
             <FormControl type='number' required
-              inputRef={status => this.submitForm.status = status}
+              inputRef={status => { this.submitForm.status = status }}
               placeholder='enter status (numeric)' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Report</ControlLabel>
             <FormControl type='text' required
               componentClass='textarea' rows={6}
-              inputRef={reportBody => this.submitForm.reportBody = reportBody}
+              inputRef={reportBody => { this.submitForm.reportBody = reportBody }}
               placeholder='write report' />
           </FormGroup>
           <Button type='submit'>Submit</Button>
@@ -78,7 +78,7 @@ export default class LocationReportSubmit extends React.Component {
         this.setState({ message: { message: 'Report sent', type: 'info' } })
       })
       .catch(error => {
-        this.setState({ message: { 'message': error, type: 'danger' } })
+        this.setState({ message: { message: error.message, type: 'danger' } })
       })
   }
 

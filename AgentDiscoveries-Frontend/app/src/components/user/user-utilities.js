@@ -1,14 +1,14 @@
 
-export function makeAuthenticationAPICall(apiAddress, requestBodyJSON) {
-    const requestBody = JSON.stringify(requestBodyJSON)
-    return fetch(apiAddress, {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: requestBody
-    })
+export function makeAuthenticationAPICall (apiAddress, requestBodyJSON) {
+  const requestBody = JSON.stringify(requestBodyJSON)
+  return fetch(apiAddress, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: requestBody
+  })
 }
 
 export function isLoggedIn () {

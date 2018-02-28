@@ -28,7 +28,7 @@ export class AddAgent extends React.Component {
           <FormGroup>
             <ControlLabel>User</ControlLabel>
             <FormControl componentClass='select' required
-              inputRef={userId => this.submitForm.userId = userId}
+              inputRef={userId => { this.submitForm.userId = userId }}
               placeholder='enter user ID'>
               {this.getUserOptions()}
             </FormControl>
@@ -36,31 +36,31 @@ export class AddAgent extends React.Component {
           <FormGroup>
             <ControlLabel>First Name</ControlLabel>
             <FormControl type='text' required
-              inputRef={firstName => this.submitForm.firstName = firstName}
+              inputRef={firstName => { this.submitForm.firstName = firstName }}
               placeholder='enter first name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Last Name</ControlLabel>
             <FormControl type='text' required
-              inputRef={lastName => this.submitForm.lastName = lastName}
+              inputRef={lastName => { this.submitForm.lastName = lastName }}
               placeholder='enter last name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Date Of Birth</ControlLabel>
             <FormControl type='date' required
-              inputRef={dateOfBirth => this.submitForm.dateOfBirth = dateOfBirth}
+              inputRef={dateOfBirth => { this.submitForm.dateOfBirth = dateOfBirth }}
               placeholder='enter date of birth' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Rank</ControlLabel>
             <FormControl type='number' required
-              inputRef={rank => this.submitForm.rank = rank}
+              inputRef={rank => { this.submitForm.rank = rank }}
               placeholder='enter rank (numeric)' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Call Sign</ControlLabel>
             <FormControl type='text' required
-              inputRef={callSign => this.submitForm.callSign = callSign}
+              inputRef={callSign => { this.submitForm.callSign = callSign }}
               placeholder='enter call sign' />
           </FormGroup>
           <Button type='submit'>Submit</Button>

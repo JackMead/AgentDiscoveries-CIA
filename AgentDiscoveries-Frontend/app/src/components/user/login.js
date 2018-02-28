@@ -25,10 +25,10 @@ export default class Login extends React.Component {
           <h3>Sign in</h3>
           <Message message={this.state.authenticationMessage} />
           <FormGroup>
-            <FormControl type='text' inputRef={username => this.username = username} placeholder='enter your username' />
+            <FormControl type='text' inputRef={username => { this.username = username }} placeholder='enter your username' />
           </FormGroup>
           <FormGroup>
-            <FormControl type='password' inputRef={password => this.password = password} placeholder='enter password' />
+            <FormControl type='password' inputRef={password => { this.password = password }} placeholder='enter password' />
           </FormGroup>
           <FormGroup>
             <Button id='login-submit' type='submit'>Login</Button>
@@ -42,17 +42,11 @@ export default class Login extends React.Component {
     if (UserUtils.isLoggedIn()) {
       window.location.hash = '#/search/location'
     }
-    
-    handleLogIn(e) {
-        e.preventDefault()
-        const requestBodyJSON = {
-            username: this.username.value,
-            password: this.password.value
-        }
+  }
 
   handleLogIn (e) {
     e.preventDefault()
-    var requestBodyJSON = {
+    let requestBodyJSON = {
       username: this.username.value,
       password: this.password.value
     }

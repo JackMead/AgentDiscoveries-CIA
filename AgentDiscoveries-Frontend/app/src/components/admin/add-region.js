@@ -26,13 +26,13 @@ export class AddRegion extends React.Component {
           <FormGroup>
             <ControlLabel>Region Name</ControlLabel>
             <FormControl type='text' required
-              inputRef={name => this.submitForm.name = name}
+              inputRef={name => { this.submitForm.name = name }}
               placeholder='enter region name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Location IDs</ControlLabel>
             <FormControl type='text' required
-              inputRef={locations => this.submitForm.locations = locations}
+              inputRef={locations => { this.submitForm.locations = locations }}
               placeholder='enter location IDs (separated by white space)' />
           </FormGroup>
           <Button type='submit'>Submit</Button>

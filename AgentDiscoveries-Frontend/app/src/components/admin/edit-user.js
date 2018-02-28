@@ -28,12 +28,12 @@ export class EditUser extends React.Component {
             <FormGroup>
               <FormControl type='text' required
                 value={this.state.entity.username}
-                inputRef={username => this.submitForm.username = username}
+                inputRef={username => { this.submitForm.username = username }}
                 placeholder='enter username' />
             </FormGroup>
             <FormGroup>
               <FormControl type='password' required
-                inputRef={password => this.submitForm.password = password}
+                inputRef={password => { this.submitForm.password = password }}
                 placeholder='enter password' />
             </FormGroup>
             <Button type='submit'>Submit</Button>

@@ -1,11 +1,4 @@
 import * as React from 'react'
-import {
-  Form,
-  FormGroup,
-  FormControl,
-  Button,
-  ControlLabel
-} from 'react-bootstrap'
 
 import { handleEntityEdit } from '../utilities/submit-utilities'
 import { getEntity } from '../utilities/get-utilities'
@@ -62,7 +55,7 @@ export default class EditEntity extends React.Component {
     e.preventDefault()
     handleEntityEdit(`/v1/api/${this.state.api}`, this.state.id, this.submitForm)
       .then(window.location.hash = `#/admin/${this.state.api}`)
-      .catch(error => this.setState({ message: { message: error, type: 'danger' } }))
+      .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }))
   }
 
   setUpEntityForms () {

@@ -29,21 +29,21 @@ export class EditLocation extends React.Component {
             <ControlLabel>Site Name</ControlLabel>
             <FormControl type='text' required
               defaultValue={this.state.entity.siteName}
-              inputRef={siteName => this.submitForm.siteName = siteName}
+              inputRef={siteName => { this.submitForm.siteName = siteName }}
               placeholder='enter site name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Location Name</ControlLabel>
             <FormControl type='text' required
               defaultValue={this.state.entity.location}
-              inputRef={location => this.submitForm.location = location}
+              inputRef={location => { this.submitForm.location = location }}
               placeholder='enter location name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Time Zone</ControlLabel>
             <FormControl type='text' required
               defaultValue={this.state.entity.timeZone}
-              inputRef={timeZone => this.submitForm.timeZone = timeZone}
+              inputRef={timeZone => { this.submitForm.timeZone = timeZone }}
               placeholder='enter time zone (e.g. GMT+1)' />
           </FormGroup>
           <Button type='submit'>Submit</Button>

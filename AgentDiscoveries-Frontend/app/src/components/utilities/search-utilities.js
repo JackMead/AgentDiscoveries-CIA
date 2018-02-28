@@ -10,12 +10,12 @@ export function getFormDate (date) {
   return date.toISOString().slice(0, 16)
 }
 
-export function getTransformedData(key, value) {
-    let transformedData = value
-    if (key === "fromTime" || key === "toTime") {
-        transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : ""
-    }
-    return transformedData
+export function getTransformedData (key, value) {
+  let transformedData = value
+  if (key === 'fromTime' || key === 'toTime') {
+    transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : ''
+  }
+  return transformedData
 }
 
 function getSearchParams (searchForm) {

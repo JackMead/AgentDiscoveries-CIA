@@ -53,7 +53,7 @@ export default class RegionSummarySubmit extends React.Component {
           <FormGroup>
             <ControlLabel>Region</ControlLabel>
             <FormControl componentClass='select' required
-              inputRef={regionId => this.submitForm.regionId = regionId}
+              inputRef={regionId => { this.submitForm.regionId = regionId }}
               placeholder='enter region ID'>
               {this.getRegionOptions()}
             </FormControl>
@@ -61,14 +61,14 @@ export default class RegionSummarySubmit extends React.Component {
           <FormGroup>
             <ControlLabel>Status</ControlLabel>
             <FormControl type='number' required
-              inputRef={status => this.submitForm.status = status}
+              inputRef={status => { this.submitForm.status = status }}
               placeholder='enter status (numeric)' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Summary</ControlLabel>
             <FormControl type='text' required
               componentClass='textarea' rows={6}
-              inputRef={reportBody => this.submitForm.reportBody = reportBody}
+              inputRef={reportBody => { this.submitForm.reportBody = reportBody }}
               placeholder='write region summary' />
           </FormGroup>
           <Button type='submit'>Submit</Button>
@@ -84,7 +84,7 @@ export default class RegionSummarySubmit extends React.Component {
         this.setState({message: {message: 'Report sent', type: 'info'}})
       })
       .catch(error => {
-        this.setState({message: {message: error, type: 'danger'}})
+        this.setState({message: {message: error.message, type: 'danger'}})
       })
   }
 

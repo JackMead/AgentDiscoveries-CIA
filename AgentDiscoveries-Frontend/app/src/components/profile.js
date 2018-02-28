@@ -9,22 +9,17 @@ import {
 import {updateAPI, updatePicture, readAPI} from './crud'
 
 export default class Profile extends React.Component {
-
-    constructor() {
-        super();
-        this.state = {
-            file: null,
-            imgSrc: "/userResources/default.jpg",
-            imageUploadMessage: ""
-        }
-
-        this.onChange = this.onChange.bind(this)
-        this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
+  constructor () {
+    super()
+    this.state = {
+      file: null,
+      imgSrc: '/userResources/default.jpg',
+      imageUploadMessage: ''
     }
 
     this.onChange = this.onChange.bind(this)
     this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
-      this.handleAgentUpdate = this.handleAgentUpdate.bind(this)
+    this.handleAgentUpdate = this.handleAgentUpdate.bind(this)
   }
 
   componentDidMount () {
@@ -37,7 +32,7 @@ export default class Profile extends React.Component {
         <Form onSubmit={this.handleAgentUpdate}>
           <h3>Update Profile</h3>
           <FormGroup>
-            <FormControl type='text' inputRef={callSign => this.callSign = callSign}
+            <FormControl type='text' inputRef={callSign => { this.callSign = callSign }}
               placeholder='enter your call sign' />
             <Button type='submit'>Submit Changes</Button>
           </FormGroup>
@@ -60,53 +55,33 @@ export default class Profile extends React.Component {
     })
   }
 
-        const userId = window.localStorage.getItem("UserId");
-        const formData = new FormData();
-        formData.append('file', this.state.file);
-
-        updatePicture("/v1/api/pictures", userId, formData)
-            .then(this.getProfileSrc());
+  handlePictureUpdate (e) {
+    e.preventDefault()
+    if (this.state.file.size > 1024 * 1024) {
+      this.setState({ imageUploadMessage: 'File must be less than 1MB' })
+      return
     }
-    this.setState({imageUploadMessage: ''})
+    this.setState({ imageUploadMessage: '' })
 
-    handleAgentUpdate(e) {
-        e.preventDefault();
-        const userId = window.localStorage.getItem("UserId");
-        const requestBodyJSON = {
-            "callSign": this.callSign.value
-        }
-        updateAPI("/v1/api/agents", userId, JSON.stringify(requestBodyJSON));
-    }
+    const userId = window.localStorage.getItem('UserId')
+    const formData = new FormData()
+    formData.append('file', this.state.file)
 
-    getProfileSrc() {
-        const userId = window.localStorage.getItem("UserId");
-        readAPI("/v1/api/pictures", userId)
-            .then(response => {
-                console.log(response)
-                if (response.ok) {
-                    response.blob()
-                } else {
-                    throw 'Could not retrieve picture from the API server'
-                }
-            })
-            .then(blob => {
-                this.setState({imgSrc: URL.createObjectURL(blob)});
-            })
-            .catch(error => {
-                console.log(error)
-            })
+    updatePicture('/v1/api/pictures', userId, formData)
+      .then(this.getProfileSrc())
+  }
 
   handleAgentUpdate (e) {
     e.preventDefault()
-    var userId = window.localStorage.getItem('UserId')
-    var requestBodyJSON = {
+    const userId = window.localStorage.getItem('UserId')
+    const requestBodyJSON = {
       'callSign': this.callSign.value
     }
     updateAPI('/v1/api/agents', userId, JSON.stringify(requestBodyJSON))
   }
 
   getProfileSrc () {
-    var userId = window.localStorage.getItem('UserId')
+    const userId = window.localStorage.getItem('UserId')
     readAPI('/v1/api/pictures', userId)
       .then(response => {
         console.log(response)
