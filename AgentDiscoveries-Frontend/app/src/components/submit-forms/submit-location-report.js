@@ -1,27 +1,27 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Form,
   FormGroup,
   FormControl,
   Button,
   ControlLabel
-} from 'react-bootstrap'
-import { handleReportSubmit } from '../utilities/submit-utilities'
-import { getAll } from '../utilities/get-utilities'
-import { Message } from '../message'
+} from 'react-bootstrap';
+import { handleReportSubmit } from '../utilities/submit-utilities';
+import { getAll } from '../utilities/get-utilities';
+import { Message } from '../message';
 
 export default class LocationReportSubmit extends React.Component {
   constructor () {
-    super()
+    super();
     this.state = {
       locations: [],
       message: { message: '', type: 'danger' }
-    }
+    };
 
-    this.submitForm = {}
+    this.submitForm = {};
 
-    this.onSubmit = this.onSubmit.bind(this)
-    this.getLocationOptions = this.getLocationOptions.bind(this)
+    this.onSubmit = this.onSubmit.bind(this);
+    this.getLocationOptions = this.getLocationOptions.bind(this);
   }
 
   componentWillMount () {
@@ -29,11 +29,11 @@ export default class LocationReportSubmit extends React.Component {
       .then(results => {
         this.setState(
           {locations: results}
-        )
+        );
       })
       .catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   }
 
   render () {
@@ -68,24 +68,24 @@ export default class LocationReportSubmit extends React.Component {
           <Button type='submit'>Submit</Button>
         </Form>
       </div>
-    )
+    );
   }
 
   onSubmit (e) {
-    e.preventDefault()
+    e.preventDefault();
     handleReportSubmit('/v1/api/reports/locationstatuses', this.submitForm)
       .then(response => {
-        this.setState({ message: { message: 'Report sent', type: 'info' } })
+        this.setState({ message: { message: 'Report sent', type: 'info' } });
       })
       .catch(error => {
-        this.setState({ message: { message: error.message, type: 'danger' } })
-      })
+        this.setState({ message: { message: error.message, type: 'danger' } });
+      });
   }
 
   getLocationOptions () {
     return Object.keys(this.state.locations).map(key => {
-      let location = this.state.locations[key]
-      return <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>
-    })
+      let location = this.state.locations[key];
+      return <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>;
+    });
   }
 }

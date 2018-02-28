@@ -1,7 +1,7 @@
 
 export function createAPI (apiAddress, requestBodyJSON) {
-  const tokenHeader = getTokenHeader()
-  console.log(requestBodyJSON)
+  const tokenHeader = getTokenHeader();
+  console.log(requestBodyJSON);
   return fetch(apiAddress, {
     method: 'POST',
     headers: {
@@ -10,12 +10,12 @@ export function createAPI (apiAddress, requestBodyJSON) {
       'Content-Type': 'application/json'
     },
     body: requestBodyJSON
-  })
+  });
 }
 
 export function searchAPI (apiAddress, searchString) {
-  const tokenHeader = getTokenHeader()
-  const requestAddress = `${apiAddress}?${searchString}`
+  const tokenHeader = getTokenHeader();
+  const requestAddress = `${apiAddress}?${searchString}`;
   return fetch(requestAddress, {
     method: 'GET',
     headers: {
@@ -23,12 +23,12 @@ export function searchAPI (apiAddress, searchString) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-  })
+  });
 }
 
 export function readAPI (apiAddress, id) {
-  const tokenHeader = getTokenHeader()
-  const requestAddress = `${apiAddress}/${id}`
+  const tokenHeader = getTokenHeader();
+  const requestAddress = `${apiAddress}/${id}`;
 
   return fetch(requestAddress, {
     method: 'GET',
@@ -37,12 +37,12 @@ export function readAPI (apiAddress, id) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-  })
+  });
 }
 
 export function updateAPI (apiAddress, id, requestBodyJSON) {
-  const tokenHeader = getTokenHeader()
-  const requestAddress = `${apiAddress}/${id}`
+  const tokenHeader = getTokenHeader();
+  const requestAddress = `${apiAddress}/${id}`;
 
   return fetch(requestAddress, {
     method: 'PUT',
@@ -52,12 +52,12 @@ export function updateAPI (apiAddress, id, requestBodyJSON) {
       'Content-Type': 'application/json'
     },
     body: requestBodyJSON
-  })
+  });
 }
 
 export function updatePicture (apiAddress, id, requestBodyJSON) {
-  const tokenHeader = getTokenHeader()
-  const requestAddress = `${apiAddress}/${id}`
+  const tokenHeader = getTokenHeader();
+  const requestAddress = `${apiAddress}/${id}`;
 
   return fetch(requestAddress, {
     method: 'PUT',
@@ -65,12 +65,12 @@ export function updatePicture (apiAddress, id, requestBodyJSON) {
       'Authorization': tokenHeader
     },
     body: requestBodyJSON
-  })
+  });
 }
 
 export function deleteAPI (apiAddress, id) {
-  const tokenHeader = getTokenHeader()
-  const requestAddress = `${apiAddress}/${id}`
+  const tokenHeader = getTokenHeader();
+  const requestAddress = `${apiAddress}/${id}`;
 
   return fetch(requestAddress, {
     method: 'DELETE',
@@ -79,9 +79,9 @@ export function deleteAPI (apiAddress, id) {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-  })
+  });
 }
 
 function getTokenHeader () {
-  return `Bearer ${window.localStorage.getItem('Token')}`
+  return `Bearer ${window.localStorage.getItem('Token')}`;
 }

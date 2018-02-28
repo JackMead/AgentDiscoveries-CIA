@@ -1,24 +1,24 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Form,
   FormGroup,
   FormControl,
   ControlLabel,
   Button
-} from 'react-bootstrap'
-import { createAPI } from './crud'
+} from 'react-bootstrap';
+import { createAPI } from './crud';
 
 export class TodaysCodePage extends React.Component {
   constructor () {
-    super()
+    super();
     this.state = {
       'message': {},
       'result': ''
-    }
+    };
 
-    this.handleDecode = this.handleDecode.bind(this)
-    this.handleEncode = this.handleEncode.bind(this)
-    this.handleRequest = this.handleRequest.bind(this)
+    this.handleDecode = this.handleDecode.bind(this);
+    this.handleEncode = this.handleEncode.bind(this);
+    this.handleRequest = this.handleRequest.bind(this);
   }
 
   render (props) {
@@ -46,29 +46,29 @@ export class TodaysCodePage extends React.Component {
         </div>
       </div>
 
-    )
+    );
   }
 
   handleEncode (e) {
-    e.preventDefault()
-    this.handleRequest('v1/api/encodemessage')
+    e.preventDefault();
+    this.handleRequest('v1/api/encodemessage');
   }
   handleDecode (e) {
-    e.preventDefault()
-    this.handleRequest('v1/api/decodemessage')
+    e.preventDefault();
+    this.handleRequest('v1/api/decodemessage');
   }
 
   handleRequest (api) {
-    const requestJSON = { 'message': this.state.message.message.value }
+    const requestJSON = { 'message': this.state.message.message.value };
     createAPI(api, JSON.stringify(requestJSON))
       .then(response => {
         if (response.status === 200) {
-          return response.json()
+          return response.json();
         } else {
-          throw Error('Server cannot process the request')
+          throw Error('Server cannot process the request');
         }
       })
       .then(response => this.setState({ result: response.message }))
-      .catch(error => this.setState({ result: error.message }))
+      .catch(error => this.setState({ result: error.message }));
   }
 }

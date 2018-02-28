@@ -1,33 +1,33 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Form,
   FormGroup,
   FormControl,
   Button,
   ControlLabel
-} from 'react-bootstrap'
+} from 'react-bootstrap';
 
-import { Message } from '../message'
-import { handleReportSubmit } from '../utilities/submit-utilities'
-import { getAll } from '../utilities/get-utilities'
-import { searchAPI } from '../crud'
+import { Message } from '../message';
+import { handleReportSubmit } from '../utilities/submit-utilities';
+import { getAll } from '../utilities/get-utilities';
+import { searchAPI } from '../crud';
 
 export default class RegionSummarySubmit extends React.Component {
   constructor () {
-    super()
+    super();
     this.state = {
       regions: [],
       message: {message: '', type: 'danger'}
-    }
+    };
 
     searchAPI('v1/api/regions', '')
       .then(response => response.json())
-      .then(response => this.setState({ 'regions': response }))
+      .then(response => this.setState({ 'regions': response }));
 
-    this.submitForm = {}
+    this.submitForm = {};
 
-    this.onSubmit = this.onSubmit.bind(this)
-    this.getRegionOptions = this.getRegionOptions.bind(this)
+    this.onSubmit = this.onSubmit.bind(this);
+    this.getRegionOptions = this.getRegionOptions.bind(this);
   }
 
   componentWillMount () {
@@ -38,8 +38,8 @@ export default class RegionSummarySubmit extends React.Component {
         })
       )
       .catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   }
 
   render () {
@@ -74,24 +74,24 @@ export default class RegionSummarySubmit extends React.Component {
           <Button type='submit'>Submit</Button>
         </Form>
       </div>
-    )
+    );
   }
 
   onSubmit (e) {
-    e.preventDefault()
+    e.preventDefault();
     handleReportSubmit('/v1/api/reports/regionsummaries', this.submitForm)
       .then(response => {
-        this.setState({message: {message: 'Report sent', type: 'info'}})
+        this.setState({message: {message: 'Report sent', type: 'info'}});
       })
       .catch(error => {
-        this.setState({message: {message: error.message, type: 'danger'}})
-      })
+        this.setState({message: {message: error.message, type: 'danger'}});
+      });
   }
 
   getRegionOptions () {
     return Object.keys(this.state.regions).map(key => {
-      let region = this.state.regions[key]
-      return <option key={region.regionId} value={region.regionId}>{region.name}</option>
-    })
+      let region = this.state.regions[key];
+      return <option key={region.regionId} value={region.regionId}>{region.name}</option>;
+    });
   }
 }

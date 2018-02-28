@@ -1,20 +1,20 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Form,
   FormGroup,
   FormControl,
   Button,
   ControlLabel
-} from 'react-bootstrap'
+} from 'react-bootstrap';
 
 export class AddLocation extends React.Component {
   constructor (props) {
-    super()
+    super();
     this.state = {
       onSubmit: props.onSubmit
-    }
+    };
 
-    this.submitForm = props.submitForm
+    this.submitForm = props.submitForm;
   }
 
   render (props) {
@@ -26,24 +26,24 @@ export class AddLocation extends React.Component {
           <FormGroup>
             <ControlLabel>Site Name</ControlLabel>
             <FormControl type='text' required
-              inputRef={siteName => this.submitForm.siteName = siteName}
+              inputRef={siteName => { this.submitForm.siteName = siteName }}
               placeholder='enter site name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Location Name</ControlLabel>
             <FormControl type='text' required
-              inputRef={location => this.submitForm.location = location}
+              inputRef={location => { this.submitForm.location = location }}
               placeholder='enter location name' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Time Zone</ControlLabel>
             <FormControl type='text' required
-              inputRef={timeZone => this.submitForm.timeZone = timeZone}
+              inputRef={timeZone => { this.submitForm.timeZone = timeZone }}
               placeholder='enter time zone (e.g. GMT+1)' />
           </FormGroup>
           <Button type='submit'>Submit</Button>
         </Form>
       </div>
-    )
+    );
   }
 }

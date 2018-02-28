@@ -1,6 +1,6 @@
 
 export function makeAuthenticationAPICall (apiAddress, requestBodyJSON) {
-  const requestBody = JSON.stringify(requestBodyJSON)
+  const requestBody = JSON.stringify(requestBodyJSON);
   return fetch(apiAddress, {
     method: 'POST',
     headers: {
@@ -8,15 +8,15 @@ export function makeAuthenticationAPICall (apiAddress, requestBodyJSON) {
       'Content-Type': 'application/json'
     },
     body: requestBody
-  })
+  });
 }
 
 export function isLoggedIn () {
-  let token = window.localStorage.getItem('Token')
-  return !!token
+  let token = window.localStorage.getItem('Token');
+  return !!token;
 }
 
 export function logOut () {
-  console.log('logging out')
-  window.localStorage.clear('Token')
+  console.log('logging out');
+  window.localStorage.clear('Token');
 }

@@ -1,41 +1,41 @@
-import { searchAPI } from '../crud'
+import { searchAPI } from '../crud';
 
 export function getDateDaysAgo (daysAgo) {
-  let date = new Date()
-  date.setDate(date.getDate() - daysAgo)
-  return date
+  let date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  return date;
 }
 
 export function getFormDate (date) {
-  return date.toISOString().slice(0, 16)
+  return date.toISOString().slice(0, 16);
 }
 
 export function getTransformedData (key, value) {
-  let transformedData = value
+  let transformedData = value;
   if (key === 'fromTime' || key === 'toTime') {
-    transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : ''
+    transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : '';
   }
-  return transformedData
+  return transformedData;
 }
 
 function getSearchParams (searchForm) {
   const searchParams = Object.keys(searchForm).map((key) => {
-    return searchForm[key].value === '' ? '' : `${encodeURIComponent(key)}=${encodeURIComponent(getTransformedData(key, searchForm[key].value))}`
-  }).filter(el => el !== '' && el).join('&')
-  return searchParams
+    return searchForm[key].value === '' ? '' : `${encodeURIComponent(key)}=${encodeURIComponent(getTransformedData(key, searchForm[key].value))}`;
+  }).filter(el => el !== '' && el).join('&');
+  return searchParams;
 }
 
 export function getResultsAsynch (apiAddress, searchForm) {
-  const searchParams = getSearchParams(searchForm)
+  const searchParams = getSearchParams(searchForm);
 
   var response = searchAPI(apiAddress, searchParams)
     .then(response => {
       if (response.ok) {
-        return response.json()
+        return response.json();
       } else {
-        throw Error('API server could not process the request')
+        throw Error('API server could not process the request');
       }
-    })
+    });
 
-  return response
+  return response;
 }

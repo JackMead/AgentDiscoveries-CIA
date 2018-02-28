@@ -1,31 +1,31 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Form,
   FormGroup,
   FormControl,
   ControlLabel
-} from 'react-bootstrap'
-import {Message} from '../message'
+} from 'react-bootstrap';
+import {Message} from '../message';
 
-import * as SearchUtils from '../utilities/search-utilities'
-import SearchResult from './search-result'
+import * as SearchUtils from '../utilities/search-utilities';
+import SearchResult from './search-result';
 export default class RegionSummariesSearch extends React.Component {
   constructor () {
-    super()
+    super();
     this.state = {
       message: { message: '', type: 'danger' },
       results: []
-    }
+    };
 
-    this.searchForm = { }
-    this.onChange = this.onChange.bind(this)
+    this.searchForm = { };
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount () {
     SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.searchForm)
       .then(results => {
-        this.setState({ results: results, message: { message: '', type: 'danger' } })
-      })
+        this.setState({ results: results, message: { message: '', type: 'danger' } });
+      });
   }
 
   render () {
@@ -64,15 +64,17 @@ export default class RegionSummariesSearch extends React.Component {
 
         <SearchResult results={this.state.results} />
       </div>
-    )
+    );
   }
 
   onChange (e) {
-    e.preventDefault()
+    e.preventDefault();
     SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.searchForm)
       .then(results => {
-        this.setState({ results: results, message: { message: '', type: 'danger' } })
+        this.setState({ results: results, message: { message: '', type: 'danger' } });
       })
-      .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }))
+      .catch(error => {
+        this.setState({ message: { message: error.message, type: 'danger' } });
+      });
   }
 }

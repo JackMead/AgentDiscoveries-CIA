@@ -1,23 +1,23 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   HashRouter as Router,
   Route,
   Switch
-} from 'react-router-dom'
+} from 'react-router-dom';
 
-import Login from './user/login'
-import Home from './home'
-import Page from './page'
-import Profile from './profile'
+import Login from './user/login';
+import Home from './home';
+import Page from './page';
+import Profile from './profile';
 
-import LocationReportSearch from './search-forms/search-location-reports'
-import RegionSummarySearch from './search-forms/search-region-summaries'
-import LocationReportSubmit from './submit-forms/submit-location-report'
-import RegionSummarySubmit from './submit-forms/submit-region-summary'
-import AddEntity from './admin/add-entity'
-import EditEntity from './admin/edit-entity'
-import Entities from './admin/entities-view'
-import { TodaysCodePage } from './todays-code-page'
+import LocationReportSearch from './search-forms/search-location-reports';
+import RegionSummarySearch from './search-forms/search-region-summaries';
+import LocationReportSubmit from './submit-forms/submit-location-report';
+import RegionSummarySubmit from './submit-forms/submit-region-summary';
+import AddEntity from './admin/add-entity';
+import EditEntity from './admin/edit-entity';
+import Entities from './admin/entities-view';
+import { TodaysCodePage } from './todays-code-page';
 
 export default class App extends React.Component {
   render () {
@@ -49,6 +49,6 @@ export default class App extends React.Component {
           </Switch>
         </Router>
       </React.Fragment>
-    )
+    );
   }
 }

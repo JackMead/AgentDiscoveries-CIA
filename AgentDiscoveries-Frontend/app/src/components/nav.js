@@ -1,31 +1,31 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Navbar,
   Nav,
   NavItem,
   NavDropdown,
   MenuItem
-} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
-import { logOut, isLoggedIn } from './user/user-utilities'
+} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import { logOut, isLoggedIn } from './user/user-utilities';
 
 export default class NavigationBar extends React.Component {
   constructor () {
-    super()
-    this.setNavOptions = this.setNavOptions.bind(this)
-    this.handleLogOut = this.handleLogOut.bind(this)
+    super();
+    this.setNavOptions = this.setNavOptions.bind(this);
+    this.handleLogOut = this.handleLogOut.bind(this);
   }
 
   componentWillMount () {
-    this.setNavOptions()
+    this.setNavOptions();
   }
 
   componentDidMount () {
-    window.addEventListener('login', this.setNavOptions)
+    window.addEventListener('login', this.setNavOptions);
   }
 
   componentWillUnmount () {
-    window.removeEventListener('login', this.setNavOptions)
+    window.removeEventListener('login', this.setNavOptions);
   }
 
   render () {
@@ -44,18 +44,18 @@ export default class NavigationBar extends React.Component {
         </Navbar.Header>
         {this.state.navOptions}
       </Navbar>
-    )
+    );
   }
 
   handleLogOut (e) {
-    e.preventDefault()
-    logOut()
-    window.dispatchEvent(new CustomEvent('login'))
-    window.location.hash = '#/'
+    e.preventDefault();
+    logOut();
+    window.dispatchEvent(new CustomEvent('login'));
+    window.location.hash = '#/';
   }
 
   setNavOptions () {
-    let navOptions
+    let navOptions;
     if (isLoggedIn()) {
       navOptions = (
         <Navbar.Collapse>
@@ -82,7 +82,7 @@ export default class NavigationBar extends React.Component {
             </NavItem>
           </Nav>
         </Navbar.Collapse>
-      )
+      );
     } else {
       navOptions = (
         <Navbar.Collapse>
@@ -92,8 +92,8 @@ export default class NavigationBar extends React.Component {
             </NavItem>
           </Nav>
         </Navbar.Collapse>
-      )
+      );
     }
-    this.setState({navOptions: navOptions})
+    this.setState({navOptions: navOptions});
   }
 }

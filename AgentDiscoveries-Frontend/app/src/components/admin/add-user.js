@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from 'react';
 import {
   Form,
   FormGroup,
@@ -6,21 +6,21 @@ import {
   Button,
   ControlLabel,
   Checkbox
-} from 'react-bootstrap'
+} from 'react-bootstrap';
 
 export class AddUser extends React.Component {
   constructor (props) {
-    super()
+    super();
     this.state = {
       onSubmit: props.onSubmit,
       additionalAgentInfo: ''
-    }
+    };
 
-    this.submitForm = props.submitForm
-    this.submitForm.agentForm = {}
+    this.submitForm = props.submitForm;
+    this.submitForm.agentForm = {};
 
-    this.onChange = this.onChange.bind(this)
-    this.getOptionalAgentForm = this.getOptionalAgentForm.bind(this)
+    this.onChange = this.onChange.bind(this);
+    this.getOptionalAgentForm = this.getOptionalAgentForm.bind(this);
   }
 
   render (props) {
@@ -58,15 +58,15 @@ export class AddUser extends React.Component {
           <Button type='submit'>Submit</Button>
         </Form>
       </div>
-    )
+    );
   }
 
   onChange (e) {
-    const additionalAgentInfo = this.submitForm.agent.checked ? this.getOptionalAgentForm() : ''
+    const additionalAgentInfo = this.submitForm.agent.checked ? this.getOptionalAgentForm() : '';
 
     this.setState({
       additionalAgentInfo: additionalAgentInfo
-    })
+    });
   }
 
   getOptionalAgentForm () {
@@ -103,6 +103,6 @@ export class AddUser extends React.Component {
             placeholder='enter call sign' />
         </FormGroup>
       </div>
-    )
+    );
   }
 }

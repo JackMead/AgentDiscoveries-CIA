@@ -1,5 +1,5 @@
 
-import * as React from 'react'
+import * as React from 'react';
 
 export default class SearchResult extends React.Component {
   render () {
@@ -8,7 +8,7 @@ export default class SearchResult extends React.Component {
         {this.getResultsHeader(this.props.results)}
         {this.renderResults(this.props.results)}
       </div>
-    )
+    );
   }
 
   renderResults (results) {
@@ -18,19 +18,19 @@ export default class SearchResult extends React.Component {
           <h3 className='search-name'>Result {index + 1}</h3>
           {this.getItemHTML(result)}
         </div>
-      )
-    })
+      );
+    });
 
-    return resultsHTML
+    return resultsHTML;
   }
 
   getItemHTML (result) {
     return Object.keys(result).map(key => {
-      return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>
-    })
+      return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>;
+    });
   }
 
   getResultsHeader (results) {
-    return results.length > 0 ? (results.length === 1 ? <h3>{`${results.length} result`}</h3> : <h3>{`${results.length} results`}</h3>) : ''
+    return results.length > 0 ? (results.length === 1 ? <h3>{`${results.length} result`}</h3> : <h3>{`${results.length} results`}</h3>) : '';
   }
 }
