@@ -51,13 +51,13 @@ export default class LocationReportsSearch extends React.Component {
                             placeholder="enter location ID" />
                     </FormGroup>
                     <FormGroup className="form-inline">
-                        <ControlLabel className="right-margin">From</ControlLabel>
-                        <FormControl className="right-margin" type="datetime-local"
+                        <ControlLabel className="rm-3">From</ControlLabel>
+                        <FormControl className="rm-3" type="datetime-local"
                             inputRef={fromTime => this.searchForm.fromTime = fromTime}
                             defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))}/>
 
-                        <ControlLabel className="right-margin">To</ControlLabel>
-                        <FormControl className="right-margin" type="datetime-local"
+                        <ControlLabel className="rm-3">To</ControlLabel>
+                        <FormControl className="rm-3" type="datetime-local"
                             inputRef={toTime => this.searchForm.toTime = toTime} />
                     </FormGroup>
                 </Form>

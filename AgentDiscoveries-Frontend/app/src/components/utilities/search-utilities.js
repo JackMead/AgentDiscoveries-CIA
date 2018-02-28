@@ -11,7 +11,7 @@ export function getFormDate(date) {
 }
 
 export function getTransformedData(key, value) {
-    var transformedData = value
+    let transformedData = value
     if (key === "fromTime" || key === "toTime") {
         transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : ""
     }

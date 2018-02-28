@@ -92,7 +92,7 @@ export default class Entities extends React.Component {
         Object.keys(this.state.entities).forEach((api) => {
             getAll(api)
                 .then(results => {
-                    var entities = this.state.entities
+                    const entities = this.state.entities
                     entities[api] = results;
                     this.setState({
                         entities: entities

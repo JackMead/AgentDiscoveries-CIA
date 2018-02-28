@@ -55,8 +55,9 @@ export default class NavigationBar extends React.Component {
     }
 
     setNavOptions() {
+        let navOptions
         if (isLoggedIn()) {
-            var navOptions = (
+            navOptions = (
             <Navbar.Collapse>
                 <Nav>
                     <NavDropdown eventKey={2} title="Search" id="basic-nav-dropdown">
@@ -73,9 +74,9 @@ export default class NavigationBar extends React.Component {
                         <MenuItem componentClass={Link} href="/admin/regions" to="/admin/regions" eventKey={5.1}>Regions</MenuItem>
                         <MenuItem componentClass={Link} href="/admin/users" to="/admin/users" eventKey={5.1}>Users</MenuItem>
                     </NavDropdown>
-                    <NavItem componentClass={Link} href="/profile" to="/profile" eventKey={6}>Profile</NavItem>
                 </Nav>
                 <Nav pullRight>
+                    <NavItem componentClass={Link} href="/profile" to="/profile" eventKey={6}>Profile</NavItem>
                     <NavItem onClick={this.handleLogOut} href="/login" to="/login" eventKey={1}>
                         Log Out
                     </NavItem>
@@ -83,7 +84,7 @@ export default class NavigationBar extends React.Component {
             </Navbar.Collapse> 
             )
         } else {
-            var navOptions = (
+            navOptions = (
                 <Navbar.Collapse>
                     <Nav pullRight>
                         <NavItem componentClass={Link} href="/login" to="/login" eventKey={1}>

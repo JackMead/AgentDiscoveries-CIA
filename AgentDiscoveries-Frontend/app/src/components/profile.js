@@ -17,7 +17,7 @@ export default class Profile extends React.Component {
             imgSrc: "/userResources/default.jpg",
             imageUploadMessage: ""
         }
-        
+
         this.onChange = this.onChange.bind(this)
         this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
     }
@@ -63,7 +63,7 @@ export default class Profile extends React.Component {
         }
         this.setState({imageUploadMessage: ""});
 
-        var userId = window.localStorage.getItem("UserId");
+        const userId = window.localStorage.getItem("UserId");
         const formData = new FormData();
         formData.append('file', this.state.file);
 
@@ -73,15 +73,15 @@ export default class Profile extends React.Component {
 
     handleAgentUpdate(e) {
         e.preventDefault();
-        var userId = window.localStorage.getItem("UserId");
-        var requestBodyJSON = {
+        const userId = window.localStorage.getItem("UserId");
+        const requestBodyJSON = {
             "callSign": this.callSign.value
         }
         updateAPI("/v1/api/agents", userId, JSON.stringify(requestBodyJSON));
     }
 
     getProfileSrc() {
-        var userId = window.localStorage.getItem("UserId");
+        const userId = window.localStorage.getItem("UserId");
         readAPI("/v1/api/pictures", userId)
             .then(response => {
                 console.log(response)
