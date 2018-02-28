@@ -1,7 +1,7 @@
 
 export function createAPI(apiAddress, requestBodyJSON) {
     const tokenHeader = getTokenHeader()
-    
+    console.log(requestBodyJSON)
     return fetch(apiAddress, {
         method: 'POST',
         headers: {

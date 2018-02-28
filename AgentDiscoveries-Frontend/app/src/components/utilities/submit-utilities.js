@@ -25,6 +25,8 @@ export function handleEntitySubmit(apiAddress, submitForm) {
         .then(response => {
             if (response.status !== 201) {
                 throw ("Server could not create the entity. Make sure all fields are correct")
+            } else {
+                return response.json()
             }
         })
 }
@@ -35,8 +37,10 @@ export function handleEntityEdit(apiAddress, id, submitForm) {
     
     return updateAPI(apiAddress, id, requestBody)
         .then(response => {
-            if (response.status >= 400) {
+            if (response.status >= 300) {
                 throw ("Server could not update the entity. Make sure all fields are correct")
+            } else {
+                return response.json()
             }
         })
 }
@@ -57,6 +61,8 @@ function getTransformedData(key, value) {
         transformedData = value.split(/\s/).map(function (item) {
             return parseInt(item, 10)
         })
+    } else if (key === "admin") {
+        transformedData = "on" ? true : false
     }
     return transformedData
 }

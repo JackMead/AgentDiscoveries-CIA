@@ -28,6 +28,7 @@ export default class AddEntity extends React.Component {
 
         this.onSubmit = this.onSubmit.bind(this)
         this.onSubmitUser = this.onSubmitUser.bind(this)
+        this.submitAgent = this.submitAgent.bind(this)
         this.getUserForm = this.getUserForm.bind(this)
         this.setUpEntityForms = this.setUpEntityForms.bind(this)
     }
@@ -62,11 +63,25 @@ export default class AddEntity extends React.Component {
     onSubmitUser(e) {
         e.preventDefault()
         const userForm = this.getUserForm()
-        console.log(userForm)
-        if (this.submitForm.agent.checked) {
-            const agentForm = this.submitForm.agentForm
-            console.log(agentForm)
-        }
+
+        handleEntitySubmit(`/v1/api/users`, userForm)
+            .then(response => {
+                if (this.submitForm.agent.checked) {
+                    this.submitAgent(response.userId)
+                } else {
+                    window.location.hash = `#/admin/${this.state.api}`
+                }
+            })
+            .catch(error => this.setState({ message: { message: error, type: "danger" } }))
+    }
+
+    submitAgent(userId) {
+        let agentForm = this.submitForm.agentForm
+        agentForm.userId = {value: userId}
+        console.log(agentForm)
+        handleEntitySubmit(`/v1/api/agents`, agentForm)
+            .then(response => window.location.hash = `#/admin/${this.state.api}`)
+            .catch(error => this.setState({ message: { message: `${error}. Created the user, but could not create the agent`, type: "danger" } }))
     }
 
     getUserForm() {
