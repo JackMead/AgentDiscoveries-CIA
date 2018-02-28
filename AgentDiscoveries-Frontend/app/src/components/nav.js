@@ -78,7 +78,7 @@ export default class NavigationBar extends React.Component {
           <Nav pullRight>
             <NavItem componentClass={Link} href='/profile' to='/profile' eventKey={6}>Profile</NavItem>
             <NavItem onClick={this.handleLogOut} href='/login' to='/login' eventKey={1}>
-                        Log Out
+              Log Out
             </NavItem>
           </Nav>
         </Navbar.Collapse>
@@ -88,7 +88,7 @@ export default class NavigationBar extends React.Component {
         <Navbar.Collapse>
           <Nav pullRight>
             <NavItem componentClass={Link} href='/login' to='/login' eventKey={1}>
-                            Login
+              Login
             </NavItem>
           </Nav>
         </Navbar.Collapse>
