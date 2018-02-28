@@ -61,16 +61,16 @@ export default class AddEntity extends React.Component {
 
     onSubmitUser(e) {
         e.preventDefault()
-        var userForm = this.getUserForm()
+        const userForm = this.getUserForm()
         console.log(userForm)
         if (this.submitForm.agent.checked) {
-            var agentForm = this.submitForm.agentForm
+            const agentForm = this.submitForm.agentForm
             console.log(agentForm)
         }
     }
 
     getUserForm() {
-        var userForm = Object.assign({}, this.submitForm)
+        const userForm = Object.assign({}, this.submitForm)
         delete userForm.agent
         delete userForm.agentForm
         return userForm

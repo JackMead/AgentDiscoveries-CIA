@@ -58,7 +58,7 @@ export class TodaysCodePage extends React.Component {
     }
 
     handleRequest(api) {
-        var requestJSON = { "message": this.state.message.message.value }
+        const requestJSON = { "message": this.state.message.message.value }
         createAPI(api, JSON.stringify(requestJSON))
             .then(response => {
                 if (response.status === 200) {

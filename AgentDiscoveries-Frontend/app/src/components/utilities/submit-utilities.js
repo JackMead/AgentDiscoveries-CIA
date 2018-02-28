@@ -8,7 +8,7 @@ export function handleReportSubmit(apiAddress, submitForm) {
 
     bodyJSON.reportTime = new Date().toJSON()
 
-    var requestBody = JSON.stringify(bodyJSON)
+    const requestBody = JSON.stringify(bodyJSON)
 
     return createAPI(apiAddress, requestBody)
         .then(response => {
@@ -20,7 +20,7 @@ export function handleReportSubmit(apiAddress, submitForm) {
 
 export function handleEntitySubmit(apiAddress, submitForm) {
     let bodyJSON = getBodyJSON(submitForm)
-    var requestBody = JSON.stringify(bodyJSON)
+    const requestBody = JSON.stringify(bodyJSON)
     return createAPI(apiAddress, requestBody)
         .then(response => {
             if (response.status !== 201) {
@@ -31,7 +31,7 @@ export function handleEntitySubmit(apiAddress, submitForm) {
 
 export function handleEntityEdit(apiAddress, id, submitForm) {
     let bodyJSON = getBodyJSON(submitForm)
-    var requestBody = JSON.stringify(bodyJSON)
+    const requestBody = JSON.stringify(bodyJSON)
     
     return updateAPI(apiAddress, id, requestBody)
         .then(response => {
@@ -42,7 +42,7 @@ export function handleEntityEdit(apiAddress, id, submitForm) {
 }
 
 function getBodyJSON(submitForm) {
-    var bodyJSON = {}
+    const bodyJSON = {}
     Object.keys(submitForm).forEach((key) => {
         if (submitForm[key]) {
             bodyJSON[key] = getTransformedData(key, submitForm[key].value)
@@ -52,7 +52,7 @@ function getBodyJSON(submitForm) {
 }
 
 function getTransformedData(key, value) {
-    var transformedData = value
+    let transformedData = value
     if (key === "locations") {
         transformedData = value.split(/\s/).map(function (item) {
             return parseInt(item, 10)

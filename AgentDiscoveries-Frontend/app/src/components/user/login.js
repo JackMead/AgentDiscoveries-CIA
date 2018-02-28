@@ -49,7 +49,7 @@ export default class Login extends React.Component {
     
     handleLogIn(e) {
         e.preventDefault()
-        var requestBodyJSON = {
+        const requestBodyJSON = {
             username: this.username.value,
             password: this.password.value
         }

@@ -1,6 +1,6 @@
 
 export function createAPI(apiAddress, requestBodyJSON) {
-    var tokenHeader = getTokenHeader()
+    const tokenHeader = getTokenHeader()
     
     return fetch(apiAddress, {
         method: 'POST',
@@ -14,8 +14,8 @@ export function createAPI(apiAddress, requestBodyJSON) {
 }
 
 export function searchAPI(apiAddress, searchString) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}?${searchString}`
+    const tokenHeader = getTokenHeader()
+    const requestAddress = `${apiAddress}?${searchString}`
     return fetch(requestAddress, {
         method: 'GET',
         headers: {
@@ -27,8 +27,8 @@ export function searchAPI(apiAddress, searchString) {
 }
 
 export function readAPI(apiAddress, id) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}/${id}`
+    const tokenHeader = getTokenHeader()
+    const requestAddress = `${apiAddress}/${id}`
 
     return fetch(requestAddress, {
         method: 'GET',
@@ -42,8 +42,8 @@ export function readAPI(apiAddress, id) {
 
 
 export function updateAPI(apiAddress, id, requestBodyJSON) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}/${id}`
+    const tokenHeader = getTokenHeader()
+    const requestAddress = `${apiAddress}/${id}`
 
     return fetch(requestAddress, {
         method: 'PUT',
@@ -57,8 +57,8 @@ export function updateAPI(apiAddress, id, requestBodyJSON) {
 }
 
 export function updatePicture(apiAddress, id, requestBodyJSON){
-    var tokenHeader = getTokenHeader();
-    var requestAddress = `${apiAddress}/${id}`;
+    const tokenHeader = getTokenHeader();
+    const requestAddress = `${apiAddress}/${id}`;
 
     return fetch(requestAddress, {
         method: 'PUT',
@@ -70,8 +70,8 @@ export function updatePicture(apiAddress, id, requestBodyJSON){
 }
 
 export function deleteAPI(apiAddress, id) {
-    var tokenHeader = getTokenHeader()
-    var requestAddress = `${apiAddress}/${id}`
+    const tokenHeader = getTokenHeader()
+    const requestAddress = `${apiAddress}/${id}`
 
     return fetch(requestAddress, {
         method: 'DELETE',
