@@ -33,7 +33,7 @@ export class TodaysCodePage extends React.Component {
                             placeholder="enter message" />
                     </FormGroup>
 
-                    <Button className='right-margin' type="submit" onClick={this.handleEncode.bind(this)}>Encode</Button>
+                    <Button className='rm-3' type="submit" onClick={this.handleEncode.bind(this)}>Encode</Button>
                     <Button type="submit" onClick={this.handleDecode.bind(this)}>Decode</Button>
                 </Form>
 
