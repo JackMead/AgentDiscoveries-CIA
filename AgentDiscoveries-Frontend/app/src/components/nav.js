@@ -54,40 +54,40 @@ export default class NavigationBar extends React.Component {
     window.location.hash = '#/'
   }
 
-  setNavOptions () {
-    let navOptions
-    if (isLoggedIn()) {
-      navOptions = (
-        <Navbar.Collapse>
-          <Nav>
-            <NavDropdown eventKey={2} title='Search' id='basic-nav-dropdown'>
-              <MenuItem componentClass={Link} href='/search/location' to='/search/location' eventKey={2.1}>Location Reports</MenuItem>
-              <MenuItem componentClass={Link} href='/search/region' to='/search/region' eventKey={2.2}>Region Summaries</MenuItem>
-            </NavDropdown>
-            <NavDropdown eventKey={3} title='Submit' id='basic-nav-dropdown'>
-              <MenuItem componentClass={Link} href='/submit/location' to='/submit/location' eventKey={3.1}>Location Report</MenuItem>
-              <MenuItem componentClass={Link} href='/submit/region' to='/submit/region' eventKey={3.2}>Region Summary</MenuItem>
-            </NavDropdown>
-            <NavItem componentClass={Link} href='/message' to='/message' eventKey={4}>Today's Message</NavItem>
-            <NavDropdown eventKey={5} title='Admin' id='basic-nav-dropdown'>
-              <MenuItem componentClass={Link} href='/admin/locations' to='/admin/locations' eventKey={5.1}>Locations</MenuItem>
-              <MenuItem componentClass={Link} href='/admin/regions' to='/admin/regions' eventKey={5.1}>Regions</MenuItem>
-              <MenuItem componentClass={Link} href='/admin/users' to='/admin/users' eventKey={5.1}>Users</MenuItem>
-            </NavDropdown>
-            <NavItem componentClass={Link} href='/profile' to='/profile' eventKey={6}>Profile</NavItem>
-          </Nav>
-          <Nav pullRight>
-            <NavItem onClick={this.handleLogOut} href='/login' to='/login' eventKey={1}>
+    setNavOptions() {
+        let navOptions
+        if (isLoggedIn()) {
+            navOptions = (
+            <Navbar.Collapse>
+                <Nav>
+                    <NavDropdown eventKey={2} title="Search" id="basic-nav-dropdown">
+                        <MenuItem componentClass={Link} href="/search/location" to="/search/location" eventKey={2.1}>Location Reports</MenuItem>
+                        <MenuItem componentClass={Link} href="/search/region" to="/search/region" eventKey={2.2}>Region Summaries</MenuItem>
+                    </NavDropdown>
+                    <NavDropdown eventKey={3} title="Submit" id="basic-nav-dropdown">
+                        <MenuItem componentClass={Link} href="/submit/location" to="/submit/location" eventKey={3.1}>Location Report</MenuItem>
+                        <MenuItem componentClass={Link} href="/submit/region" to="/submit/region" eventKey={3.2}>Region Summary</MenuItem>
+                    </NavDropdown>
+                    <NavItem componentClass={Link} href="/message" to="/message" eventKey={4}>Today's Message</NavItem>
+                    <NavDropdown eventKey={5} title="Admin" id="basic-nav-dropdown">
+                        <MenuItem componentClass={Link} href="/admin/locations" to="/admin/locations" eventKey={5.1}>Locations</MenuItem>
+                        <MenuItem componentClass={Link} href="/admin/regions" to="/admin/regions" eventKey={5.1}>Regions</MenuItem>
+                        <MenuItem componentClass={Link} href="/admin/users" to="/admin/users" eventKey={5.1}>Users</MenuItem>
+                    </NavDropdown>
+                </Nav>
+                <Nav pullRight>
+                    <NavItem componentClass={Link} href="/profile" to="/profile" eventKey={6}>Profile</NavItem>
+                    <NavItem onClick={this.handleLogOut} href="/login" to="/login" eventKey={1}>
                         Log Out
-            </NavItem>
-          </Nav>
-        </Navbar.Collapse>
-      )
-    } else {
-      navOptions = (
-        <Navbar.Collapse>
-          <Nav pullRight>
-            <NavItem componentClass={Link} href='/login' to='/login' eventKey={1}>
+                    </NavItem>
+                </Nav>
+            </Navbar.Collapse> 
+            )
+        } else {
+            navOptions = (
+                <Navbar.Collapse>
+                    <Nav pullRight>
+                        <NavItem componentClass={Link} href="/login" to="/login" eventKey={1}>
                             Login
             </NavItem>
           </Nav>

@@ -8,7 +8,7 @@ export function handleReportSubmit (apiAddress, submitForm) {
 
   bodyJSON.reportTime = new Date().toJSON()
 
-  var requestBody = JSON.stringify(bodyJSON)
+    const requestBody = JSON.stringify(bodyJSON)
 
   return createAPI(apiAddress, requestBody)
     .then(response => {
@@ -18,34 +18,50 @@ export function handleReportSubmit (apiAddress, submitForm) {
     })
 }
 
-export function handleEntitySubmit (apiAddress, submitForm) {
-  let bodyJSON = getBodyJSON(submitForm)
-  var requestBody = JSON.stringify(bodyJSON)
-  return createAPI(apiAddress, requestBody)
-    .then(response => {
-      if (response.status !== 201) {
-        throw Error('Server could not create the entity. Make sure all fields are correct')
-      }
+export function handleEntitySubmit(apiAddress, submitForm) {
+    let bodyJSON = getBodyJSON(submitForm)
+    const requestBody = JSON.stringify(bodyJSON)
+    return createAPI(apiAddress, requestBody)
+        .then(response => {
+            if (response.status !== 201) {
+                throw ("Server could not create the entity. Make sure all fields are correct")
+            } else {
+                return response.json()
+            }
+        })
+}
+
+export function handleEntityEdit(apiAddress, id, submitForm) {
+    let bodyJSON = getBodyJSON(submitForm)
+    const requestBody = JSON.stringify(bodyJSON)
+    
+    return updateAPI(apiAddress, id, requestBody)
+        .then(response => {
+            if (response.status >= 300) {
+                throw ("Server could not update the entity. Make sure all fields are correct")
+            } else {
+                return response.json()
+            }
+        })
+}
+
+function getBodyJSON(submitForm) {
+    const bodyJSON = {}
+    Object.keys(submitForm).forEach((key) => {
+        if (submitForm[key]) {
+            bodyJSON[key] = getTransformedData(key, submitForm[key].value)
+        }
     })
 }
 
-export function handleEntityEdit (apiAddress, id, submitForm) {
-  let bodyJSON = getBodyJSON(submitForm)
-  var requestBody = JSON.stringify(bodyJSON)
-
-  return updateAPI(apiAddress, id, requestBody)
-    .then(response => {
-      if (response.status >= 400) {
-        throw Error('Server could not update the entity. Make sure all fields are correct')
-      }
-    })
-}
-
-function getBodyJSON (submitForm) {
-  var bodyJSON = {}
-  Object.keys(submitForm).forEach((key) => {
-    if (submitForm[key]) {
-      bodyJSON[key] = getTransformedData(key, submitForm[key].value)
+function getTransformedData(key, value) {
+    let transformedData = value
+    if (key === "locations") {
+        transformedData = value.split(/\s/).map(function (item) {
+            return parseInt(item, 10)
+        })
+    } else if (key === "admin") {
+        transformedData = "on" ? true : false
     }
   })
   return bodyJSON

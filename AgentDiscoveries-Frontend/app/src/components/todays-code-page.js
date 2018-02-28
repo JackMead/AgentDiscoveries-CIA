@@ -27,13 +27,9 @@ export class TodaysCodePage extends React.Component {
 
           <h3>Encode/decode message with today's secret</h3>
 
-          <FormGroup>
-            <ControlLabel>Message</ControlLabel>
-            <FormControl type='text' required
-              componentClass='textarea' rows={6}
-              inputRef={message => this.state.message.message = message}
-              placeholder='enter message' />
-          </FormGroup>
+                    <Button className='rm-3' type="submit" onClick={this.handleEncode.bind(this)}>Encode</Button>
+                    <Button type="submit" onClick={this.handleDecode.bind(this)}>Decode</Button>
+                </Form>
 
           <Button className='right-margin' type='submit' onClick={this.handleEncode}>Encode</Button>
           <Button type='submit' onClick={this.handleDecode}>Decode</Button>
@@ -53,22 +49,17 @@ export class TodaysCodePage extends React.Component {
     this.handleRequest('v1/api/encodemessage')
   }
 
-  handleDecode (e) {
-    e.preventDefault()
-    this.handleRequest('v1/api/decodemessage')
-  }
-
-  handleRequest (api) {
-    var requestJSON = { 'message': this.state.message.message.value }
-    createAPI(api, JSON.stringify(requestJSON))
-      .then(response => {
-        if (response.status === 200) {
-          return response.json()
-        } else {
-          throw Error('Server cannot process the request')
-        }
-      })
-      .then(response => this.setState({ 'result': response.message }))
-      .catch(error => this.setState({ 'result': error }))
-  }
+    handleRequest(api) {
+        const requestJSON = { "message": this.state.message.message.value }
+        createAPI(api, JSON.stringify(requestJSON))
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                } else {
+                    throw ("Server cannot process the request")
+                }
+            })
+            .then(response => this.setState({ "result": response.message }))
+            .catch(error => this.setState({ "result": error }))
+    }
 }

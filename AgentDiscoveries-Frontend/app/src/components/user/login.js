@@ -42,7 +42,13 @@ export default class Login extends React.Component {
     if (UserUtils.isLoggedIn()) {
       window.location.hash = '#/search/location'
     }
-  }
+    
+    handleLogIn(e) {
+        e.preventDefault()
+        const requestBodyJSON = {
+            username: this.username.value,
+            password: this.password.value
+        }
 
   handleLogIn (e) {
     e.preventDefault()

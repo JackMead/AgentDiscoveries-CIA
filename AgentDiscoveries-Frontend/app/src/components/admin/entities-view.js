@@ -87,15 +87,19 @@ export default class Entities extends React.Component {
     )
   }
 
-  updateEntities () {
-    Object.keys(this.state.entities).forEach((api) => {
-      getAll(api)
-        .then(results => {
-          var entities = this.state.entities
-          entities[api] = results
-          this.setState({
-            entities: entities
-          })
+    updateEntities() {
+        Object.keys(this.state.entities).forEach((api) => {
+            getAll(api)
+                .then(results => {
+                    const entities = this.state.entities
+                    entities[api] = results;
+                    this.setState({
+                        entities: entities
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         })
         .catch(err => {
           console.log(err)

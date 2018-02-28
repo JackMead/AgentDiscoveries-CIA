@@ -1,5 +1,6 @@
 $background-color: rgb(238, 238, 238);
 $text-color: rgb(12, 12, 12);
+
 body {
   background-color: $background-color;
   color: $text-color;
@@ -11,6 +12,10 @@ body {
   padding-right: 8px;
 }
 
-.right-margin {
-  margin-right: 8px;
+.rm-3 {
+  margin-right: 0.75rem !important;
+}
+
+.ml-3 {
+  margin-left: 0.75rem !important;
 }

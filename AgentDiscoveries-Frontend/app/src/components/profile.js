@@ -9,12 +9,17 @@ import {
 import {updateAPI, updatePicture, readAPI} from './crud'
 
 export default class Profile extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      file: null,
-      imgSrc: '/userResources/default.jpg',
-      imageUploadMessage: ''
+
+    constructor() {
+        super();
+        this.state = {
+            file: null,
+            imgSrc: "/userResources/default.jpg",
+            imageUploadMessage: ""
+        }
+
+        this.onChange = this.onChange.bind(this)
+        this.handlePictureUpdate = this.handlePictureUpdate.bind(this)
     }
 
     this.onChange = this.onChange.bind(this)
@@ -55,21 +60,41 @@ export default class Profile extends React.Component {
     })
   }
 
-  handlePictureUpdate (e) {
-    e.preventDefault()
-    if (this.state.file.size > 1024 * 1024) {
-      this.setState({imageUploadMessage: 'File must be less than 1MB'})
-      return
+        const userId = window.localStorage.getItem("UserId");
+        const formData = new FormData();
+        formData.append('file', this.state.file);
+
+        updatePicture("/v1/api/pictures", userId, formData)
+            .then(this.getProfileSrc());
     }
     this.setState({imageUploadMessage: ''})
 
-    var userId = window.localStorage.getItem('UserId')
-    const formData = new FormData()
-    formData.append('file', this.state.file)
+    handleAgentUpdate(e) {
+        e.preventDefault();
+        const userId = window.localStorage.getItem("UserId");
+        const requestBodyJSON = {
+            "callSign": this.callSign.value
+        }
+        updateAPI("/v1/api/agents", userId, JSON.stringify(requestBodyJSON));
+    }
 
-    updatePicture('/v1/api/pictures', userId, formData)
-      .then(this.getProfileSrc())
-  }
+    getProfileSrc() {
+        const userId = window.localStorage.getItem("UserId");
+        readAPI("/v1/api/pictures", userId)
+            .then(response => {
+                console.log(response)
+                if (response.ok) {
+                    response.blob()
+                } else {
+                    throw 'Could not retrieve picture from the API server'
+                }
+            })
+            .then(blob => {
+                this.setState({imgSrc: URL.createObjectURL(blob)});
+            })
+            .catch(error => {
+                console.log(error)
+            })
 
   handleAgentUpdate (e) {
     e.preventDefault()
