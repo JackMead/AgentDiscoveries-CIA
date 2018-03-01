@@ -54,7 +54,6 @@ export default class EditProfilePicture extends React.Component {
 
     updatePicture('/v1/api/pictures', userId, formData)
       .then(response => {
-        console.log(response);
         if (response.ok) {
           response.json();
         } else {

@@ -23,16 +23,16 @@ export function getEntity (api, id) {
         throw Error(`Could not retrieve the entity with id ${id} from the ${api} API`);
       }
     })
-    .then(results => {
-      return filterResult(results);
+    .then(result => {
+      return filterResult(result);
     });
 }
 
 function filterResults (results) {
   results.forEach(val => {
     delete val.hashedPassword; // we don't want this to be rendered
-    if (val.isAdmin) {
-      val.isAdmin = 'yes';
+    if (val.admin) {
+      val.admin = 'yes';
     }
   });
 
@@ -40,8 +40,8 @@ function filterResults (results) {
 }
 function filterResult (result) {
   delete result.hashedPassword; // we don't want this to be rendered
-  if (result.isAdmin) {
-    result.isAdmin = 'yes';
+  if (result.admin) {
+    result.admin = 'yes';
   }
   return result;
 }

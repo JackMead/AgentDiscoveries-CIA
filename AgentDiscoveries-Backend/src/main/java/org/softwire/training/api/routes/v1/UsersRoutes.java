@@ -43,17 +43,9 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.isAdmin());
 
         int newUserId = usersDao.addUser(user);
-
-        //TODO creating new user should have choice to also create a corresponding agent.
-        //And should provide the relevant parameters
-        //Per Card https://trello.com/c/iDGPOsLq/47-admin-should-be-able-to-create-new-users-agents
-        if(false){
-            Agent agent = new Agent(newUserId,"","",null,0,"");
-            agentsDao.addAgent(agent);
-        }
 
         // Set the userId and for security remove the password
         userApiModel.setPassword(null);
@@ -91,7 +83,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
         }
         User oldUser = optionalUser.get();
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.isAdmin());
         user.setUserId(id);
         usersDao.updateUser(user);
 

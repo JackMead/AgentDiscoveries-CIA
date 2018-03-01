@@ -31,8 +31,8 @@ export default class LocationReportSubmit extends React.Component {
           {locations: results}
         );
       })
-      .catch(err => {
-        console.log(err);
+      .catch(error => {
+        console.log(error);
       });
   }
 

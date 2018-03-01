@@ -97,8 +97,8 @@ export default class Entities extends React.Component {
             entities: entities
           });
         })
-        .catch(err => {
-          console.log(err);
+        .catch(error => {
+          console.log(error);
         });
     });
   }

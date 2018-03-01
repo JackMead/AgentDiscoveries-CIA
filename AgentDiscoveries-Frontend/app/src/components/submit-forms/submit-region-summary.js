@@ -37,8 +37,8 @@ export default class RegionSummarySubmit extends React.Component {
           regions: results
         })
       )
-      .catch(err => {
-        console.log(err);
+      .catch(error => {
+        console.log(error);
       });
   }
 
