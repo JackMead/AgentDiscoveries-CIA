@@ -9,10 +9,10 @@ import Message from '../message';
 import * as UserUtils from './user-utilities';
 
 export default class Login extends React.Component {
-  constructor (props) {
+  constructor () {
     super();
     this.state = {
-      authenticationMessage: { message: '', type: 'info' }
+      message: { message: '', type: 'info' }
     };
 
     this.handleLogIn = this.handleLogIn.bind(this);
@@ -21,9 +21,9 @@ export default class Login extends React.Component {
   render () {
     return (
       <div className='col-md-6 col-md-offset-3'>
+        <Message message={this.state.message} />
         <Form onSubmit={this.handleLogIn}>
           <h3>Sign in</h3>
-          <Message message={this.state.authenticationMessage} />
           <FormGroup>
             <FormControl type='text' inputRef={username => { this.username = username }} placeholder='enter your username' />
           </FormGroup>
@@ -71,8 +71,8 @@ export default class Login extends React.Component {
         window.dispatchEvent(new Event('login'));
         window.location.hash = '#/';
       })
-      .catch(err => {
-        this.setState({ authenticationMessage: {message: err, type: 'danger'} });
+      .catch(error => {
+        this.setState({ message: { message: error.message, type: 'danger' } });
       });
   }
 }
