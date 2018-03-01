@@ -81,7 +81,7 @@ export default class Entities extends React.Component {
     return (
       <tbody>
         {Object.values(entities).map(val => {
-          return <Entity entity={val} type={this.state.api} />;
+          return <Entity key={Object.values(val)[0]} entity={val} type={this.state.api} />;
         })}
       </tbody>
     );
