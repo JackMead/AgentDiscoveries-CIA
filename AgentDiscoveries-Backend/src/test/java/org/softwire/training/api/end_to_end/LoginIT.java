@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginIT {
-    public static final String Target_Address = "http://localhost:8080";//System.getProperty("target.address");
+    public static final String Target_Address = System.getProperty("target.address");
 
     private static WebDriver driver;
     private static E2eHelper helper;
