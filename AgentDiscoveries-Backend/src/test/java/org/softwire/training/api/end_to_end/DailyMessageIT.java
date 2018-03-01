@@ -23,7 +23,8 @@ public class DailyMessageIT {
 
     private static WebDriver driver;
     private static E2eHelper helper;
-    private static WebDriverWait wait = new WebDriverWait(driver, 10);
+    private static WebDriverWait wait;
+
     @BeforeAll
     public static void setUp(){
         driver = new ChromeDriver();
@@ -31,6 +32,7 @@ public class DailyMessageIT {
         driver.manage().timeouts()
                 .implicitlyWait(10, TimeUnit.SECONDS)
                 .pageLoadTimeout(2, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 10);
     }
 
     @AfterAll

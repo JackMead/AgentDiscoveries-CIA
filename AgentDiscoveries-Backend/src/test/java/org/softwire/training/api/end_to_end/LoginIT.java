@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.softwire.training.api.end_to_end.helper.E2eHelper;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginIT {
@@ -23,6 +25,9 @@ public class LoginIT {
     public static void setUp() {
         driver = new ChromeDriver();
         helper = new E2eHelper();
+        driver.manage().timeouts()
+                .implicitlyWait(10, TimeUnit.SECONDS)
+                .pageLoadTimeout(2, TimeUnit.SECONDS);
     }
 
     @AfterAll

@@ -293,6 +293,36 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.honton.chas</groupId>
+                <artifactId>process-exec-maven-plugin</artifactId>
+                <version>0.9.2</version>
+                <executions>
+                    <execution>
+                        <id>start-application</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <name>Start server for testing</name>
+                            <waitForInterrupt>false</waitForInterrupt>
+                            <arguments>
+                                <argument>${java.home}/bin/java</argument>
+                                <argument>-jar</argument>
+                                <argument>${basedir}/target/agentdiscoveries-backend-1.0-SNAPSHOT.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-all</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop-all</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
