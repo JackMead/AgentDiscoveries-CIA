@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap';
 import { handleReportSubmit } from '../utilities/submit-utilities';
 import { getAll } from '../utilities/get-utilities';
-import { Message } from '../message';
+import Message from '../message';
 
 export default class LocationReportSubmit extends React.Component {
   constructor () {

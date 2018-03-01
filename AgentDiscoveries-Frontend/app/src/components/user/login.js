@@ -5,7 +5,7 @@ import {
   FormControl,
   Button
 } from 'react-bootstrap';
-import { Message } from '../message';
+import Message from '../message';
 import * as UserUtils from './user-utilities';
 
 export default class Login extends React.Component {

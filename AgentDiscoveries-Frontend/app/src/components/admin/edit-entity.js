@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { handleEntityEdit } from '../utilities/submit-utilities';
 import { getEntity } from '../utilities/get-utilities';
-import { Message } from '../message';
+import Message from '../message';
 import { EditLocation } from './edit-location';
 import { EditUser } from './edit-user';
 

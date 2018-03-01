@@ -7,7 +7,7 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 
-import { Message } from '../message';
+import Message from '../message';
 import { handleReportSubmit } from '../utilities/submit-utilities';
 import { getAll } from '../utilities/get-utilities';
 import { searchAPI } from '../crud';

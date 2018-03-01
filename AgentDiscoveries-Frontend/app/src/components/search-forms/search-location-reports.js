@@ -5,7 +5,7 @@ import {
   FormControl,
   ControlLabel
 } from 'react-bootstrap';
-import { Message } from '../message';
+import Message from '../message';
 
 import * as SearchUtils from '../utilities/search-utilities';
 import SearchResult from './search-result';

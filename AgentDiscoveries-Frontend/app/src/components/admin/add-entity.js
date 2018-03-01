@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Message } from '../message';
+import Message from '../message';
 import { AddLocation } from './add-location';
 import { AddRegion } from './add-region';
 import { AddUser } from './add-user';

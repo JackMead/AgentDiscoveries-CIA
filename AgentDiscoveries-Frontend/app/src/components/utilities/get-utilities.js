@@ -31,11 +31,17 @@ export function getEntity (api, id) {
 function filterResults (results) {
   results.forEach(val => {
     delete val.hashedPassword; // we don't want this to be rendered
+    if (val.isAdmin) {
+      val.isAdmin = 'yes';
+    }
   });
 
   return results;
 }
 function filterResult (result) {
   delete result.hashedPassword; // we don't want this to be rendered
+  if (result.isAdmin) {
+    result.isAdmin = 'yes';
+  }
   return result;
 }

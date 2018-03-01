@@ -8,7 +8,9 @@ import {
 import Login from './user/login';
 import Home from './home';
 import Page from './page';
-import Profile from './profile';
+import Profile from './profile/profile';
+import EditProfilePicture from './profile/edit-profile-picture';
+import EditProfileCallSign from './profile/edit-profile-callsign';
 
 import LocationReportSearch from './search-forms/search-location-reports';
 import RegionSummarySearch from './search-forms/search-region-summaries';
@@ -17,7 +19,7 @@ import RegionSummarySubmit from './submit-forms/submit-region-summary';
 import AddEntity from './admin/add-entity';
 import EditEntity from './admin/edit-entity';
 import Entities from './admin/entities-view';
-import { TodaysCodePage } from './todays-code-page';
+import TodaysCodePage from './todays-code-page';
 
 export default class App extends React.Component {
   render () {
@@ -44,7 +46,9 @@ export default class App extends React.Component {
             <Route path='/admin/users/edit/:id' render={(props) => <Page><EditEntity api='users' {...props} /></Page>} />
 
             <Route path='/message' render={() => <Page><TodaysCodePage /></Page>} />
-            <Route path='/profile' render={() => <Page><Profile /></Page>} />
+            <Route path='/profile' exact render={() => <Page><Profile /></Page>} />
+            <Route path='/profile/edit/callsign' render={() => <Page><EditProfileCallSign /></Page>} />
+            <Route path='/profile/edit/picture' render={() => <Page><EditProfilePicture /></Page>} />
 
           </Switch>
         </Router>

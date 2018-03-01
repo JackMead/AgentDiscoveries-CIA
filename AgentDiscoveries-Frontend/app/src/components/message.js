@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Alert } from 'react-bootstrap';
 
-export class Message extends React.Component {
+export default class Message extends React.Component {
   render () {
     if (this.props.message.message) {
       return (

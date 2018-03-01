@@ -8,7 +8,7 @@ import {
 } from 'react-bootstrap';
 import { createAPI } from './crud';
 
-export class TodaysCodePage extends React.Component {
+export default class TodaysCodePage extends React.Component {
   constructor () {
     super();
     this.state = {
