@@ -70,7 +70,7 @@ Configuration of type `Application`, the main class is
 To run the server side unit tests in intelliJ, right click on the `AgentDiscoveries-Backend/src/test/java` folder and then choose `Run 'All Tests'`.
 From the command line, use `mvn test`. 
 
-Unit test files should be named ending with "Test.java".
+Unit test files should be named ending with "Test.java", and end-to-end tests should end in "IT.java" as the system views them as integration tests.
 
 ## Frontend Tests
 To run the front-end unit tests, from command line navigate to `AgentDiscoveries-Frontend` and then run npm test.
