@@ -9,6 +9,7 @@ import Message from '../message';
 
 import * as SearchUtils from '../utilities/search-utilities';
 import SearchResult from './search-result';
+
 export default class LocationReportsSearch extends React.Component {
   constructor () {
     super();
@@ -21,13 +22,6 @@ export default class LocationReportsSearch extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount () {
-    SearchUtils.getResultsAsynch('/v1/api/reports/regionsummaries', this.searchForm)
-      .then(results => {
-        this.setState({ results: results, message: { message: '', type: 'danger' } });
-      });
-  }
-
   render () {
     return (
       <div className='col-md-8 col-md-offset-2'>
@@ -37,10 +31,10 @@ export default class LocationReportsSearch extends React.Component {
           <Message message={this.state.message} />
 
           <FormGroup>
-            <ControlLabel>Agent</ControlLabel>
-            <FormControl type='number'
-              inputRef={agentId => { this.searchForm.agentId = agentId }}
-              placeholder='enter agent ID' />
+            <ControlLabel>Agent Call Sign</ControlLabel>
+            <FormControl type='text'
+              inputRef={callSign => { this.searchForm.callSign = callSign }}
+              placeholder='enter agent call sign' />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Location</ControlLabel>
@@ -50,12 +44,11 @@ export default class LocationReportsSearch extends React.Component {
           </FormGroup>
           <FormGroup className='form-inline'>
             <ControlLabel className='rm-3'>From</ControlLabel>
-            <FormControl className='rm-3' type='datetime-local'
-              inputRef={fromTime => { this.searchForm.fromTime = fromTime }}
-              defaultValue={SearchUtils.getFormDate(SearchUtils.getDateDaysAgo(7))} />
+            <FormControl className='rm-3' type='date'
+              inputRef={fromTime => { this.searchForm.fromTime = fromTime }} />
 
             <ControlLabel className='rm-3'>To</ControlLabel>
-            <FormControl className='rm-3' type='datetime-local'
+            <FormControl className='rm-3' type='date'
               inputRef={toTime => { this.searchForm.toTime = toTime }} />
           </FormGroup>
         </Form>

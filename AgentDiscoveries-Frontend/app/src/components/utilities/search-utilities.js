@@ -1,19 +1,15 @@
 import { searchAPI } from '../crud';
 
-export function getDateDaysAgo (daysAgo) {
-  let date = new Date();
-  date.setDate(date.getDate() - daysAgo);
-  return date;
-}
-
-export function getFormDate (date) {
-  return date.toISOString().slice(0, 16);
-}
-
 export function getTransformedData (key, value) {
   let transformedData = value;
-  if (key === 'fromTime' || key === 'toTime') {
-    transformedData = transformedData.length > 0 && transformedData !== undefined ? `${transformedData}Z` : '';
+  if (key === 'fromTime') {
+    let date = new Date(transformedData).toISOString().slice(0, 19);
+    transformedData = transformedData.length > 0 && transformedData !== undefined ? `${date}Z` : '';
+  } else if (key === 'toTime') {
+    let date = new Date(transformedData);
+    date = date.setDate(date.getDate() + 1);
+    date = new Date(date).toISOString().slice(0, 19);
+    transformedData = transformedData.length > 0 && transformedData !== undefined ? `${date}Z` : '';
   }
   return transformedData;
 }
