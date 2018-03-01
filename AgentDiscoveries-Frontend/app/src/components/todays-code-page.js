@@ -32,11 +32,11 @@ export class TodaysCodePage extends React.Component {
                             placeholder="enter message" />
                     </FormGroup>
 
-                    <Button type="submit" onClick={this.handleEncode.bind(this)}>Encode</Button>
-                    <Button type="submit" onClick={this.handleDecode.bind(this)}>Decode</Button>
+                    <Button type="submit" onClick={this.handleEncode.bind(this)} id="encode-button">Encode</Button>
+                    <Button type="submit" onClick={this.handleDecode.bind(this)} id="decode-button">Decode</Button>
                 </Form>
 
-                <div>
+                <div id="code-result">
                 {this.state.result != "" ? <h3> Result </h3> : ""}
                     {this.state.result}
                 </div>

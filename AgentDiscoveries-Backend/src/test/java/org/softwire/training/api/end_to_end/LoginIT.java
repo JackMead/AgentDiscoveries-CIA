@@ -14,32 +14,31 @@ import org.softwire.training.api.end_to_end.helper.E2eHelper;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginIT {
-    public static final String Target_Address="http://localhost:8080";//System.getProperty("target.address");
+    public static final String Target_Address = "http://localhost:8080";//System.getProperty("target.address");
 
     private static WebDriver driver;
     private static E2eHelper helper;
 
     @BeforeAll
-    public static void setUp(){
-//        ChromeOptions options = new ChromeOptions().addArguments("--headless");
-         driver = new ChromeDriver();
-         helper= new E2eHelper();
+    public static void setUp() {
+        driver = new ChromeDriver();
+        helper = new E2eHelper();
     }
 
     @AfterAll
-    public static void tearDown(){
+    public static void tearDown() {
         driver.quit();
     }
 
     @Test
-    public void testTitle(){
+    public void testTitle() {
         driver.get(Target_Address);
         String title = driver.getTitle();
         assertTrue(title.equals("Agent Discoveries"));
     }
 
     @Test
-    public void testCanLogIn(){
+    public void testCanLogIn() {
         helper.login(driver, Target_Address);
         WebElement navBarRight = driver.findElement(By.className("navbar-right"));
         assertTrue(navBarRight.getText().contains("Log Out"));
