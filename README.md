@@ -76,7 +76,7 @@ Unit test files should be named ending with "Test.java", and end-to-end tests sh
 To run the front-end unit tests, from command line navigate to `AgentDiscoveries-Frontend` and then run npm test.
 
 ## End-to-End Tests
-In order to run the End-To-End tests locally the webserver needs to be active, so ensure you either first run the application as described in the "Run" section, or you run them using `mvn verify -P end-to-end-test-local`.
+Before running end-to-end tests, you will need to download chromedriver and add it to your path. Then in order to run the End-To-End tests locally the webserver needs to be active, so ensure you either first run the application as described in the "Run" section, or you run them using `mvn verify -P end-to-end-test-local`.
 
 If the server is online, you can run the tests from the command line using `mvn verify -P integration-test` from the root directory. It will target the address `http://localhost:8080` by default.
 If you need to run the tests on another address for any reason, use the command `mvn verify -P integration-test -Dtarget.address="http://foo.bar"` with the relevant address.

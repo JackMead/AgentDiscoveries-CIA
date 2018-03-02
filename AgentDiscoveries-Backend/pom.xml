@@ -21,7 +21,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>1.2.2</dropwizard.version>
         <mainClass>org.softwire.training.AgentDiscoveriesApplication</mainClass>
-        <webdriver.chrome>./src/main/resources/chromedriver.exe</webdriver.chrome>
     </properties>
 
     <profiles>
@@ -291,7 +290,6 @@
                     <skipTests>${skip.integration.tests}</skipTests>
                     <systemPropertyVariables>
                         <target.address>${target.address}</target.address>
-                        <webdriver.chrome.driver>${webdriver.chrome}</webdriver.chrome.driver>
                     </systemPropertyVariables>
                 </configuration>
                 <version>2.20.1</version>
