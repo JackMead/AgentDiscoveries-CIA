@@ -1,6 +1,4 @@
-import { createAPI, createAPIExternal, updateAPI } from "../crud"
-
-const EXTERNAL_API = "http://35.177.80.2"
+import { createAPI, updateAPI } from "../crud"
 
 export function handleReportSubmit(apiAddress, submitForm) {
     let bodyJSON = getBodyJSON()
@@ -22,13 +20,14 @@ export function handleExternalReportSubmit(submitForm) {
     try {
         bodyJSON.agentId = 1 //TODO: set this to the agent's actual ID
         bodyJSON.reportBody = submitForm.reportBody.value
-        bodyJSON.locationId = submitForm.locationId.value
     } catch (e) {
         throw "Can not submit this report format to the external API"
     }
     var requestBody = JSON.stringify(bodyJSON)
-    return createAPIExternal(`${EXTERNAL_API}/reports`, requestBody)
+
+    return createAPI('/v1/api/external/reports', requestBody)
         .then(response => {
+            console.log(response)
             if (!response.ok) {
                 if (response.status === 400) {
                     throw "Could not submit report to the external API. Bad Request"
@@ -37,7 +36,7 @@ export function handleExternalReportSubmit(submitForm) {
                 } else {
                     throw `Could not submit report to the external API. Server error`
                 }
-                
+
             }
         })
 }

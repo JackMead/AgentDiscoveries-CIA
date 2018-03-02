@@ -54,6 +54,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.mashape.unirest</groupId>
+            <artifactId>unirest-java</artifactId>
+            <version>1.4.9</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.softwire.training</groupId>
             <artifactId>agentdiscoveries-frontend</artifactId>
             <version>1.0-SNAPSHOT</version>

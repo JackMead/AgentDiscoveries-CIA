@@ -13,17 +13,6 @@ export function createAPI(apiAddress, requestBodyJSON) {
     })
 }
 
-export function createAPIExternal(apiAddress, requestBodyJSON) {
-    return fetch(apiAddress, {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: requestBodyJSON
-    })
-}
-
 export function searchAPI(apiAddress, searchString) {
     var tokenHeader = getTokenHeader()
     var requestAddress = `${apiAddress}?${searchString}`
