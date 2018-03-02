@@ -15,12 +15,16 @@ public class MessageProcessor {
     public void encrypt(Message message){
         String codeWord = getCodeWord();
         String messageString = message.getMessage();
-        String encodedMessage = new String();
+        String encodedMessageString = new String();
         for (int i = 0; i < messageString.length(); i++) {
-            encodedMessage += (char) (Math.floorMod((messageString.charAt(i) + codeWord.charAt(i % codeWord.length()) - (int)'a'), 26) + (int)'a');
+            if (messageString.charAt(i) == ' ') {
+                encodedMessageString+= ' ';
+            } else {
+                encodedMessageString += (char) (Math.floorMod((messageString.charAt(i) + codeWord.charAt(i % codeWord.length()) - (int)'A'), 58) + (int)'A');
+            }
         }
 
-        message.setMessage(encodedMessage);
+        message.setMessage(encodedMessageString);
     }
 
     public void decrypt(Message message){
@@ -28,7 +32,11 @@ public class MessageProcessor {
         String messageString = message.getMessage();
         String decodedMessageString = new String();
         for (int i = 0; i < messageString.length(); i++) {
-            decodedMessageString += (char) (Math.floorMod((messageString.charAt(i) - codeWord.charAt(i % codeWord.length()) - (int)'a'), 26) + (int)'a');
+            if (messageString.charAt(i) == ' ') {
+                decodedMessageString += ' ';
+            } else {
+                decodedMessageString += (char) (Math.floorMod((messageString.charAt(i) - codeWord.charAt(i % codeWord.length()) - (int) 'A'), 58) + (int) 'A');
+            }
         }
 
         message.setMessage(decodedMessageString);

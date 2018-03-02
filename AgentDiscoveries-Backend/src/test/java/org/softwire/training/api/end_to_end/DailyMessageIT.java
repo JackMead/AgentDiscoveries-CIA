@@ -58,7 +58,7 @@ public class DailyMessageIT {
                 throw e;
             }
         }
-        WebElement userNameInput = driver.findElement(By.tagName("input"));
+        WebElement userNameInput = driver.findElement(By.id("message-input"));
         userNameInput.sendKeys(startingMessage);
 
         WebElement encodeButton = driver.findElement(By.id("encode-button"));

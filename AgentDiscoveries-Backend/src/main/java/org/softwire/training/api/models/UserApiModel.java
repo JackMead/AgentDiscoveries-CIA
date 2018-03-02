@@ -10,6 +10,7 @@ public class UserApiModel {
     private int userId;
     private String username;
     private String password;
+    private boolean admin;
 
     public String getUsername() {
         return username;
@@ -34,4 +35,8 @@ public class UserApiModel {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    public boolean isAdmin(){ return admin; }
+
+    public void setAdmin(boolean admin){ this.admin=admin; }
 }
