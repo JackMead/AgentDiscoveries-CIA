@@ -1,6 +1,6 @@
 import chai from 'chai'
 import React from 'react'
-import * as utilities from "../src/components/submit-forms/submit-utilities";
+import * as utilities from "../src/components/utilities/submit-utilities";
 let expect = chai.expect;
 
 describe("submit utilities", ()=>{

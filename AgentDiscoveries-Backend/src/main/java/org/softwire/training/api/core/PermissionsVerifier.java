@@ -23,12 +23,12 @@ public class PermissionsVerifier {
         return optionalUser.map(User::isAdmin)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "User not found"));
     }
-
+    
     public boolean isAdminOrRelevantAgent(Request req, int id) throws FailedRequestException{
-        int userId = req.attribute("user_id");
-        if(userId!=id){
-            return isAdmin(userId);
-        }
-        return true;
-    }
+       int userId = req.attribute("user_id");
+       if(userId!=id){
+           return isAdmin(userId);
+       }
+       return true;
+   }
 }

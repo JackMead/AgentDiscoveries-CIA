@@ -6,7 +6,7 @@ import {
     Button,
     ControlLabel
 } from "react-bootstrap";
-import { handleEntitySubmit } from "./submit-utilities"
+import { handleEntitySubmit } from "../utilities/submit-utilities"
 import { Message } from "../message"
 import { CreateLocation } from "./location-form"
 import { CreateRegion } from "./region-form"

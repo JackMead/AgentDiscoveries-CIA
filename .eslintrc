@@ -1,0 +1,7 @@
+{
+  "extends": ["standard", "standard-react"],
+  "rules": {
+    "jsx-a11y/label-has-for": false,
+    "semi": [2, "always", { "omitLastInOneLineBlock": true}]
+  }
+}

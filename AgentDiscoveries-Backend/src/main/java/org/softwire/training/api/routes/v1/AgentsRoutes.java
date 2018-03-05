@@ -50,7 +50,6 @@ public class AgentsRoutes {
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
-
         verifyIsAdminOrRelevantAgent(req, id);
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);

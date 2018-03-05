@@ -9,15 +9,16 @@ public class User {
     private int userId;
     private String username;
     private String hashedPassword;
-    private boolean isAdmin;
+    private boolean admin;
 
     public User() {
 
     }
 
-    public User(String username, String hashedPassword) {
+    public User(String username, String hashedPassword, boolean admin) {
         this.username = username;
         this.hashedPassword = hashedPassword;
+        this.admin = admin;
     }
 
     public int getUserId() {
@@ -44,7 +45,7 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
-    public boolean isAdmin(){return isAdmin;}
+    public boolean isAdmin(){return admin;}
 
-    public void setAdmin(boolean isAdmin){this.isAdmin=isAdmin;}
+    public void setAdmin(boolean admin){this.admin=admin;}
 }

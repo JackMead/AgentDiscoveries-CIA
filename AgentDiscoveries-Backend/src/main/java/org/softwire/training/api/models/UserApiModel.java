@@ -1,7 +1,5 @@
 package org.softwire.training.api.models;
 
-import java.sql.Blob;
-
 /**
  * The UserApiModel is a version of the domain model with a password field instead of a hashed password.
  *
@@ -12,6 +10,7 @@ public class UserApiModel {
     private int userId;
     private String username;
     private String password;
+    private boolean admin;
 
     public String getUsername() {
         return username;
@@ -36,4 +35,8 @@ public class UserApiModel {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    public boolean isAdmin(){ return admin; }
+
+    public void setAdmin(boolean admin){ this.admin=admin; }
 }

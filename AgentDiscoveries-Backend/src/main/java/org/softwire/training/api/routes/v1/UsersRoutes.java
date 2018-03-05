@@ -44,17 +44,9 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.isAdmin());
 
         int newUserId = usersDao.addUser(user);
-
-        //TODO creating new user should have choice to also create a corresponding agent.
-        //And should provide the relevant parameters
-        //Per Card https://trello.com/c/iDGPOsLq/47-admin-should-be-able-to-create-new-users-agents
-        if(false){
-            Agent agent = new Agent(newUserId,"","",null,0,"");
-            agentsDao.addAgent(agent);
-        }
 
         // Set the userId and for security remove the password
         userApiModel.setPassword(null);
@@ -83,15 +75,15 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
-        verifyIsAdminOrRelevantUser(req, id);
-
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
+
+        verifyIsAdminOrRelevantUser(req, id);
         Optional<User> optionalUser = usersDao.getUser(id);
         if(!optionalUser.isPresent()){
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
         }
         User oldUser = optionalUser.get();
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
+        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.isAdmin());
         user.setUserId(id);
         usersDao.updateUser(user);
 
@@ -120,17 +112,17 @@ public class UsersRoutes implements EntityCRUDRoutes {
         res.status(204);
 
         return new Object();
-    }
-
-    public void verifyIsAdminOrRelevantUser(Request req, int id) throws FailedRequestException{
-        if(!permissionsVerifier.isAdminOrRelevantAgent(req, id)){
-            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
-        }
-    }
+    }  
 
     public void verifyAdminPermission(Request req) throws FailedRequestException {
         int userId = req.attribute("user_id");
         if (!permissionsVerifier.isAdmin(userId)) {
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
+    }
+
+    public void verifyIsAdminOrRelevantUser(Request req, int id) throws FailedRequestException{
+        if(!permissionsVerifier.isAdminOrRelevantAgent(req, id)){
             throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
         }
     }

@@ -1,6 +1,6 @@
 import chai from 'chai'
 import React from 'react'
-import * as utilities from "../src/components/search-forms/search-utilities";
+import * as utilities from "../src/components/utilities/search-utilities";
 import * as sinon from "sinon"
 
 let expect = chai.expect;
