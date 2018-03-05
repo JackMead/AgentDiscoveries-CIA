@@ -21,16 +21,12 @@ public class SubmitReportsIT {
     public static final String Target_Address = System.getProperty("target.address");
 
     private static WebDriver driver;
-    private static E2eHelper helper;
+    private static E2eHelper helper= new E2eHelper();;
     private static WebDriverWait wait;
 
     @BeforeAll
     public static void setUp() throws InterruptedException {
-        driver = new ChromeDriver();
-        helper = new E2eHelper();
-        driver.manage().timeouts()
-                .implicitlyWait(10, TimeUnit.SECONDS)
-                .pageLoadTimeout(2, TimeUnit.SECONDS);
+        driver=helper.prepareDriver();
         wait = new WebDriverWait(driver, 10);
     }
 

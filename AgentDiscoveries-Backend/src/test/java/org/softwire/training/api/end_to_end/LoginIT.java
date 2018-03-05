@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.softwire.training.api.end_to_end.helper.E2eHelper;
@@ -19,15 +20,12 @@ public class LoginIT {
     public static final String Target_Address = System.getProperty("target.address");
 
     private static WebDriver driver;
-    private static E2eHelper helper;
+    private static E2eHelper helper = new E2eHelper();
+    ;
 
     @BeforeAll
     public static void setUp() {
-        driver = new ChromeDriver();
-        helper = new E2eHelper();
-        driver.manage().timeouts()
-                .implicitlyWait(10, TimeUnit.SECONDS)
-                .pageLoadTimeout(2, TimeUnit.SECONDS);
+        driver = helper.prepareDriver();
     }
 
     @AfterAll
