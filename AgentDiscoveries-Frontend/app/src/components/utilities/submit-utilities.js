@@ -45,7 +45,11 @@ export function getBodyJSON (submitForm) {
   const bodyJSON = {};
   Object.keys(submitForm).forEach((key) => {
     if (submitForm[key]) {
-      bodyJSON[key] = getTransformedData(key, submitForm[key].value);
+      let value = submitForm[key].value;
+      if(key==="admin"){
+        value = submitForm[key].checked;
+      }
+      bodyJSON[key] = getTransformedData(key, value);
     }
   });
   return bodyJSON;
@@ -57,9 +61,6 @@ function getTransformedData (key, value) {
     transformedData = value.split(/\s/).map(function (item) {
       return parseInt(item, 10);
     });
-  } else if (key === 'admin') {
-    transformedData = value === 'on';
   }
-
   return transformedData;
 }

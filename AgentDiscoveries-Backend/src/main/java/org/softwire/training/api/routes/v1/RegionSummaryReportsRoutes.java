@@ -1,5 +1,6 @@
 package org.softwire.training.api.routes.v1;
 
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.RegionSummaryReportApiModel;
@@ -23,12 +24,13 @@ import java.util.Optional;
 public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryReportApiModel, RegionSummaryReport, RegionSummaryReport> {
 
     @Inject
-    public RegionSummaryReportsRoutes(RegionSummaryReportsDao regionSummaryReportsDao, RegionsDao regionsDao, UsersDao usersDao) {
+    public RegionSummaryReportsRoutes(RegionSummaryReportsDao regionSummaryReportsDao, RegionsDao regionsDao, UsersDao usersDao, PermissionsVerifier permissionsVerifier) {
         super(
-            RegionSummaryReportApiModel.class,
-            new RegionSummaryValidationMapper(regionsDao, usersDao),
-            regionSummaryReportsDao,
-            new RegionSummaryReportSearchCriteriaParser());
+                RegionSummaryReportApiModel.class,
+                new RegionSummaryValidationMapper(regionsDao, usersDao),
+                regionSummaryReportsDao,
+                new RegionSummaryReportSearchCriteriaParser(),
+                permissionsVerifier);
     }
 
     private static class RegionSummaryValidationMapper

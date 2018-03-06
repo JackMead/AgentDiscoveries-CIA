@@ -64,9 +64,7 @@ export default class Login extends React.Component {
         }
       })
       .then(response => {
-        let token = response.token;
-        let userId = response.userId;
-        UserUtils.logIn(token, userId);
+        UserUtils.logIn(response);
         window.dispatchEvent(new Event('login'));
         window.location.hash = '#/';
       })

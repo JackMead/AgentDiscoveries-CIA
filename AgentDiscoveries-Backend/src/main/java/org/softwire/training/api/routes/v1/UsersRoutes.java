@@ -37,7 +37,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel createEntity(Request req, Response res) throws FailedRequestException {
-
+        permissionsVerifier.verifyAdminPermission(req);
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         if (userApiModel.getUserId() != 0) {
@@ -60,7 +60,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
-        verifyIsAdminOrRelevantUser(req, id);
+        permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
 
         return usersDao.getUser(id)
                 .map(this::mapModelToApiModel)
@@ -69,7 +69,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public List<User> readEntities(Request req, Response res) throws FailedRequestException {
-        verifyAdminPermission(req);
+        permissionsVerifier.verifyAdminPermission(req);
         return usersDao.getUsers();
     }
 
@@ -77,7 +77,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
-        verifyIsAdminOrRelevantUser(req, id);
+        permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
         Optional<User> optionalUser = usersDao.getUser(id);
         if(!optionalUser.isPresent()){
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
@@ -101,7 +101,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
     @Override
     public Object deleteEntity(Request req, Response res, int id) throws Exception {
-        verifyAdminPermission(req);
+        permissionsVerifier.verifyAdminPermission(req);
 
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "User delete request should have no body");
@@ -112,18 +112,5 @@ public class UsersRoutes implements EntityCRUDRoutes {
         res.status(204);
 
         return new Object();
-    }  
-
-    public void verifyAdminPermission(Request req) throws FailedRequestException {
-        int userId = req.attribute("user_id");
-        if (!permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
-        }
-    }
-
-    public void verifyIsAdminOrRelevantUser(Request req, int id) throws FailedRequestException{
-        if(!permissionsVerifier.isAdminOrRelevantAgent(req, id)){
-            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
-        }
     }
 }
