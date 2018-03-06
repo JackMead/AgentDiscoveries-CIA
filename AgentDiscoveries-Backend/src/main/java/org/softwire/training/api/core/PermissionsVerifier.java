@@ -31,4 +31,17 @@ public class PermissionsVerifier {
        }
        return true;
    }
+
+    public void verifyAdminPermission(Request req) throws FailedRequestException {
+        int userId = req.attribute("user_id");
+        if (!isAdmin(userId)) {
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
+    }
+
+    public void verifyIsAdminOrRelevantUser(Request req, int id) throws FailedRequestException{
+        if(!isAdminOrRelevantAgent(req, id)){
+            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
+        }
+    }
 }

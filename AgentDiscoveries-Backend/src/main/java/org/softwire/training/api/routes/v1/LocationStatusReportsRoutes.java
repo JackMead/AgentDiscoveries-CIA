@@ -1,5 +1,6 @@
 package org.softwire.training.api.routes.v1;
 
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.LocationStatusReportApiModel;
@@ -23,12 +24,13 @@ import java.util.*;
 public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
     @Inject
-    public LocationStatusReportsRoutes(LocationReportsDao locationReportsDao, AgentsDao agentsDao, LocationsDao locationsDao) {
+    public LocationStatusReportsRoutes(LocationReportsDao locationReportsDao, AgentsDao agentsDao, LocationsDao locationsDao, PermissionsVerifier permissionsVerifier) {
         super(
-            LocationStatusReportApiModel.class,
-            new LocationStatusValidationMapper(locationsDao, agentsDao),
-            locationReportsDao,
-            new LocationStatusReportSearchCriteriaParser());
+                LocationStatusReportApiModel.class,
+                new LocationStatusValidationMapper(locationsDao, agentsDao),
+                locationReportsDao,
+                new LocationStatusReportSearchCriteriaParser(),
+                permissionsVerifier);
     }
 
     private static class LocationStatusValidationMapper

@@ -28,7 +28,7 @@ public class AgentsRoutes {
 
     public Agent createAgent(Request req, Response res) throws FailedRequestException {
         Agent agentModel = JsonRequestUtils.readBodyAsType(req, Agent.class);
-        verifyAdminPermission(req);
+        permissionsVerifier.verifyAdminPermission(req);
 
         agentsDao.addAgent(agentModel);
 
@@ -39,18 +39,18 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
-        verifyIsAdminOrRelevantAgent(req, id);
+        permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
         return agentsDao.getAgentByUserId(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
     public List<Agent> readAgents(Request req, Response res) throws FailedRequestException {
-        verifyAdminPermission(req);
+        permissionsVerifier.verifyAdminPermission(req);
         return agentsDao.getAgents();
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
-        verifyIsAdminOrRelevantAgent(req, id);
+        permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
         Optional<Agent> optionalAgent = agentsDao.getAgentByUserId(id);
@@ -64,7 +64,7 @@ public class AgentsRoutes {
     }
 
     public Object deleteAgent(Request req, Response res, int id) throws Exception {
-        verifyAdminPermission(req);
+        permissionsVerifier.verifyAdminPermission(req);
 
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Agent delete request should have no body");
@@ -75,19 +75,6 @@ public class AgentsRoutes {
         res.status(204);
 
         return new Object();
-    }
-
-    public void verifyIsAdminOrRelevantAgent(Request req, int id) throws FailedRequestException{
-        if(!permissionsVerifier.isAdminOrRelevantAgent(req, id)){
-            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
-        }
-    }
-
-    public void verifyAdminPermission(Request req) throws FailedRequestException {
-        int userId = req.attribute("user_id");
-        if (!permissionsVerifier.isAdmin(userId)) {
-            throw new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user doesn't have valid permissions");
-        }
     }
 
     private Agent mergeAgents(Agent newAgentDetails, Agent oldAgentDetails){
