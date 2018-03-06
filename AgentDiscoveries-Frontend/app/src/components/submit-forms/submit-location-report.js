@@ -4,7 +4,8 @@ import {
     FormGroup,
     FormControl,
     Button,
-    ControlLabel
+    ControlLabel,
+  Checkbox
 } from "react-bootstrap"
 import { handleReportSubmit, handleExternalReportSubmit } from "./submit-utilities"
 import { Message } from "../message"
@@ -23,9 +24,8 @@ export default class LocationReportSubmit extends React.Component {
         }
 
         this.submitForm = {}
-        
+
         this.onSubmit = this.onSubmit.bind(this)
-        this.onSubmitToExternal = this.onSubmitToExternal.bind(this)
         this.updateLocations = this.updateLocations.bind(this)
         this.getLocationOptions = this.getLocationOptions.bind(this)
     }
@@ -68,8 +68,13 @@ export default class LocationReportSubmit extends React.Component {
                             inputRef={reportBody => this.submitForm.reportBody = reportBody}
                             placeholder="write report" />
                     </FormGroup>
+                    <FormGroup>
+                      <Checkbox type='checkbox'
+                                inputRef={sendExternal => { this.submitForm.sendExternal = sendExternal }} >
+                        Send to external partner
+                      </Checkbox>
+                    </FormGroup>
                     <Button className="form-section-inline" type="submit">Submit</Button>
-                    <Button className="form-section-inline" type="button" onClick={this.onSubmitToExternal}>Submit to External</Button>
                 </Form>
             </div>
         )
@@ -86,23 +91,12 @@ export default class LocationReportSubmit extends React.Component {
             })
     }
 
-    onSubmitToExternal(e) {
-        e.preventDefault()
-        handleExternalReportSubmit(this.submitForm)
-            .then(response => {
-                this.setState({ message: { message: "Report sent", type: "info" } })
-            })
-            .catch(error => {
-                this.setState({ message: { "message": error, type: "danger" } })
-            })
-    }
-
     updateLocations() {
         this.setState({
             locations: LocationStore.getAll()
         })
     }
-    
+
     getLocationOptions() {
         return Object.keys(this.state.locations).map(key => {
             let location = this.state.locations[key]

@@ -65,7 +65,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
         Location location = JsonRequestUtils.readBodyAsType(req, Location.class);
 
         if (location.getLocationId() != id && location.getLocationId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "locationId cannot be specified differently to URI");
         }
         // Perform validations of model before storing
         validateLocationModel(location);

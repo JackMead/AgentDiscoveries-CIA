@@ -39,7 +39,6 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject UsersRoutes usersRoutes;
     @Inject ExecutiveSummaryRoutes executiveSummaryRoutes;
     @Inject MessageProcessorRoutes messageProcessorRoutes;
-    @Inject ExternalReportRoutes externalReportRoutes;
 
     @Override
     public void run() {
@@ -70,7 +69,6 @@ public class AgentDiscoveriesApplication implements Runnable {
                 path("/regions", this::regionsRouteGroup);
                 path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
                 path("/reports/regionsummaries", () -> reportsRouteGroup(regionSummaryReportsRoutes));
-                path("/external", this::externalRouteGroup);
 
                 setupBasicEntityCrudRoutes("/locations", locationsRoutes);
                 get("/locations", locationsRoutes::readEntities, responseTransformer);
@@ -124,10 +122,6 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);
         get("", reportsRoutes::searchReports, responseTransformer);
-    }
-
-    private void externalRouteGroup() {
-        post("/reports", externalReportRoutes::forwardReport, responseTransformer);
     }
 
     private void setupBasicEntityCrudRoutes(String path, EntityCRUDRoutes entityCRUDRoutes) {
