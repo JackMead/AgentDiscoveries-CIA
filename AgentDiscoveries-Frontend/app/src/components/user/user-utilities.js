@@ -15,12 +15,19 @@ export function isLoggedIn() {
   return !!token;
 }
 
+export function isAdmin(){
+  let admin = window.localStorage.getItem("Admin");
+  return admin==="true";
+}
+
 export function logOut() {
   window.localStorage.clear("Token");
   window.localStorage.clear("UserId");
+  window.localStorage.clear("Admin");
 }
 
-export function logIn(token, userId) {
-  window.localStorage.setItem("Token", token);
-  window.localStorage.setItem("UserId", userId);
+export function logIn(response) {
+  window.localStorage.setItem("Token", response.token);
+  window.localStorage.setItem("UserId", response.userId);
+  window.localStorage.setItem("Admin", response.isAdmin?"true":"false");
 }
