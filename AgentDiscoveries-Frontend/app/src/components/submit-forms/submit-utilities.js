@@ -1,9 +1,9 @@
 import {createAPI, updateAPI} from "../crud"
 
 export function handleReportSubmit(apiAddress, submitForm) {
-  let bodyJSON = getBodyJSON(submitForm)
-  bodyJSON.reportTime = new Date().toJSON()
-  const requestBody = JSON.stringify(bodyJSON)
+  let bodyJSON = getBodyJSON(submitForm);
+  bodyJSON.reportTime = new Date().toJSON();
+  const requestBody = JSON.stringify(bodyJSON);
 
   return createAPI(apiAddress, requestBody)
       .then(response => {
@@ -14,7 +14,7 @@ export function handleReportSubmit(apiAddress, submitForm) {
 }
 
 export function handleExternalReportSubmit(submitForm) {
-  let bodyJSON = getBodyJSON(submitForm);
+  const bodyJSON = getBodyJSON(submitForm);
   const requestBody = JSON.stringify(bodyJSON);
 
   return createAPI('/v1/api/external/reports', requestBody)
@@ -32,8 +32,8 @@ export function handleExternalReportSubmit(submitForm) {
 }
 
 export function handleEntitySubmit(apiAddress, submitForm) {
-  let bodyJSON = getBodyJSON(submitForm)
-  var requestBody = JSON.stringify(bodyJSON)
+  const bodyJSON = getBodyJSON(submitForm);
+  const requestBody = JSON.stringify(bodyJSON);
   return createAPI(apiAddress, requestBody)
       .then(response => {
         if (response.status !== 201) {
@@ -43,18 +43,18 @@ export function handleEntitySubmit(apiAddress, submitForm) {
 }
 
 function getBodyJSON(submitForm) {
-  var bodyJSON = {}
+  let bodyJSON = {};
   Object.keys(submitForm).forEach((key) => {
     if (submitForm[key]) {
       let value = submitForm[key].value;
       bodyJSON[key] = getTransformedData(key, value)
     }
-  })
+  });
   return bodyJSON
 }
 
 function getTransformedData(key, value) {
-  var transformedData = value
+  let transformedData = value;
   if (key === "locations") {
     transformedData = value.split(/\s/).map(function (item) {
       return parseInt(item, 10)

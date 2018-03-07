@@ -1,8 +1,5 @@
 package org.softwire.training.api.routes.v1;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
@@ -39,7 +36,7 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
         this.searchCriteriaParser = searchCriteriaParser;
     }
 
-    public T createReport(Request req, Response res) throws Exception {
+    public T createReport(Request req, Response res) throws FailedRequestException {
         T reportApiModel = JsonRequestUtils.readBodyAsType(req, apiModelClass);
 
         if (reportApiModel.getReportId() != 0) {
@@ -55,8 +52,8 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
         int newReportId = reportsDao.addReport(reportModel);
 
         // Create requests should return 201
-        res.status(201);
         reportApiModel.setReportId(newReportId);
+        res.status(201);
 
         return reportApiModel;
     }
