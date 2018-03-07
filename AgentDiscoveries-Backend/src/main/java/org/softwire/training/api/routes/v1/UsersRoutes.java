@@ -34,7 +34,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         if (userApiModel.getUserId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "agentId cannot be specified on create");
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
@@ -49,7 +49,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
             agentsDao.addAgent(agent);
         }
 
-        // Set the agentId and for security remove the password
+        // Set the userId and for security remove the password
         userApiModel.setPassword(null);
         userApiModel.setUserId(newUserId);
 
@@ -76,7 +76,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         if (userApiModel.getUserId() != id && userApiModel.getUserId() != 0) {
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "agentId cannot be specified differently to URI");
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
         }
 
         User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()));
