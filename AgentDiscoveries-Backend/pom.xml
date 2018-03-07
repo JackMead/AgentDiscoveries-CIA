@@ -25,10 +25,20 @@
 
     <profiles>
         <profile>
-            <id>integration-test</id>
+            <id>end-to-end-test-live</id>
             <properties>
                 <skip.unit.tests>true</skip.unit.tests>
                 <skip.integration.tests>false</skip.integration.tests>
+                <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
+                <target.address>http://localhost:8080</target.address>
+            </properties>
+        </profile>
+        <profile>
+            <id>end-to-end-test-local</id>
+            <properties>
+                <skip.unit.tests>true</skip.unit.tests>
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
                 <target.address>http://localhost:8080</target.address>
             </properties>
         </profile>
@@ -40,6 +50,7 @@
             <properties>
                 <skip.unit.tests>false</skip.unit.tests>
                 <skip.integration.tests>true</skip.integration.tests>
+                <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
                 <target.address>http://localhost:8080</target.address>
             </properties>
         </profile>
@@ -176,6 +187,18 @@
             <artifactId>htmlunit-driver</artifactId>
             <version>2.29.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>3.9.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>24.0-jre</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -281,6 +304,39 @@
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.honton.chas</groupId>
+                <artifactId>process-exec-maven-plugin</artifactId>
+                <version>0.9.2</version>
+                <configuration>
+                    <skip>${skip.starting.app.before.tests}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-application</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <name>Start server for testing</name>
+                            <waitForInterrupt>false</waitForInterrupt>
+                            <arguments>
+                                <argument>${java.home}/bin/java</argument>
+                                <argument>-jar</argument>
+                                <argument>${basedir}/target/agentdiscoveries-backend-1.0-SNAPSHOT.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-all</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop-all</goal>
                         </goals>
                     </execution>
                 </executions>

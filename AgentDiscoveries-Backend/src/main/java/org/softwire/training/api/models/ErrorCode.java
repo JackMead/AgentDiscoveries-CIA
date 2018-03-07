@@ -7,6 +7,7 @@ public enum ErrorCode {
     INVALID_INPUT(1004, 400),
     NOT_FOUND(1005, 404),
     OPERATION_INVALID(1006, 409),
+    OPERATION_FORBIDDEN(1007, 403),
     UNKNOWN_ERROR(2000, 500);
 
     public final int numericErrorCode;

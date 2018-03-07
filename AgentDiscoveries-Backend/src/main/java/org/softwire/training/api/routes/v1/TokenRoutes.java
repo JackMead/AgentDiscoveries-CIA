@@ -62,6 +62,6 @@ public class TokenRoutes {
     private TokenResponseApiModel generateToken(User user) {
         // Use the user_id as the subject for the issued token
         TokenIssuer.IssuedToken issuedToken = tokenIssuer.generateToken(Integer.toString(user.getUserId()));
-        return new TokenResponseApiModel(issuedToken.getToken(), issuedToken.getExpiryInstant().toString());
+        return new TokenResponseApiModel(issuedToken.getToken(), issuedToken.getExpiryInstant().toString(), user.getUserId(), user.isAdmin());
     }
 }

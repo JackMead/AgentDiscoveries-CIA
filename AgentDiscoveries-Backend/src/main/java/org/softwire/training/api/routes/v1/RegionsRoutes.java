@@ -1,6 +1,7 @@
 package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.JsonRequestUtils;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.db.daos.LocationsDao;
@@ -17,14 +18,17 @@ public class RegionsRoutes {
 
     private final LocationsDao locationsDao;
     private final RegionsDao regionsDao;
+    private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public RegionsRoutes(LocationsDao locationsDao, RegionsDao regionsDao) {
+    public RegionsRoutes(LocationsDao locationsDao, RegionsDao regionsDao, PermissionsVerifier permissionsVerifier) {
         this.locationsDao = locationsDao;
         this.regionsDao = regionsDao;
+        this.permissionsVerifier=permissionsVerifier;
     }
 
     public Region createRegion(Request req, Response res) throws FailedRequestException {
+        permissionsVerifier.verifyAdminPermission(req);
         Region region = JsonRequestUtils.readBodyAsType(req, Region.class);
 
         if (region.getRegionId() != 0) {
@@ -56,6 +60,7 @@ public class RegionsRoutes {
     }
 
     public Object deleteRegion(Request req, Response res, int id) throws FailedRequestException {
+        permissionsVerifier.verifyAdminPermission(req);
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Region delete request should have no body");
         }

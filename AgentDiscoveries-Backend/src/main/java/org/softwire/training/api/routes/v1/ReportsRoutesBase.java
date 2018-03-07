@@ -1,6 +1,7 @@
 package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.JsonRequestUtils;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.ReportApiModelBase;
@@ -12,6 +13,7 @@ import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -24,19 +26,24 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
     private final ValidatorMapper<T, U, V> validatorThenMapper;
     private final Class<T> apiModelClass;
     private final ReportSearchCriteriaParser<V> searchCriteriaParser;
+    @Inject
+    protected PermissionsVerifier permissionsVerifier;
 
     protected ReportsRoutesBase(
             Class<T> apiModelClass,
             ValidatorMapper<T, U, V> validatorThenMapper,
             ReportsDao<U, V> reportsDao,
-            ReportSearchCriteriaParser<V> searchCriteriaParser) {
+            ReportSearchCriteriaParser<V> searchCriteriaParser,
+            PermissionsVerifier permissionsVerifier) {
         this.apiModelClass = apiModelClass;
         this.validatorThenMapper = validatorThenMapper;
         this.reportsDao = reportsDao;
         this.searchCriteriaParser = searchCriteriaParser;
+        this.permissionsVerifier=permissionsVerifier;
     }
 
     public T createReport(Request req, Response res) throws FailedRequestException {
+        permissionsVerifier.verifyIsAgent(req);
         T reportApiModel = JsonRequestUtils.readBodyAsType(req, apiModelClass);
 
         if (reportApiModel.getReportId() != 0) {
@@ -59,11 +66,13 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
     }
 
     public T readReport(Request req, Response res, int id) throws FailedRequestException {
+        permissionsVerifier.verifyAdminPermission(req);
         return validatorThenMapper.mapToApiModel(reportsDao.getReport(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Report not found")));
     }
 
     public Object deleteReport(Request req, Response res, int id) throws Exception {
+        permissionsVerifier.verifyAdminPermission(req);
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Report delete request should have no body");
         }
@@ -75,7 +84,8 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
         return new Object();
     }
 
-    public List<T> searchReports(Request req, Response res) {
+    public List<T> searchReports(Request req, Response res) throws FailedRequestException {
+        permissionsVerifier.verifyAdminPermission(req);
         List<ApiReportSearchCriterion<V>> apiReportSearchCriteria = searchCriteriaParser.parseApiReportSearchCriteria(req);
 
         // Extract the existing ReportSearchCriterions from th ApiReportSearchCriterion list

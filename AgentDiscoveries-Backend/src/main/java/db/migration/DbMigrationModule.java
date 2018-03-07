@@ -1,7 +1,7 @@
 package db.migration;
 
-import dagger.Module;
 import dagger.Provides;
+import dagger.Module;
 import org.jdbi.v3.core.Jdbi;
 
 import java.sql.*;
@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-@Module(injects=V2__AddSeedData.V2__AddSeedDataDaggerMigrationModule.class)
+@Module(injects = {
+        V2__AddSeedData.V2__AddSeedDataDaggerMigrationModule.class,
+        V5__AddAdminUser.V5_AddAdminUserDaggerMigrationModule.class})
 public class DbMigrationModule {
 
     private Connection connection;

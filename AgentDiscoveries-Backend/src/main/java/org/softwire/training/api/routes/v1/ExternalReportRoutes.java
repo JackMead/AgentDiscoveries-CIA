@@ -5,6 +5,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import org.apache.commons.configuration2.Configuration;
 import org.softwire.training.api.core.JsonRequestUtils;
+import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.models.ExternalReport;
 import spark.Request;
 import spark.Response;
@@ -14,12 +15,16 @@ import javax.inject.Inject;
 public class ExternalReportRoutes {
 
     private final Configuration configuration;
+    private final PermissionsVerifier permissionsVerifier;
+
     @Inject
-    public ExternalReportRoutes(Configuration configuration){
+    public ExternalReportRoutes(Configuration configuration, PermissionsVerifier permissionsVerifier){
         this.configuration=configuration;
+        this.permissionsVerifier=permissionsVerifier;
     }
 
     public String forwardReport(Request req, Response res) throws Exception {
+        permissionsVerifier.verifyIsAgent(req);
         ExternalReport modelReport = JsonRequestUtils.readBodyAsType(req, ExternalReport.class);
         modelReport.setAgentId(req.attribute("user_id"));
         String jsonString = new ObjectMapper().writeValueAsString(modelReport);
