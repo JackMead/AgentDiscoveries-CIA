@@ -44,8 +44,8 @@ Visit the url listed under the Public DNS (IPv4) value in the description for th
 
 Hopefully, you are able to see your website!
 
-## Create a Jenkin's Job for End-to-End Tests
-Like the Jenkin's build above, the easiest way to do this is to clone the [End-To-End Skeleton](http://ec2-35-178-57-85.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton%20End-To-End%20Testing/), then edit the parameters in the configuration to use your Github Repository, and your Deployment Address. This job will trigger the generic Agent Discoveries End-to-End Testing job and report the results.
+### Create a Jenkin's Job for End-to-End Tests
+Like the Jenkin's build above, the easiest way to do this is to clone the [End-To-End Skeleton](http://ec2-35-178-57-85.eu-west-2.compute.amazonaws.com/job/Agent%20Discoveries%20Skeleton%20End-To-End%20Testing/), then edit the parameters in the configuration to use your Github Repository, and your Deployment Address (the test one if you have separated test and live environments). This job will trigger the generic Agent Discoveries End-to-End Testing job and report the results.
 
 You should then add your team's email addresses at the bottom so that you'll be notified quickly in the case of any broken tests, and optionally can configure the job to run on a different schedule to the current one.
 
