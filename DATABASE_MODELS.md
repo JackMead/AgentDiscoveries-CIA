@@ -7,3 +7,5 @@ A user is somebody who can access the site by logging in. They are uniquely iden
 2) An Admin - Somebody who can view reports, create new users, and add users to roles.
 
 Thus User-Agent and User-Admin are both One-to-One/None relationships.
+
+It is worth noting that the automatically added users are Not agents, and so cannot submit reports.
