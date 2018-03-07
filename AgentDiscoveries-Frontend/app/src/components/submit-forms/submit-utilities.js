@@ -2,10 +2,8 @@ import {createAPI, updateAPI} from "../crud"
 
 export function handleReportSubmit(apiAddress, submitForm) {
   let bodyJSON = getBodyJSON(submitForm)
-
   bodyJSON.reportTime = new Date().toJSON()
-
-  var requestBody = JSON.stringify(bodyJSON)
+  const requestBody = JSON.stringify(bodyJSON)
 
   return createAPI(apiAddress, requestBody)
       .then(response => {
@@ -13,6 +11,24 @@ export function handleReportSubmit(apiAddress, submitForm) {
           throw "Server could not create the report. Make sure all fields are correct"
         }
       })
+}
+
+export function handleExternalReportSubmit(submitForm) {
+  let bodyJSON = getBodyJSON(submitForm);
+  const requestBody = JSON.stringify(bodyJSON);
+
+  return createAPI('/v1/api/external/reports', requestBody)
+      .then(response => {
+        if (!response.ok) {
+          if (response.status === 400) {
+            throw "Could not submit report to the external API. Bad Request"
+          } else if (response.status === 422) {
+            throw `Could not submit report to the external API. Some fields are incorrect`
+          } else {
+            throw `Could not submit report to the external API. Server error`
+          }
+        }
+      });
 }
 
 export function handleEntitySubmit(apiAddress, submitForm) {
@@ -31,9 +47,6 @@ function getBodyJSON(submitForm) {
   Object.keys(submitForm).forEach((key) => {
     if (submitForm[key]) {
       let value = submitForm[key].value;
-      if(key==="sendExternal"){
-        value = submitForm[key].checked;
-      }
       bodyJSON[key] = getTransformedData(key, value)
     }
   })

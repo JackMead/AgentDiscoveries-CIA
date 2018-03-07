@@ -23,8 +23,6 @@ import java.util.stream.Stream;
 
 public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBase, V> {
 
-    //Get from config
-    private final String externalAPIAddress = "http://ec2-35-177-80-2.eu-west-2.compute.amazonaws.com/reports";
     private final ReportsDao<U, V> reportsDao;
     private final ValidatorMapper<T, U, V> validatorThenMapper;
     private final Class<T> apiModelClass;
@@ -56,17 +54,9 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
 
         int newReportId = reportsDao.addReport(reportModel);
 
+        // Create requests should return 201
+        res.status(201);
         reportApiModel.setReportId(newReportId);
-
-        if (isRequestToBeForwarded(req)) {
-            forwardReport(req, res);
-        }
-
-        if (res.status() == 200) {
-            // Create requests should return 201
-            // Overwrite if successful
-            res.status(201);
-        }
 
         return reportApiModel;
     }
@@ -110,39 +100,4 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
 
         return statusReports.map(validatorThenMapper::mapSearchResultToApiModel).collect(Collectors.toList());
     }
-
-    public String forwardReport(Request req, Response res) throws Exception {
-        ExternalReportModel modelReport = JsonRequestUtils.readBodyAsType(req, ExternalReportModel.class);
-        modelReport.agentId = req.attribute("user_id");
-        String jsonString = new ObjectMapper().writeValueAsString(modelReport);
-        HttpResponse<String> stringHttpResponse = Unirest.post(externalAPIAddress)
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/json")
-                .body(jsonString)
-                .asString();
-        res.status(stringHttpResponse.getStatus());
-        return stringHttpResponse.getStatusText();
-    }
-
-    public boolean isRequestToBeForwarded(Request req) {
-        return JsonRequestUtils.readBodyAsType(req, SendExternalModel.class).sendExternal;
-    }
-}
-
-//Needs to be abstract, and can be turned into location or region report
-//since coming off abstract class
-class ExternalReportModel {
-    public int agentId;
-    public String reportBody;
-    public int locationId;
-
-    public ExternalReportModel(int agentId, String reportBody, int locationId) {
-        this.agentId = agentId;
-        this.reportBody = reportBody;
-        this.locationId = locationId;
-    }
-}
-
-class SendExternalModel {
-    public boolean sendExternal;
 }
