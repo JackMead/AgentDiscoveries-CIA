@@ -7,14 +7,17 @@ import { EditLocation } from './edit-location';
 import { EditUser } from './edit-user';
 
 export default class EditEntity extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super();
+
+    // TODO: Dodgy props usage
     this.state = {
       api: props.api,
       id: props.match.params.id,
       entity: {},
       message: { 'message': '', 'type': 'danger' }
     };
+
     this.submitForm = {};
     this.apiForms = [];
 
@@ -22,7 +25,7 @@ export default class EditEntity extends React.Component {
     this.setUpEntityForms = this.setUpEntityForms.bind(this);
   }
 
-  componentWillMount () {
+  componentWillMount() {
     getEntity(this.state.api, this.state.id)
       .then(result => {
         this.setState({
@@ -34,14 +37,14 @@ export default class EditEntity extends React.Component {
       });
   }
 
-  componentWillReceiveProps (props) {
+  componentWillReceiveProps(props) {
     this.setState({
       api: props.api,
       id: props.match.params.id
     });
   }
 
-  render () {
+  render() {
     return (
       <div className='col-md-8 col-md-offset-2'>
         <Message message={this.state.message} />
@@ -50,8 +53,9 @@ export default class EditEntity extends React.Component {
     );
   }
 
-  onSubmit (e) {
-    e.preventDefault();
+  onSubmit(event) {
+    event.preventDefault();
+
     handleEntityEdit(`/v1/api/${this.state.api}`, this.state.id, this.submitForm)
       .then(window.location.hash = `#/admin/${this.state.api}`)
       .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));

@@ -10,9 +10,12 @@ import Message from '../message';
 export default class EditProfilePicture extends React.Component {
   constructor () {
     super();
+
     this.state = {
       message: { message: '', type: 'danger' }
     };
+
+    // TODO: should this be state?
     this.file = null;
 
     this.handleClick = this.handleClick.bind(this);
@@ -38,12 +41,13 @@ export default class EditProfilePicture extends React.Component {
     );
   }
 
-  handleClick (e) {
+  handleClick() {
+    // TODO: what?
     document.getElementById('selectFile').click();
   }
 
-  handlePictureUpdate (e) {
-    e.preventDefault();
+  handlePictureUpdate(event) {
+    event.preventDefault();
     if (!this.isPictureValid(this.file)) {
       return;
     }

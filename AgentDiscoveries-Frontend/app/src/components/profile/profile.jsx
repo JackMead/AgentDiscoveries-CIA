@@ -12,7 +12,9 @@ import EditProfilePicture from './edit-profile-picture';
 export default class Profile extends React.Component {
   constructor () {
     super();
+
     this.state = {
+      // TODO: hotlinking?!
       imgSrc: 'http://clipground.com/images/placeholder-clipart-5.jpg',
       user: {},
       agent: {}

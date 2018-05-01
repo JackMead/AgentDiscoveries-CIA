@@ -7,19 +7,16 @@ import {
   ControlLabel
 } from 'react-bootstrap';
 
+// TODO: unused? Might now be same form as add-user
 export class AddAgent extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super();
-    this.state = {
-      users: props.entities.users,
-      onSubmit: props.onSubmit
-    };
 
     this.submitForm = props.submitForm;
     this.getUserOptions = this.getUserOptions.bind(this);
   }
 
-  render (props) {
+  render() {
     return (
         <div className='col-md-12'>
           <Form onSubmit={this.state.onSubmit}>
@@ -70,9 +67,7 @@ export class AddAgent extends React.Component {
   }
 
   getUserOptions () {
-    return Object.keys(this.state.users).map(key => {
-      let user = this.state.users[key];
-      return <option key={user.userId} value={user.userId}>{user.username}</option>;
-    });
+    return Object.values(this.props.users).map(user =>
+        <option key={user.userId} value={user.userId}>{user.username}</option>);
   }
 }

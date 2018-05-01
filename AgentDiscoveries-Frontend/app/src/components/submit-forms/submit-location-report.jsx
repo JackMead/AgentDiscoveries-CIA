@@ -15,10 +15,11 @@ import Message from '../message';
 export default class LocationReportSubmit extends React.Component {
   constructor() {
     super();
+
     this.state = {
       locations: [],
-      serverMessage: {message: "", type: "danger"},
-      apiMessage: {message: "", type: "danger"}
+      serverMessage: { message: "", type: "danger" },
+      apiMessage: { message: "", type: "danger" }
     };
 
     this.submitForm = {};
@@ -30,10 +31,11 @@ export default class LocationReportSubmit extends React.Component {
     getAll('locations')
         .then(results => {
           this.setState(
-              {locations: results}
+              { locations: results }
           );
         })
         .catch(error => {
+          // TODO: handle error properly?
           console.log(error);
         });
   }
@@ -90,8 +92,9 @@ export default class LocationReportSubmit extends React.Component {
     );
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  onSubmit(event) {
+    event.preventDefault();
+
     handleReportSubmit('/v1/api/reports/locationstatuses', this.submitForm)
         .then(response => {
           this.setState({serverMessage: {message: "Report filed", type: "info"}})
@@ -112,10 +115,7 @@ export default class LocationReportSubmit extends React.Component {
   }
 
   getLocationOptions() {
-    return Object.keys(this.state.locations).map(key => {
-      let location = this.state.locations[key];
-      return <option key={location.locationId}
-                     value={location.locationId}>{location.location}, {location.siteName}</option>;
-    });
+    return Object.values(this.state.locations).map(location =>
+      <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>);
   }
 }

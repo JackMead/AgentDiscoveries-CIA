@@ -10,37 +10,39 @@ import Message from '../message';
 import * as SearchUtils from '../utilities/search-utilities';
 import SearchResult from './search-result';
 
-export default class LocationReportsSearch extends React.Component {
+export default class RegionSummariesSearch extends React.Component {
   constructor () {
     super();
+
     this.state = {
-      message: {message: '', type: 'danger'},
+      message: { message: '', type: 'danger' },
       results: []
     };
 
-    this.searchForm = {};
+    this.searchForm = { };
     this.onChange = this.onChange.bind(this);
   }
+
 
   render () {
     return (
       <div className='col-md-8 col-md-offset-2'>
         <Form onChange={this.onChange}>
-          <h3>Search Location Reports</h3>
+          <h3>Search Region Summaries</h3>
 
           <Message message={this.state.message} />
 
           <FormGroup>
-            <ControlLabel>Agent Call Sign</ControlLabel>
+            <ControlLabel>Region</ControlLabel>
             <FormControl type='text'
-              inputRef={callSign => { this.searchForm.callSign = callSign }}
-              placeholder='enter agent call sign' />
+              inputRef={regionId => { this.searchForm.regionId = regionId }}
+              placeholder='enter region ID' />
           </FormGroup>
           <FormGroup>
-            <ControlLabel>Location</ControlLabel>
-            <FormControl type='number'
-              inputRef={locationId => { this.searchForm.locationId = locationId }}
-              placeholder='enter location ID' />
+            <ControlLabel>User</ControlLabel>
+            <FormControl type='text'
+              inputRef={userId => { this.searchForm.userId = userId }}
+              placeholder='enter user ID' />
           </FormGroup>
           <FormGroup className='form-inline'>
             <ControlLabel className='rm-3'>From</ControlLabel>
@@ -52,19 +54,21 @@ export default class LocationReportsSearch extends React.Component {
               inputRef={toTime => { this.searchForm.toTime = toTime }} />
           </FormGroup>
         </Form>
+
         <SearchResult results={this.state.results} />
       </div>
     );
   }
 
-  onChange (e) {
-    e.preventDefault();
-    SearchUtils.getResultsAsynch('/v1/api/reports/locationstatuses', this.searchForm)
+
+  onChange(event) {
+    event.preventDefault();
+    SearchUtils.getResultsAsync('/v1/api/reports/regionsummaries', this.searchForm)
       .then(results => {
         this.setState({ results: results, message: { message: '', type: 'danger' } });
       })
       .catch(error => {
-        this.setState({ message: {message: error.message, type: 'danger'} });
+        this.setState({ message: { message: error.message, type: 'danger' } });
       });
   }
 }

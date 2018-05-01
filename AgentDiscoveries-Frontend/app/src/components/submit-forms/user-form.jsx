@@ -11,17 +11,15 @@ export class CreateUser extends React.Component {
     
     constructor(props) {
         super();
-        this.state = {
-            onSubmit: props.onSubmit,
-        }
 
+        // TODO: props modification
         this.submitForm = props.submitForm;
     }
 
-    render(props) {
+    render() {
         return (
             <div className="col-md-12">
-                <Form onSubmit={this.state.onSubmit}>
+                <Form onSubmit={this.props.onSubmit}>
                     <h3>Create User</h3>
                     <FormGroup>
                         <FormControl type="text" inputRef={username => this.submitForm.username = username} placeholder="enter username" />

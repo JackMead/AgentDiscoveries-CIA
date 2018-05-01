@@ -5,17 +5,14 @@ import Link from 'react-router-dom/Link';
 export default class Entity extends React.Component {
   constructor (props) {
     super();
-    this.state = {
-      type: props.type,
-      id: Object.values(props.entity)[0], // this assumes that id is the first JSON value
-      entity: props.entity
-    };
+
+    this.id = Object.values(props.entity)[0]; // TODO: this assumes that id is the first JSON value
 
     this.getEntityRow = this.getEntityRow.bind(this);
     this.getEditButton = this.getEditButton.bind(this);
   }
 
-  componentWillReceiveProps (props) {
+  componentWillReceiveProps(props) {
     this.setState({
       type: props.type,
       id: Object.values(props.entity)[0], // this assumes that id is the first JSON value
@@ -23,9 +20,9 @@ export default class Entity extends React.Component {
     });
   }
 
-  render (props) {
+  render() {
     return (
-      <tr key={Object.values(this.state.entity)[0]}>
+      <tr key={this.id}>
         {this.getEntityRow()}
         <td key='edit'>
           {this.getEditButton()}
@@ -34,19 +31,16 @@ export default class Entity extends React.Component {
     );
   }
 
-  getEntityRow () {
-    return Object.keys(this.state.entity).map((key) => {
-      return (
-        <td key={key}>{this.state.entity[key]}</td>
-      );
-    }
-    );
+  getEntityRow() {
+    return Object.keys(this.props.entity).map(key =>
+        <td key={key}>{this.props.entity[key]}</td>);
   }
 
-  getEditButton () {
-    if (this.state.type !== 'regions') {
+  getEditButton() {
+    // TODO: shouldn't use reserved words as properties
+    if (this.props.type !== 'regions') {
       return (
-        <Link to={`/admin/${this.state.type}/edit/${this.state.id}`}>
+        <Link to={`/admin/${this.state.type}/edit/${this.id}`}>
           <Button type='button'>Edit</Button>
         </Link>
       );

@@ -11,6 +11,7 @@ import * as UserUtils from './user-utilities';
 export default class Login extends React.Component {
   constructor () {
     super();
+
     this.state = {
       message: { message: '', type: 'info' }
     };
@@ -44,9 +45,10 @@ export default class Login extends React.Component {
     }
   }
 
-  handleLogIn (e) {
-    e.preventDefault();
-    let requestBodyJSON = {
+  handleLogIn(event) {
+    event.preventDefault();
+
+    const requestBodyJSON = {
       username: this.username.value,
       password: this.password.value
     };

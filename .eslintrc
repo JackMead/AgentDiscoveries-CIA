@@ -1,7 +1,21 @@
 {
-  "extends": ["standard", "standard-react"],
+  "env": {
+    "es6": true
+  },
+  "extends": [ "eslint:recommended", "plugin:react/recommended" ],
+  "plugins": [ "react" ],
   "rules": {
-    "jsx-a11y/label-has-for": false,
-    "semi": [2, "always", { "omitLastInOneLineBlock": true}]
+    "indent": [ "error", 4, { "SwitchCase": 1 } ],
+    "linebreak-style": [ "error", "unix" ],
+    "quotes": [ "error", "single" ],
+    "semi": [ "error", "always" ],
+    "no-console": "off",
+    "no-unused-vars": ["error", { "args": "none" }]
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
   }
 }

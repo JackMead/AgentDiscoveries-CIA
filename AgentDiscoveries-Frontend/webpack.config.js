@@ -7,7 +7,12 @@ const extractSass = new ExtractTextPlugin("styles.css");
 const outputPath = path.join(__dirname, 'target', 'classes', 'frontend');
 
 module.exports = {
-    entry: './app/src/index.js',
+    entry: './app/src/index.jsx',
+
+    resolve: {
+        extensions: ['.js', '.jsx']
+    },
+
     module: {
         rules: [{
             test: /\.scss$/,
@@ -21,7 +26,7 @@ module.exports = {
             })
         },
         {
-            test: /\.js$/,
+            test: /\.jsx?$/,
             exclude: /node_modules/,
             loader: 'babel-loader'
         },

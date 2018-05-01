@@ -9,13 +9,14 @@ import {
 } from 'react-bootstrap';
 
 export class AddUser extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super();
+
     this.state = {
-      onSubmit: props.onSubmit,
       additionalAgentInfo: ''
     };
 
+    // TODO: modifying props
     this.submitForm = props.submitForm;
     this.submitForm.agentForm = {};
 
@@ -23,10 +24,10 @@ export class AddUser extends React.Component {
     this.getOptionalAgentForm = this.getOptionalAgentForm.bind(this);
   }
 
-  render (props) {
+  render() {
     return (
       <div className='col-md-12'>
-        <Form onSubmit={this.state.onSubmit}>
+        <Form onSubmit={this.props.onSubmit}>
           <h3>Create User</h3>
           <FormGroup>
             <FormControl type='text' required
@@ -61,7 +62,7 @@ export class AddUser extends React.Component {
     );
   }
 
-  onChange (e) {
+  onChange() {
     const additionalAgentInfo = this.submitForm.agent.checked ? this.getOptionalAgentForm() : '';
 
     this.setState({

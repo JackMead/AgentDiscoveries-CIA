@@ -8,9 +8,11 @@ import {
 } from 'react-bootstrap';
 import { createAPI } from './crud';
 
+// TODO: modifies state without using setState
 export default class TodaysCodePage extends React.Component {
   constructor () {
     super();
+
     this.state = {
       'message': {},
       'result': ''
@@ -21,7 +23,7 @@ export default class TodaysCodePage extends React.Component {
     this.handleRequest = this.handleRequest.bind(this);
   }
 
-  render (props) {
+  render() {
     return (
       <div className='col-md-8 col-md-offset-2'>
         <Form>
@@ -52,17 +54,19 @@ export default class TodaysCodePage extends React.Component {
     );
   }
 
-  handleEncode (e) {
-    e.preventDefault();
+  handleEncode (event) {
+    event.preventDefault();
     this.handleRequest('v1/api/encodemessage');
   }
-  handleDecode (e) {
-    e.preventDefault();
+
+  handleDecode (event) {
+    event.preventDefault();
     this.handleRequest('v1/api/decodemessage');
   }
 
   handleRequest (api) {
     const requestJSON = { 'message': this.state.message.message.value };
+
     createAPI(api, JSON.stringify(requestJSON))
       .then(response => {
         if (response.status === 200) {

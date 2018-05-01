@@ -49,7 +49,6 @@ export default class App extends React.Component {
             <Route path='/profile' exact render={() => <Page><Profile /></Page>} />
             <Route path='/profile/edit/callsign' render={() => <Page><EditProfileCallSign /></Page>} />
             <Route path='/profile/edit/picture' render={() => <Page><EditProfilePicture /></Page>} />
-
           </Switch>
         </Router>
       </React.Fragment>

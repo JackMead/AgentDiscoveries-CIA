@@ -14,7 +14,7 @@ export function getAll (api) {
     });
 }
 
-export function getEntity (api, id) {
+export function getEntity(api, id) {
   return readAPI(`v1/api/${api}`, id)
     .then(response => {
       if (response.ok) {
@@ -28,8 +28,9 @@ export function getEntity (api, id) {
     });
 }
 
-export function filterResults (results) {
+export function filterResults(results) {
   results.forEach(val => {
+    // TODO: really shouldn't return this on the API!!
     delete val.hashedPassword; // we don't want this to be rendered
     if (val.admin) {
       val.admin = 'yes';
@@ -38,7 +39,8 @@ export function filterResults (results) {
 
   return results;
 }
-export function filterResult (result) {
+export function filterResult(result) {
+  // TODO: really shouldn't return this on the API!!
   delete result.hashedPassword; // we don't want this to be rendered
   if (result.admin) {
     result.admin = 'yes';

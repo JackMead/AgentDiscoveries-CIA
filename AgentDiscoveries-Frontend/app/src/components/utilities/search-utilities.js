@@ -18,16 +18,15 @@ export function getDateString(date){
 }
 
 function getSearchParams (searchForm) {
-  const searchParams = Object.keys(searchForm).map((key) => {
+  return Object.keys(searchForm).map((key) => {
     return searchForm[key].value === '' ? '' : `${encodeURIComponent(key)}=${encodeURIComponent(getTransformedData(key, searchForm[key].value))}`;
-  }).filter(el => el !== '' && el).join('&');
-  return searchParams;
+  }).filter(el => !!el).join('&');
 }
 
-export function getResultsAsynch (apiAddress, searchForm) {
+export function getResultsAsync (apiAddress, searchForm) {
   const searchParams = getSearchParams(searchForm);
 
-  var response = searchAPI(apiAddress, searchParams)
+  return searchAPI(apiAddress, searchParams)
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -35,6 +34,4 @@ export function getResultsAsynch (apiAddress, searchForm) {
         throw Error('API server could not process the request');
       }
     });
-
-  return response;
 }

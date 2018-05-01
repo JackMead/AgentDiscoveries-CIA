@@ -9,6 +9,7 @@ import {
 import { updateAPI } from '../crud';
 import { getEntity } from '../utilities/get-utilities';
 
+// TODO: should newCallSign be state?
 export default class EditProfileCallSign extends React.Component {
   constructor () {
     super();
@@ -16,6 +17,7 @@ export default class EditProfileCallSign extends React.Component {
     this.state = {
       agent: {}
     };
+
     this.handleCallSignUpdate = this.handleCallSignUpdate.bind(this);
     this.getAgent = this.getAgent.bind(this);
   }
@@ -43,8 +45,9 @@ export default class EditProfileCallSign extends React.Component {
     );
   }
 
-  handleCallSignUpdate (e) {
-    e.preventDefault();
+  handleCallSignUpdate (event) {
+    event.preventDefault();
+
     const userId = window.localStorage.getItem('UserId');
     const requestBodyJSON = {
       callSign: this.newCallSign.value

@@ -13,6 +13,7 @@ import { CreateRegion } from "./region-form"
 import { CreateAgent } from "./agent-form"
 import { CreateUser } from "./user-form"
 
+// TODO: unused??
 export default class EntitySubmit extends React.Component {
 
     constructor() {
@@ -33,7 +34,7 @@ export default class EntitySubmit extends React.Component {
             regions: <CreateRegion submitForm={this.submitForm} onSubmit={this.onSubmit} />,
             users: <CreateUser submitForm={this.submitForm} onSubmit={this.onSubmit} />,
             agents: <CreateAgent submitForm={this.submitForm} onSubmit={this.onSubmit} />
-        }
+        };
 
         this.setState({ form: this.apiForms[this.state.api]})
     }

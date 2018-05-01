@@ -8,26 +8,22 @@ import {
 } from 'react-bootstrap';
 
 export class EditUser extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super();
-    this.state = {
-      onSubmit: props.onSubmit,
-      id: props.id,
-      entity: props.entity
-    };
 
+    // TODO: props modifications
     this.submitForm = props.submitForm;
   }
 
-  render (props) {
+  render() {
     return (
       <div className='col-md-12'>
-        <Form onSubmit={this.state.onSubmit}>
+        <Form onSubmit={this.props.onSubmit}>
           <h3>Edit User</h3>
 
           <FormGroup>
             <FormControl type='text' required
-              defaultValue={this.state.entity.username}
+              defaultValue={this.props.entity.username}
               inputRef={username => { this.submitForm.username = username }}
               placeholder='enter username' />
           </FormGroup>

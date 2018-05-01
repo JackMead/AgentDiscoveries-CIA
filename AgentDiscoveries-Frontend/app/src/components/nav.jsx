@@ -12,6 +12,7 @@ import {logOut, isLoggedIn, isAdmin} from './user/user-utilities';
 export default class NavigationBar extends React.Component {
   constructor() {
     super();
+
     this.setNavOptions = this.setNavOptions.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
   }
@@ -38,7 +39,7 @@ export default class NavigationBar extends React.Component {
                 <img className='agent-discoveries-logo' src={require('../../static/agent.png')}
                      alt='Agent Discoveries'/>
               </span>
-                <span>Agent Discoveries</span>
+              <span>Agent Discoveries</span>
               </Link>
             </Navbar.Brand>
             <Navbar.Toggle/>
@@ -48,8 +49,9 @@ export default class NavigationBar extends React.Component {
     );
   }
 
-  handleLogOut(e) {
-    e.preventDefault();
+  handleLogOut(event) {
+    event.preventDefault();
+
     logOut();
     window.dispatchEvent(new CustomEvent('login'));
     window.location.hash = '#/';
@@ -107,16 +109,15 @@ export default class NavigationBar extends React.Component {
           </Nav>
       );
     }
-    let navOptions = (
+
+    const navOptions = (
         <Navbar.Collapse>
           {navBarAdmin}
           {navBarStandard}
           {loginBar}
         </Navbar.Collapse>
-    )
+    );
+
     this.setState({navOptions: navOptions});
   }
 }
-
-
-

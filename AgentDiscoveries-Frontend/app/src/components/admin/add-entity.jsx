@@ -14,6 +14,7 @@ export default class AddEntity extends React.Component {
       api: props.api,
       message: { 'message': '', 'type': 'danger' }
     };
+
     this.submitForm = {};
     this.apiForms = [];
 
@@ -28,13 +29,14 @@ export default class AddEntity extends React.Component {
     this.setUpEntityForms();
   }
 
+  // TODO: What?
   componentWillReceiveProps (props) {
     this.setState({
       api: props.api
     });
   }
 
-  render () {
+  render() {
     return (
       <div className='col-md-8 col-md-offset-2'>
         <Message message={this.state.message} />
@@ -43,15 +45,17 @@ export default class AddEntity extends React.Component {
     );
   }
 
-  onSubmit (e) {
-    e.preventDefault();
+  onSubmit(event) {
+    event.preventDefault();
+
     handleEntitySubmit(`/v1/api/${this.state.api}`, this.submitForm)
       .then(window.location.hash = `#/admin/${this.state.api}`)
       .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
   }
 
-  onSubmitUser (e) {
-    e.preventDefault();
+  onSubmitUser(event) {
+    event.preventDefault();
+
     const userForm = this.getUserForm();
 
     handleEntitySubmit(`/v1/api/users`, userForm)
@@ -65,22 +69,22 @@ export default class AddEntity extends React.Component {
       .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
   }
 
-  submitAgent (userId) {
-    let agentForm = this.submitForm.agentForm;
+  submitAgent(userId) {
+    const agentForm = this.submitForm.agentForm;
     agentForm.userId = { value: userId };
     handleEntitySubmit(`/v1/api/agents`, agentForm)
       .then(window.location.hash = `#/admin/${this.state.api}`)
       .catch(error => this.setState({ message: { message: `${error.message}. Created the user, but could not create the agent`, type: 'danger' } }));
   }
 
-  getUserForm () {
+  getUserForm() {
     const userForm = Object.assign({}, this.submitForm);
     delete userForm.agent;
     delete userForm.agentForm;
     return userForm;
   }
 
-  setUpEntityForms () {
+  setUpEntityForms() {
     this.apiForms = {
       locations: <AddLocation submitForm={this.submitForm} onSubmit={this.onSubmit} />,
       regions: <AddRegion submitForm={this.submitForm} onSubmit={this.onSubmit} />,

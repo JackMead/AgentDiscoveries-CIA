@@ -5,6 +5,7 @@ import Entity from './entity';
 
 import { getAll } from '../utilities/get-utilities';
 
+// TODO: this whole class is super suspicious - looks like it's trying to be a stateful store(!)
 export default class Entities extends React.Component {
   constructor (props) {
     super(props);
@@ -31,6 +32,7 @@ export default class Entities extends React.Component {
     this.updateEntities();
   }
 
+  // TODO: what is going on here
   componentWillReceiveProps (props) {
     this.setState({
       api: props.api

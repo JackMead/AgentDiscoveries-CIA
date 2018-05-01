@@ -10,17 +10,15 @@ import {
 export class AddRegion extends React.Component {
   constructor (props) {
     super();
-    this.state = {
-      onSubmit: props.onSubmit
-    };
 
+    // TODO: idiomatic way to pass back form?
     this.submitForm = props.submitForm;
   }
 
   render (props) {
     return (
         <div className='col-md-12'>
-          <Form onSubmit={this.state.onSubmit}>
+          <Form onSubmit={this.props.onSubmit}>
             <h3>Create Region</h3>
 
             <FormGroup>
