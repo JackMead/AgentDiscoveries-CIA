@@ -13,7 +13,8 @@ import java.time.LocalDate;
 
 public class V5__AddAdminUser extends DaggerMigrationBase {
     @Override
-    public Class<V5__AddAdminUser.V5_AddAdminUserDaggerMigrationModule> getMigrationClass() {
+    @SuppressWarnings("unchecked")
+    public Class<?> getMigrationClass() {
         return V5__AddAdminUser.V5_AddAdminUserDaggerMigrationModule.class;
     }
 

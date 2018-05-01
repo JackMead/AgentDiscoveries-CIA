@@ -54,7 +54,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         port(config.getInt("server.port"));
 
         // Serve the static assets from the frontend project
-        staticFileLocation("/META-INF/resources/public");
+        staticFileLocation("/frontend");
 
         // Setup of all the routes
         path("/v1", () -> {

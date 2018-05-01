@@ -1,10 +1,10 @@
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin("styles.css");
-const outputPath = path.join(__dirname, 'target', 'classes', 'META-INF', 'resources', 'public');
+const outputPath = path.join(__dirname, 'target', 'classes', 'frontend');
 
 module.exports = {
     entry: './app/src/index.js',

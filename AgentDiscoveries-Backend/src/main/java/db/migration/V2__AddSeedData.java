@@ -8,7 +8,8 @@ import javax.inject.Inject;
 public class V2__AddSeedData extends DaggerMigrationBase {
 
     @Override
-    public Class<V2__AddSeedDataDaggerMigrationModule> getMigrationClass() {
+    @SuppressWarnings("unchecked")
+    public Class<?> getMigrationClass() {
         return V2__AddSeedDataDaggerMigrationModule.class;
     }
 
@@ -38,6 +39,4 @@ public class V2__AddSeedData extends DaggerMigrationBase {
             }
         }
     }
-
-
 }

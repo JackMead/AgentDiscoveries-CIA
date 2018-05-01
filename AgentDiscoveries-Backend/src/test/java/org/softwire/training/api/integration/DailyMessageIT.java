@@ -1,40 +1,31 @@
-package org.softwire.training.api.end_to_end;
+package org.softwire.training.api.integration;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.softwire.training.api.core.MessageProcessor;
-import org.softwire.training.api.end_to_end.helper.E2eHelper;
+import org.softwire.training.api.integration.helper.LoginHelper;
+import org.softwire.training.api.integration.helper.WebDriverHelper;
 import org.softwire.training.models.Message;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DailyMessageIT {
-    public static final String Target_Address=System.getProperty("target.address");
+
+    public static final String TARGET_ADDRESS =System.getProperty("target.address");
 
     private static WebDriver driver;
-    private static E2eHelper helper = new E2eHelper();
     private static WebDriverWait wait;
 
     @BeforeAll
     public static void setUp(){
-        driver=helper.prepareDriver();
+        driver = WebDriverHelper.getSharedDriver();
         wait = new WebDriverWait(driver, 10);
-    }
-
-    @AfterAll
-    public static void tearDown(){
-        driver.quit();
     }
 
     @Test
@@ -47,11 +38,11 @@ public class DailyMessageIT {
         messageProcessor.encrypt(encodedMessage);
         messageProcessor.decrypt(decodedMessage);
 
-        helper.login(driver, Target_Address);
+        LoginHelper.login(driver, TARGET_ADDRESS);
         try {
-            driver.get(Target_Address + "/#/message");
-        }catch(Exception e){
-            if(e.getClass()!=TimeoutException.class){
+            driver.get(TARGET_ADDRESS + "/#/message");
+        } catch (Exception e) {
+            if (e.getClass() != TimeoutException.class) {
                 throw e;
             }
         }

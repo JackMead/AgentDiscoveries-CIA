@@ -1,6 +1,5 @@
 package org.softwire.training.api.routes.v1;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.softwire.training.api.models.ErrorCode;
@@ -9,6 +8,7 @@ import org.softwire.training.api.models.PictureApiModel;
 import org.softwire.training.db.daos.PicturesDao;
 import spark.Request;
 import spark.Response;
+import spark.utils.IOUtils;
 
 import javax.inject.Inject;
 import javax.servlet.MultipartConfigElement;
@@ -90,16 +90,11 @@ public class PictureRoutes {
 
     private ArrayList<String> getAllowedContentTypes(){
         String[] allowedContent = configuration.getStringArray("database.picture.allowed-content-types");
-        return new ArrayList<String>(Arrays.asList(allowedContent));
+        return new ArrayList<>(Arrays.asList(allowedContent));
     }
 
     private Blob getBlobFromInputStream(InputStream in) throws IOException, SQLException {
         byte[] contents = IOUtils.toByteArray(in);
         return new SerialBlob(contents);
-    }
-
-    private String getFileExtension(Part filePart) {
-        String fileName = filePart.getSubmittedFileName();
-        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }
