@@ -1,11 +1,10 @@
-import * as React from "react";
+import * as React from 'react';
 import {
     Form,
     FormGroup,
     FormControl,
-    Button,
-    ControlLabel
-} from "react-bootstrap";
+    Button
+} from 'react-bootstrap';
 
 export class CreateUser extends React.Component {
     

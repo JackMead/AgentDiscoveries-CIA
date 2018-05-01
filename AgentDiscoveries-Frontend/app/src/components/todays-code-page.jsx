@@ -1,81 +1,80 @@
 import * as React from 'react';
 import {
-  Form,
-  FormGroup,
-  FormControl,
-  ControlLabel,
-  Button
+    Form,
+    FormGroup,
+    FormControl,
+    ControlLabel,
+    Button
 } from 'react-bootstrap';
 import { createAPI } from './crud';
 
 // TODO: modifies state without using setState
 export default class TodaysCodePage extends React.Component {
-  constructor () {
-    super();
+    constructor () {
+        super();
 
-    this.state = {
-      'message': {},
-      'result': ''
-    };
+        this.state = {
+            'message': {},
+            'result': ''
+        };
 
-    this.handleDecode = this.handleDecode.bind(this);
-    this.handleEncode = this.handleEncode.bind(this);
-    this.handleRequest = this.handleRequest.bind(this);
-  }
+        this.handleDecode = this.handleDecode.bind(this);
+        this.handleEncode = this.handleEncode.bind(this);
+        this.handleRequest = this.handleRequest.bind(this);
+    }
 
-  render() {
-    return (
-      <div className='col-md-8 col-md-offset-2'>
-        <Form>
+    render() {
+        return (
+            <div className='col-md-8 col-md-offset-2'>
+                <Form>
 
-          <h3>Encode/decode message with today's secret</h3>
+                    <h3>Encode/decode message with today&quot;s secret</h3>
+
+                    <FormGroup>
+                        <ControlLabel>Message</ControlLabel>
+                        <FormControl type='text' required
+                            componentClass='textarea' rows={6}
+                            inputRef={message => { this.state.message.message = message; }}
+                            placeholder='enter message'
+                            id="message-input"/>
+                    </FormGroup>
+
+                    <Button id="encode-button" className='rm-3' type='submit' onClick={this.handleEncode}>Encode</Button>
+                    <Button id="decode-button" type='submit' onClick={this.handleDecode}>Decode</Button>
+                </Form>
 
 
-          <FormGroup>
-            <ControlLabel>Message</ControlLabel>
-            <FormControl type='text' required
-              componentClass='textarea' rows={6}
-              inputRef={message => { this.state.message.message = message }}
-              placeholder='enter message'
-              id="message-input"/>
-          </FormGroup>
+                <div id="code-result">
+                    {this.state.result !== '' ? <h3> Result </h3> : ''}
+                    {this.state.result}
+                </div>
+            </div>
 
-          <Button id="encode-button" className='rm-3' type='submit' onClick={this.handleEncode}>Encode</Button>
-          <Button id="decode-button" type='submit' onClick={this.handleDecode}>Decode</Button>
-        </Form>
+        );
+    }
 
+    handleEncode (event) {
+        event.preventDefault();
+        this.handleRequest('v1/api/encodemessage');
+    }
 
-        <div id="code-result">
-          {this.state.result !== '' ? <h3> Result </h3> : ''}
-          {this.state.result}
-        </div>
-      </div>
+    handleDecode (event) {
+        event.preventDefault();
+        this.handleRequest('v1/api/decodemessage');
+    }
 
-    );
-  }
+    handleRequest (api) {
+        const requestJSON = { 'message': this.state.message.message.value };
 
-  handleEncode (event) {
-    event.preventDefault();
-    this.handleRequest('v1/api/encodemessage');
-  }
-
-  handleDecode (event) {
-    event.preventDefault();
-    this.handleRequest('v1/api/decodemessage');
-  }
-
-  handleRequest (api) {
-    const requestJSON = { 'message': this.state.message.message.value };
-
-    createAPI(api, JSON.stringify(requestJSON))
-      .then(response => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          throw Error('Server cannot process the request');
-        }
-      })
-      .then(response => this.setState({ result: response.message }))
-      .catch(error => this.setState({ result: error.message }));
-  }
+        createAPI(api, JSON.stringify(requestJSON))
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    throw Error('Server cannot process the request');
+                }
+            })
+            .then(response => this.setState({ result: response.message }))
+            .catch(error => this.setState({ result: error.message }));
+    }
 }
