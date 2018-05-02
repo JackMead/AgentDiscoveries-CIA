@@ -4,7 +4,7 @@ import {
     FormGroup,
     FormControl
 } from 'react-bootstrap';
-import { updatePicture } from '../crud';
+import {getTokenHeader} from '../utilities/request-helper';
 import Message from '../message';
 
 export default class EditProfilePicture extends React.Component {
@@ -56,11 +56,14 @@ export default class EditProfilePicture extends React.Component {
         let formData = new FormData();
         formData.append('file', this.file.files[0]);
 
-        updatePicture('/v1/api/pictures', userId, formData)
+        // Not JSON, so don't use the API request helpers
+        fetch('v1/api/pictures', {
+            method: 'PUT',
+            headers: { 'Authorization': getTokenHeader() },
+            body: formData
+        })
             .then(response => {
-                if (response.ok) {
-                    response.json();
-                } else {
+                if (!response.ok) {
                     throw Error('Image could not be uploaded');
                 }
             })

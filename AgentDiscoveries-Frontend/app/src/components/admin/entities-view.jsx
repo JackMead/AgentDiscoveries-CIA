@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Table, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import {Button, Table} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 import Entity from './entity';
-
-import { getAll } from '../utilities/get-utilities';
+import {apiGet} from '../utilities/request-helper';
 
 // TODO: this whole class is super suspicious - looks like it's trying to be a stateful store(!)
 export default class Entities extends React.Component {
@@ -91,7 +90,7 @@ export default class Entities extends React.Component {
 
     updateEntities () {
         Object.keys(this.state.entities).forEach((api) => {
-            getAll(api)
+            apiGet(api)
                 .then(results => {
                     const entities = this.state.entities;
                     entities[api] = results;

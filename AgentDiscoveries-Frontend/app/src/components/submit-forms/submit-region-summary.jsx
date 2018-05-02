@@ -1,16 +1,8 @@
 import * as React from 'react';
-import {
-    Form,
-    FormGroup,
-    FormControl,
-    Button,
-    ControlLabel
-
-} from 'react-bootstrap';
+import {Button, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
 
 import Message from '../message';
-import {handleReportSubmit} from '../utilities/submit-utilities';
-import {getAll} from '../utilities/get-utilities';
+import {apiFormCreate, apiGet} from '../utilities/request-helper';
 
 export default class RegionSummarySubmit extends React.Component {
     constructor() {
@@ -27,7 +19,7 @@ export default class RegionSummarySubmit extends React.Component {
     }
 
     componentWillMount() {
-        getAll('regions')
+        apiGet('regions')
             .then(results =>
                 this.setState({
                     regions: results
@@ -83,7 +75,11 @@ export default class RegionSummarySubmit extends React.Component {
 
     onSubmit(event) {
         event.preventDefault();
-        handleReportSubmit('/v1/api/reports/regionsummaries', this.submitForm)
+
+        // TODO: this seems extremely suspect
+        this.submitForm.reportTime = new Date().toJSON();
+
+        apiFormCreate('reports/regionsummaries', this.submitForm)
             .then(response => {
                 this.setState({message: {message: 'Report sent', type: 'info'}});
             })

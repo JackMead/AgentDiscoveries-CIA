@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { handleEntityEdit } from '../utilities/submit-utilities';
-import { getEntity } from '../utilities/get-utilities';
 import Message from '../message';
-import { EditLocation } from './edit-location';
-import { EditUser } from './edit-user';
+import {EditLocation} from './edit-location';
+import {EditUser} from './edit-user';
+import {apiFormUpdate, apiGet} from '../utilities/request-helper';
 
 export default class EditEntity extends React.Component {
     constructor(props) {
@@ -26,7 +25,7 @@ export default class EditEntity extends React.Component {
     }
 
     componentWillMount() {
-        getEntity(this.state.api, this.state.id)
+        apiGet(this.state.api, this.state.id)
             .then(result => {
                 this.setState({
                     entity: result
@@ -56,7 +55,7 @@ export default class EditEntity extends React.Component {
     onSubmit(event) {
         event.preventDefault();
 
-        handleEntityEdit(`/v1/api/${this.state.api}`, this.state.id, this.submitForm)
+        apiFormUpdate(this.state.api, this.submitForm, this.state.id)
             .then(window.location.hash = `#/admin/${this.state.api}`)
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }

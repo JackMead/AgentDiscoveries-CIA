@@ -8,6 +8,7 @@ import {
 } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import {logOut, isLoggedIn, isAdmin} from './user/user-utilities';
+import logo from '../../static/agent.png';
 
 export default class NavigationBar extends React.Component {
     constructor() {
@@ -37,7 +38,7 @@ export default class NavigationBar extends React.Component {
                         <Link to='/'>
                             <span>
                                 <img className='agent-discoveries-logo'
-                                    src='../../static/agent.png'
+                                    src={logo}
                                     alt='Agent Discoveries'/>
                             </span>
                             <span>Agent Discoveries</span>
@@ -96,7 +97,7 @@ export default class NavigationBar extends React.Component {
                         <MenuItem componentClass={Link} href='/submit/location' to='/submit/location' eventKey={4.1}>Location Report</MenuItem>
                         <MenuItem componentClass={Link} href='/submit/region' to='/submit/region' eventKey={4.2}>Region Summary</MenuItem>
                     </NavDropdown>
-                    <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>Today&quot;s Message</NavItem>
+                    <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>Today's Message</NavItem>
                 </Nav>
             );
         } else {

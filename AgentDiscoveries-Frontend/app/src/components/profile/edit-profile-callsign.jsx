@@ -1,13 +1,6 @@
 import * as React from 'react';
-import {
-    Form,
-    FormGroup,
-    FormControl,
-    Button,
-    ButtonGroup
-} from 'react-bootstrap';
-import { updateAPI } from '../crud';
-import { getEntity } from '../utilities/get-utilities';
+import {Button, ButtonGroup, Form, FormControl, FormGroup} from 'react-bootstrap';
+import {apiGet, apiPut} from '../utilities/request-helper';
 
 // TODO: should newCallSign be state?
 export default class EditProfileCallSign extends React.Component {
@@ -49,10 +42,8 @@ export default class EditProfileCallSign extends React.Component {
         event.preventDefault();
 
         const userId = window.localStorage.getItem('UserId');
-        const requestBodyJSON = {
-            callSign: this.newCallSign.value
-        };
-        updateAPI('v1/api/agents', userId, JSON.stringify(requestBodyJSON))
+        const body = { callSign: this.newCallSign.value };
+        apiPut('agents', body, userId)
             .then(response => {
                 window.location.hash = '/profile';
             })
@@ -63,7 +54,7 @@ export default class EditProfileCallSign extends React.Component {
 
     getAgent () {
         const userId = window.localStorage.getItem('UserId');
-        getEntity('agents', userId)
+        apiGet('agents', userId)
             .then(response => {
                 this.setState({
                     agent: response

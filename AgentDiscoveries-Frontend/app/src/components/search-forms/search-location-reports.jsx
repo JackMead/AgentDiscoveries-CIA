@@ -1,14 +1,8 @@
 import * as React from 'react';
-import {
-    Form,
-    FormGroup,
-    FormControl,
-    ControlLabel
-} from 'react-bootstrap';
+import {ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
 import Message from '../message';
-
-import * as SearchUtils from '../utilities/search-utilities';
 import SearchResult from './search-result';
+import {apiFormSearch} from '../utilities/request-helper';
 
 export default class LocationReportsSearch extends React.Component {
     constructor () {
@@ -59,7 +53,7 @@ export default class LocationReportsSearch extends React.Component {
 
     onChange(event) {
         event.preventDefault();
-        SearchUtils.getResultsAsync('/v1/api/reports/locationstatuses', this.searchForm)
+        apiFormSearch('reports/locationstatuses', this.searchForm)
             .then(results => {
                 this.setState({ results: results, message: { message: '', type: 'danger' } });
             })

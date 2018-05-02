@@ -74,11 +74,23 @@
                     </execution>
 
                     <execution>
+                        <id>npm lint</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                        <configuration>
+                            <arguments>run lint</arguments>
+                            <skip>${skip.unit.tests}</skip>
+                        </configuration>
+                    </execution>
+
+                    <execution>
                         <id>npm test</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
-
+                        <phase>test</phase>
                         <configuration>
                             <arguments>test app/test</arguments>
                             <skip>${skip.unit.tests}</skip>
@@ -94,7 +106,6 @@
                             <arguments>${npm.command}</arguments>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
         </plugins>

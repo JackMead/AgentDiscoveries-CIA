@@ -1,11 +1,7 @@
 import * as React from 'react';
-import {
-    Image,
-    Button
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { readAPI } from '../crud';
-import { getEntity } from '../utilities/get-utilities';
+import {Button, Image} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import {apiGet} from '../utilities/request-helper';
 import AgentInfo from './agent-info';
 import EditProfilePicture from './edit-profile-picture';
 
@@ -62,25 +58,18 @@ export default class Profile extends React.Component {
 
     getProfilePictureSource () {
         const userId = window.localStorage.getItem('UserId');
-        readAPI('/v1/api/pictures', userId)
-            .then(response => {
-                if (response.ok) {
-                    return response.blob();
-                } else {
-                    throw Error('Could not retrieve picture from the API server');
-                }
-            })
-            .then(blob => {
-                this.setState({imgSrc: URL.createObjectURL(blob)});
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        apiGet('pictures', userId)
+            .then(response =>
+                response.blob())
+            .then(blob =>
+                this.setState({imgSrc: URL.createObjectURL(blob)}))
+            .catch(error =>
+                console.log(error));
     }
 
     getUser () {
         const userId = window.localStorage.getItem('UserId');
-        getEntity('users', userId)
+        apiGet('users', userId)
             .then(response => {
                 this.setState({
                     user: response
@@ -94,7 +83,7 @@ export default class Profile extends React.Component {
 
     getAgent () {
         const userId = window.localStorage.getItem('UserId');
-        getEntity('agents', userId)
+        apiGet('agents', userId)
             .then(response => {
                 this.setState({
                     agent: response

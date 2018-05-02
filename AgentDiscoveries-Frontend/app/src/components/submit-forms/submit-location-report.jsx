@@ -1,14 +1,6 @@
 import * as React from 'react';
-import {
-    Form,
-    FormGroup,
-    FormControl,
-    Button,
-    ControlLabel,
-    Checkbox
-} from 'react-bootstrap';
-import {handleReportSubmit, handleExternalReportSubmit} from '../utilities/submit-utilities';
-import {getAll} from '../utilities/get-utilities';
+import {Button, Checkbox, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
+import {apiFormCreate, apiGet} from '../utilities/request-helper';
 import Message from '../message';
 
 
@@ -28,7 +20,7 @@ export default class LocationReportSubmit extends React.Component {
     }
 
     componentWillMount() {
-        getAll('locations')
+        apiGet('locations')
             .then(results => {
                 this.setState(
                     { locations: results }
@@ -95,7 +87,10 @@ export default class LocationReportSubmit extends React.Component {
     onSubmit(event) {
         event.preventDefault();
 
-        handleReportSubmit('/v1/api/reports/locationstatuses', this.submitForm)
+        // TODO: this seems extremely suspect
+        this.submitForm.reportTime = new Date().toJSON();
+
+        apiFormCreate('reports/locationstatuses', this.submitForm)
             .then(response => {
                 this.setState({serverMessage: {message: 'Report filed', type: 'info'}});
             })
@@ -104,7 +99,7 @@ export default class LocationReportSubmit extends React.Component {
             });
 
         if (this.submitForm.sendExternal.checked) {
-            handleExternalReportSubmit(this.submitForm)
+            apiFormCreate('external/reports', this.submitForm)
                 .then(response => {
                     this.setState({apiMessage: {message: 'External partner received report', type: 'info'}});
                 })

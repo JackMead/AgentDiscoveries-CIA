@@ -1,23 +1,17 @@
 import * as React from 'react';
-import {
-    Form,
-    FormGroup,
-    FormControl,
-    ControlLabel,
-    Button
-} from 'react-bootstrap';
-import { createAPI } from './crud';
+import {Button, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
+import {apiPost} from './utilities/request-helper';
 
-// TODO: modifies state without using setState
 export default class TodaysCodePage extends React.Component {
     constructor () {
         super();
 
         this.state = {
-            'message': {},
-            'result': ''
+            message: '',
+            result: ''
         };
 
+        this.onChange = this.onChange.bind(this);
         this.handleDecode = this.handleDecode.bind(this);
         this.handleEncode = this.handleEncode.bind(this);
         this.handleRequest = this.handleRequest.bind(this);
@@ -28,15 +22,16 @@ export default class TodaysCodePage extends React.Component {
             <div className='col-md-8 col-md-offset-2'>
                 <Form>
 
-                    <h3>Encode/decode message with today&quot;s secret</h3>
+                    <h3>Encode/decode message with today's secret</h3>
 
                     <FormGroup>
                         <ControlLabel>Message</ControlLabel>
                         <FormControl type='text' required
-                            componentClass='textarea' rows={6}
-                            inputRef={message => { this.state.message.message = message; }}
-                            placeholder='enter message'
-                            id="message-input"/>
+                                     id='message-input'
+                                     componentClass='textarea' rows={6}
+                                     placeholder='Enter message'
+                                     value={this.state.message}
+                                     onChange={this.onChange}/>
                     </FormGroup>
 
                     <Button id="encode-button" className='rm-3' type='submit' onClick={this.handleEncode}>Encode</Button>
@@ -45,7 +40,7 @@ export default class TodaysCodePage extends React.Component {
 
 
                 <div id="code-result">
-                    {this.state.result !== '' ? <h3> Result </h3> : ''}
+                    {this.state.result ? <h3>Result</h3> : ''}
                     {this.state.result}
                 </div>
             </div>
@@ -53,27 +48,24 @@ export default class TodaysCodePage extends React.Component {
         );
     }
 
-    handleEncode (event) {
-        event.preventDefault();
-        this.handleRequest('v1/api/encodemessage');
+    onChange(event) {
+        this.setState({ message: event.target.value });
     }
 
-    handleDecode (event) {
+    handleEncode(event) {
         event.preventDefault();
-        this.handleRequest('v1/api/decodemessage');
+        this.handleRequest('encodemessage');
     }
 
-    handleRequest (api) {
-        const requestJSON = { 'message': this.state.message.message.value };
+    handleDecode(event) {
+        event.preventDefault();
+        this.handleRequest('decodemessage');
+    }
 
-        createAPI(api, JSON.stringify(requestJSON))
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                } else {
-                    throw Error('Server cannot process the request');
-                }
-            })
+    handleRequest(api) {
+        const body = { message: this.state.message };
+
+        apiPost(api, body)
             .then(response => this.setState({ result: response.message }))
             .catch(error => this.setState({ result: error.message }));
     }
