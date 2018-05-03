@@ -54,10 +54,6 @@ export function apiFormUpdate(apiPath, form, id) {
     return apiPut(apiPath, prepareForm(form), id);
 }
 
-export function apiFormSearch(apiPath, form) {
-    return apiGet(`${apiPath}?${searchFormToQueryParams(form)}`);
-}
-
 // Helper Functions for headers
 
 export function getTokenHeader() {
@@ -73,12 +69,6 @@ function getHeaders() {
 }
 
 // Helper functions for forms
-
-function searchFormToQueryParams(searchForm) {
-    return Object.keys(searchForm).map((key) => {
-        return searchForm[key].value ? '' : `${encodeURIComponent(key)}=${encodeURIComponent(transformFormProperty(key, searchForm[key].value))}`;
-    }).filter(el => !!el).join('&');
-}
 
 export function prepareForm(form) {
     const result = {};
@@ -99,17 +89,7 @@ function transformFormProperty(key, value) {
     switch (key) {
         case 'locations':
             return value.split(/\s/).map(item => parseInt(item, 10));
-        case 'fromTime':
-            return value ? getDateString(value) : '';
-        case 'toTime':
-            // TODO: old code used to add one day
-            return value ? getDateString(value) : '';
         default:
             return value;
     }
-}
-
-// TODO: Is this correct?
-function getDateString(value) {
-    return new Date(value).toISOString().slice(0, 19)+'Z';
 }

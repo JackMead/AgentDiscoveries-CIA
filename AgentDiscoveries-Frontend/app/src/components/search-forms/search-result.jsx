@@ -21,6 +21,7 @@ export default class SearchResult extends React.Component {
         });
     }
 
+    // TODO: This looks pretty bad!
     getItemHTML(result) {
         return Object.keys(result).map(key => {
             return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>;

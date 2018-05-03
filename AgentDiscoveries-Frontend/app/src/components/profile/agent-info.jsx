@@ -1,10 +1,8 @@
 import * as React from 'react';
-import {
-} from 'react-bootstrap';
 
 export default class AgentInfo extends React.Component {
 
-    render () {
+    render() {
         return (
             <div>
                 <h3>Agent Info</h3>

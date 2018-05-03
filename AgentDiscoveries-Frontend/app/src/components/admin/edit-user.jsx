@@ -34,7 +34,7 @@ export class EditUser extends React.Component {
                     </FormGroup>
                     <FormGroup>
                         <Checkbox type='checkbox'
-                            onChange={this.onChange}
+                            onChange={this.onSubmit}
                             inputRef={admin => { this.submitForm.admin = admin; }} >
               Admin
                         </Checkbox>

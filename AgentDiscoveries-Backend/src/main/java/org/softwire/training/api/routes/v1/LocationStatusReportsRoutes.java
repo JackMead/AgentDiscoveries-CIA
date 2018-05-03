@@ -1,5 +1,6 @@
 package org.softwire.training.api.routes.v1;
 
+import com.google.common.base.Strings;
 import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
@@ -16,10 +17,11 @@ import spark.QueryParamsMap;
 import spark.Request;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
@@ -110,25 +112,30 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
     private static class LocationStatusReportSearchCriteriaParser
             implements ReportSearchCriteriaParser<LocationStatusReportWithTimeZone> {
 
+        // TODO: This is a bit overly generic and confusing - would be easier to parse query parameters into a direct representation
         public List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> parseApiReportSearchCriteria(Request req) {
             QueryParamsMap queryMap = req.queryMap();
             List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> apiReportSearchCriteria = new ArrayList<>();
 
-            // All query parameters are optional and any combination can be specified
-            Optional.ofNullable(queryMap.get("callSign").value())
-                    .ifPresent(callSign -> apiReportSearchCriteria.add(new AgentCallSignApiSearchCriterion(callSign)));
-            Optional.ofNullable(queryMap.get("locationId").integerValue())
-                    .ifPresent(locationId -> apiReportSearchCriteria.add(new LocationIdApiSearchCriterion(locationId)));
+            if (!isNullOrEmpty(queryMap.get("callSign").value())) {
+                apiReportSearchCriteria.add(new AgentCallSignApiSearchCriterion(queryMap.get("callSign").value()));
+            }
 
-            // fromTime / toTime specify the report should be made between those times taking into account time zones.
-            // The reports are stored as a date time in the location timezone.
-            Optional.ofNullable(queryMap.get("fromTime").value())
-                    .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                    .ifPresent(fromTime -> apiReportSearchCriteria.add(new FromTimeApiLocationStatusSearchCriterion(fromTime)));
-            Optional.ofNullable(queryMap.get("toTime").value())
-                    .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                    .ifPresent(toTime -> apiReportSearchCriteria.add(new ToTimeApiLocationStatusSearchCriterion(toTime)));
+            if (!isNullOrEmpty(queryMap.get("locationId").value())) {
+                apiReportSearchCriteria.add(new LocationIdApiSearchCriterion(queryMap.get("locationId").integerValue()));
+            }
 
+            if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
+                apiReportSearchCriteria.add(new FromTimeApiLocationStatusSearchCriterion(
+                        ZonedDateTime.parse(queryMap.get("fromTime").value())));
+            }
+
+            if (!isNullOrEmpty(queryMap.get("toTime").value())) {
+                apiReportSearchCriteria.add(new FromTimeApiLocationStatusSearchCriterion(
+                        ZonedDateTime.parse(queryMap.get("toTime").value())));
+            }
+
+            // TODO: unused?
             // If specified then the reportBody should include exactly this many digits.
             Optional.ofNullable(queryMap.get("digitsInBody").integerValue())
                     .ifPresent(digitsInBody ->

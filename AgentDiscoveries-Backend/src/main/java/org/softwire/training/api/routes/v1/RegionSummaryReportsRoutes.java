@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryReportApiModel, RegionSummaryReport, RegionSummaryReport> {
 
     @Inject
@@ -96,20 +98,25 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
             QueryParamsMap queryMap = req.queryMap();
             List<ApiReportSearchCriterion<RegionSummaryReport>> apiReportSearchCriteria = new ArrayList<>();
 
-            // All query parameters are optional and any combination can be specified
-            Optional.ofNullable(queryMap.get("userId").integerValue())
-                    .ifPresent(userId -> apiReportSearchCriteria.add(new UserIdApiSearchCriterion(userId)));
-            Optional.ofNullable(queryMap.get("regionId").integerValue())
-                    .ifPresent(regionId -> apiReportSearchCriteria.add(new RegionIdApiSearchCriterion(regionId)));
+            if (!isNullOrEmpty(queryMap.get("regionId").value())) {
+                apiReportSearchCriteria.add(new RegionIdApiSearchCriterion(queryMap.get("regionId").integerValue()));
+            }
 
-            // fromTime / toTime specify the report should be made between those times
-            Optional.ofNullable(queryMap.get("fromTime").value())
-                    .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                    .ifPresent(fromTime -> apiReportSearchCriteria.add(new FromTimeApiRegionSummarySearchCriterion(fromTime)));
-            Optional.ofNullable(queryMap.get("toTime").value())
-                    .map(timeString -> ZonedDateTime.parse(timeString, DateTimeFormatter.ISO_OFFSET_DATE_TIME))
-                    .ifPresent(toTime -> apiReportSearchCriteria.add(new ToTimeApiRegionSummarySearchCriterion(toTime)));
+            if (!isNullOrEmpty(queryMap.get("userId").value())) {
+                apiReportSearchCriteria.add(new UserIdApiSearchCriterion(queryMap.get("userId").integerValue()));
+            }
 
+            if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
+                apiReportSearchCriteria.add(new FromTimeApiRegionSummarySearchCriterion(
+                        ZonedDateTime.parse(queryMap.get("fromTime").value())));
+            }
+
+            if (!isNullOrEmpty(queryMap.get("toTime").value())) {
+                apiReportSearchCriteria.add(new FromTimeApiRegionSummarySearchCriterion(
+                        ZonedDateTime.parse(queryMap.get("toTime").value())));
+            }
+
+            // TODO: unused?
             // If specified then the reportBody should include exactly this many digits.
             Optional.ofNullable(queryMap.get("digitsInBody").integerValue())
                     .ifPresent(digitsInBody ->
