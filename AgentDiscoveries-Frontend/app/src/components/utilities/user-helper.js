@@ -1,0 +1,29 @@
+// Wrapper for localstorage to save user info
+
+export function storeUserInfo(userInfo) {
+    window.localStorage.setItem('Token', userInfo.token);
+    window.localStorage.setItem('UserId', userInfo.userId);
+    window.localStorage.setItem('Admin', userInfo.isAdmin ? 'true' : 'false');
+}
+
+export function clearUserInfo() {
+    window.localStorage.clear('Token');
+    window.localStorage.clear('UserId');
+    window.localStorage.clear('Admin');
+}
+
+export function isLoggedIn() {
+    return !!window.localStorage.getItem('Token');
+}
+
+export function currentUserId() {
+    return window.localStorage.getItem('UserId');
+}
+
+export function currentAuthToken() {
+    return window.localStorage.getItem('Token');
+}
+
+export function isAdmin(){
+    return window.localStorage.getItem('Admin') === 'true';
+}

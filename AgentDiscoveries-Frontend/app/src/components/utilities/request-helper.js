@@ -6,7 +6,7 @@ export function apiRequest(apiPath, method, body) {
         headers: getHeaders(),
         body: body && JSON.stringify(body)
     }).then(response => {
-        if (response.status >= 200 || response.status < 300) {
+        if (response.status >= 200 && response.status < 300) {
             // Request successful - automatically parse JSON, leave anything else alone.
             const contentType = response.headers.get('Content-Type');
             if (contentType && contentType.startsWith('application/json')) {
@@ -16,7 +16,9 @@ export function apiRequest(apiPath, method, body) {
             }
         } else {
             // TODO: create custom error class to include the error?
-            throw new Error(`Received ${response.status} ${response.statusText} when performing ${method} ${apiPath}`);
+            const message = `Received ${response.status} ${response.statusText} when performing ${method} ${apiPath}`;
+            console.error(message);
+            throw new Error(message);
         }
     });
 }
@@ -67,7 +69,7 @@ function getHeaders() {
         'Authorization': getTokenHeader(),
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-    }
+    };
 }
 
 // Helper functions for forms

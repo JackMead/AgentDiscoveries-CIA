@@ -60,5 +60,12 @@ module.exports = {
     output: {
         path: outputPath,
         filename: 'bundle.js'
-    }
+    },
+
+    // 'source-map'
+    // Generates a separate source map file, which can be used when debugging in production.
+    //
+    // 'eval-cheap-module-source-map'
+    // Generates an inline source map with line numbers which is much faster to write, suitable for dev.
+    devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'eval-cheap-module-source-map'
 };

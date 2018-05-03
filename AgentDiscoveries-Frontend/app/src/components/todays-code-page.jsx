@@ -27,11 +27,11 @@ export default class TodaysCodePage extends React.Component {
                     <FormGroup>
                         <ControlLabel>Message</ControlLabel>
                         <FormControl type='text' required
-                                     id='message-input'
-                                     componentClass='textarea' rows={6}
-                                     placeholder='Enter message'
-                                     value={this.state.message}
-                                     onChange={this.onChange}/>
+                            id='message-input'
+                            componentClass='textarea' rows={6}
+                            placeholder='Enter message'
+                            value={this.state.message}
+                            onChange={this.onChange}/>
                     </FormGroup>
 
                     <Button id="encode-button" className='rm-3' type='submit' onClick={this.handleEncode}>Encode</Button>

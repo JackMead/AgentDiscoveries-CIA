@@ -1,63 +1,66 @@
 import * as React from 'react';
-import {
-    Form,
-    FormGroup,
-    FormControl
-} from 'react-bootstrap';
+import {Form, FormControl, FormGroup} from 'react-bootstrap';
 import {getTokenHeader} from '../utilities/request-helper';
 import Message from '../message';
+import {currentUserId} from '../utilities/user-helper';
+
+const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 
 export default class EditProfilePicture extends React.Component {
     constructor () {
         super();
 
         this.state = {
-            message: { message: '', type: 'danger' }
+            file: '',
+            message: {}
         };
 
-        // TODO: should this be state?
-        this.file = null;
-
-        this.handleClick = this.handleClick.bind(this);
-        this.handlePictureUpdate = this.handlePictureUpdate.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
     }
 
     render () {
         return (
-            <div className='overlay-action' onClick={this.handleClick}>
+            <React.Fragment>
+                <div className='overlay'>
+                    <div className='overlay-action' onClick={this.onClick}>
+                        <p> Change Profile Picture </p>
+                        <Form encType='multipart/form-data'>
+                            <FormGroup hidden>
+                                <FormControl id='selectFile'
+                                    accept='image/png, image/jpeg'
+                                    type='file'
+                                    name='file'
+                                    value={this.state.file}
+                                    onChange={this.onUpdate} />
+                            </FormGroup>
+                        </Form>
+                    </div>
+                </div>
                 <Message message={this.state.message} />
-                <p> Change Profile Picture </p>
-                <Form encType='multipart/form-data'>
-                    <FormGroup hidden>
-                        <FormControl id='selectFile'
-                            accept='image/png, image/jpeg'
-                            type='file'
-                            name='file'
-                            inputRef={file => { this.file = file; }}
-                            onChange={this.handlePictureUpdate} />
-                    </FormGroup>
-                </Form>
-            </div>
+            </React.Fragment>
         );
     }
 
-    handleClick() {
-    // TODO: what?
+    onClick() {
+        // The best way of triggering the file dialog programmatically is to simulate a 'click'
         document.getElementById('selectFile').click();
     }
 
-    handlePictureUpdate(event) {
+    onUpdate(event) {
         event.preventDefault();
-        if (!this.isPictureValid(this.file)) {
+
+        const file = event.target.files[0];
+
+        if (!this.validatePicture(file)) {
             return;
         }
 
-        const userId = window.localStorage.getItem('UserId');
-        let formData = new FormData();
-        formData.append('file', this.file.files[0]);
+        const formData = new FormData();
+        formData.append('file', file);
 
         // Not JSON, so don't use the API request helpers
-        fetch('v1/api/pictures', {
+        fetch('v1/api/pictures/' + currentUserId(), {
             method: 'PUT',
             headers: { 'Authorization': getTokenHeader() },
             body: formData
@@ -68,9 +71,7 @@ export default class EditProfilePicture extends React.Component {
                 }
             })
             .then(() => {
-                this.setState({
-                    image: this.file.value
-                });
+                this.props.onSuccess();
             })
             .catch(error => {
                 this.setState({
@@ -79,16 +80,12 @@ export default class EditProfilePicture extends React.Component {
             });
     }
 
-    isPictureValid (file) {
+    validatePicture(file) {
         if (!file) {
-            this.setState(
-                { message: { message: 'Select a file before submission', type: 'warning' } }
-            );
+            this.setState({ message: { message: 'Select a file before submission', type: 'warning' } });
             return false;
-        } else if (this.file.size > 1024 * 1024) {
-            this.setState(
-                { message: { message: 'File must be less than 1MB', type: 'warning' } }
-            );
+        } else if (file.size > MAX_FILE_SIZE) {
+            this.setState({ message: { message: 'File must be less than 1MB', type: 'warning' } });
             return false;
         }
         return true;

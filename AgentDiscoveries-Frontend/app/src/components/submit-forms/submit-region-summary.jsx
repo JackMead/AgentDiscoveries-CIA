@@ -1,70 +1,68 @@
 import * as React from 'react';
 import {Button, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
 
-import Message from '../message';
-import {apiFormCreate, apiGet} from '../utilities/request-helper';
+import {Messages} from '../message';
+import {apiGet, apiPost} from '../utilities/request-helper';
 
 export default class RegionSummarySubmit extends React.Component {
     constructor() {
         super();
+
         this.state = {
             regions: [],
-            message: { message: '', type: 'danger' }
+
+            regionId: '',
+            status: '',
+            reportBody: '',
+
+            messages: []
         };
 
-        this.submitForm = {};
-
+        this.onRegionChange = this.onRegionChange.bind(this);
+        this.onStatusChange = this.onStatusChange.bind(this);
+        this.onReportBodyChange = this.onReportBodyChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.getRegionOptions = this.getRegionOptions.bind(this);
     }
 
     componentWillMount() {
         apiGet('regions')
-            .then(results =>
-                this.setState({
-                    regions: results
-                })
-            )
-            .catch(error => {
-                // TODO: handle errors properly?
-                console.log(error);
-            });
+            .then(results => this.setState({ regions: results }))
+            .catch(() => this.addMessage('Error fetching regions, please try again later', 'danger'));
     }
 
     render() {
         return (
             <div>
                 <Form className='col-md-8 col-md-offset-2' onSubmit={this.onSubmit}>
-
                     <h3>Submit Region Summary</h3>
-                    <Message message={this.state.message}/>
+
+                    <Messages messages={this.state.messages}/>
+
                     <FormGroup>
                         <ControlLabel>Region</ControlLabel>
                         <FormControl componentClass='select' required
-                            inputRef={regionId => {
-                                this.submitForm.regionId = regionId;
-                            }}
-                            placeholder='enter region ID'>
-                            {this.getRegionOptions()}
+                            value={this.state.regionId}
+                            onChange={this.onRegionChange}>
+                            <option value='' hidden>Choose a region</option>
+                            {this.state.regions.map(region =>
+                                <option key={region.regionId} value={region.regionId}>{region.name}</option>)}
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type='number' required
-                            inputRef={status => {
-                                this.submitForm.status = status;
-                            }}
-                            placeholder='enter status (numeric)'
+                            placeholder='Enter numeric status code'
+                            value={this.state.status}
+                            onChange={this.onStatusChange}
                             id="status-input"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Summary</ControlLabel>
                         <FormControl type='text' required
                             componentClass='textarea' rows={6}
-                            inputRef={reportBody => {
-                                this.submitForm.reportBody = reportBody;
-                            }}
-                            placeholder='write region summary'
+                            placeholder='Write region summary'
+                            value={this.state.reportBody}
+                            onChange={this.onReportBodyChange}
                             id="report-input"/>
                     </FormGroup>
                     <Button type='submit' id="submit-report">Submit</Button>
@@ -73,24 +71,36 @@ export default class RegionSummarySubmit extends React.Component {
         );
     }
 
+    onRegionChange(event) {
+        this.setState({ regionId: parseInt(event.target.value) });
+    }
+
+    onStatusChange(event) {
+        this.setState({ status: parseInt(event.target.value) });
+    }
+
+    onReportBodyChange(event) {
+        this.setState({ reportBody: event.target.value });
+    }
+
     onSubmit(event) {
         event.preventDefault();
 
-        // TODO: this seems extremely suspect
-        this.submitForm.reportTime = new Date().toJSON();
+        const body = {
+            regionId: this.state.regionId,
+            status: this.state.status,
+            reportBody: this.state.reportBody,
+            reportTime: new Date().toJSON() // TODO: do this server-side?
+        };
 
-        apiFormCreate('reports/regionsummaries', this.submitForm)
-            .then(response => {
-                this.setState({message: {message: 'Report sent', type: 'info'}});
-            })
-            .catch(error => {
-                this.setState({message: {message: error.message, type: 'danger'}});
-            });
+        apiPost('reports/regionsummaries', body)
+            .then(() => this.addMessage('Report submitted', 'info'))
+            .catch(() => this.addMessage('Error submitting report, please try again later', 'danger'));
     }
 
-    getRegionOptions() {
-        // TODO: why is this an object not an array?
-        return Object.values(this.state.regions).map(region =>
-            <option key={region.regionId} value={region.regionId}>{region.name}</option>);
+    addMessage(message, type) {
+        this.setState(oldState => {
+            return { messages: [...oldState.messages, { message: message, type: type }] };
+        });
     }
 }

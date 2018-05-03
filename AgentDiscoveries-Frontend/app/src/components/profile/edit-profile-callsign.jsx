@@ -1,34 +1,36 @@
 import * as React from 'react';
 import {Button, ButtonGroup, Form, FormControl, FormGroup} from 'react-bootstrap';
-import {apiGet, apiPut} from '../utilities/request-helper';
+import {apiPut} from '../utilities/request-helper';
+import {currentUserId} from '../utilities/user-helper';
+import Message from '../message';
 
-// TODO: should newCallSign be state?
 export default class EditProfileCallSign extends React.Component {
     constructor () {
         super();
 
         this.state = {
-            agent: {}
+            callSign: '',
+            message: {}
         };
 
-        this.handleCallSignUpdate = this.handleCallSignUpdate.bind(this);
-        this.getAgent = this.getAgent.bind(this);
-    }
-
-    componentWillMount () {
-        this.getAgent();
+        this.onChange = this.onChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     render () {
         return (
             <div className='col-md-8 col-md-offset-2'>
-                <Form onSubmit={this.handleCallSignUpdate}>
+                <Form onSubmit={this.handleSubmit}>
 
                     <h3>Change Call Sign</h3>
 
+                    <Message message={this.state.message}/>
+
                     <FormGroup>
-                        <FormControl type='text' inputRef={callSign => { this.newCallSign = callSign; }}
-                            placeholder='enter your call sign' />
+                        <FormControl type='text'
+                            placeholder='Enter your new call sign'
+                            value={this.state.callSign}
+                            onChange={this.onChange}/>
                     </FormGroup>
                     <ButtonGroup>
                         <Button type='submit'>Submit</Button>
@@ -38,30 +40,16 @@ export default class EditProfileCallSign extends React.Component {
         );
     }
 
-    handleCallSignUpdate (event) {
-        event.preventDefault();
-
-        const userId = window.localStorage.getItem('UserId');
-        const body = { callSign: this.newCallSign.value };
-        apiPut('agents', body, userId)
-            .then(response => {
-                window.location.hash = '/profile';
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    onChange(event) {
+        this.setState({ callSign: event.target.value });
     }
 
-    getAgent () {
-        const userId = window.localStorage.getItem('UserId');
-        apiGet('agents', userId)
-            .then(response => {
-                this.setState({
-                    agent: response
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    handleSubmit(event) {
+        event.preventDefault();
+
+        const body = { callSign: this.state.callSign };
+        apiPut('agents', body, currentUserId())
+            .then(() => { window.location.hash = '/profile'; })
+            .catch(() => this.setState({ message: { message: 'Could not update Call Sign, please try again later', type: 'danger'} }));
     }
 }

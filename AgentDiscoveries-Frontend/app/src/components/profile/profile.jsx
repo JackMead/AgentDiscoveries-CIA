@@ -4,31 +4,26 @@ import {Link} from 'react-router-dom';
 import {apiGet} from '../utilities/request-helper';
 import AgentInfo from './agent-info';
 import EditProfilePicture from './edit-profile-picture';
+import placeholderPicture from '../../../static/placeholder.jpg';
+import {currentUserId} from '../utilities/user-helper';
 
 export default class Profile extends React.Component {
     constructor () {
         super();
 
         this.state = {
-            // TODO: hotlinking?!
-            imgSrc: 'http://clipground.com/images/placeholder-clipart-5.jpg',
+            imgSrc: placeholderPicture,
             user: {},
             agent: {}
         };
 
-        this.getProfilePictureSource = this.getProfilePictureSource.bind(this);
-        this.getUser = this.getUser.bind(this);
-        this.getAgent = this.getAgent.bind(this);
+        this.getProfilePicture = this.getProfilePicture.bind(this);
     }
 
     componentWillMount () {
-        this.getProfilePictureSource();
+        this.getProfilePicture();
         this.getUser();
         this.getAgent();
-    }
-
-    componentWillReceiveProps () {
-        this.getProfilePictureSource();
     }
 
     render () {
@@ -40,57 +35,36 @@ export default class Profile extends React.Component {
                     {this.state.agent ? <AgentInfo agent={this.state.agent} /> : ''}
                     <Link to='/profile/edit/callsign'>
                         <Button type='button'>
-              Change Call Sign
+                            Change Call Sign
                         </Button>
                     </Link>
                 </div>
 
                 <div className='profile-img-container col-md-6'>
                     <Image className='img' src={this.state.imgSrc} />
-                    <div className='overlay'>
-                        <EditProfilePicture />
-                    </div>
+                    <EditProfilePicture onSuccess={this.getProfilePicture}/>
                 </div>
-
             </div>
         );
     }
 
-    getProfilePictureSource () {
-        const userId = window.localStorage.getItem('UserId');
-        apiGet('pictures', userId)
-            .then(response =>
-                response.blob())
-            .then(blob =>
-                this.setState({imgSrc: URL.createObjectURL(blob)}))
-            .catch(error =>
-                console.log(error));
+    // TODO: Error handling here and below
+    getProfilePicture() {
+        apiGet('pictures', currentUserId())
+            .then(response => response.blob())
+            .then(blob => this.setState({imgSrc: URL.createObjectURL(blob)}))
+            .catch(error => console.error(error));
     }
 
-    getUser () {
-        const userId = window.localStorage.getItem('UserId');
-        apiGet('users', userId)
-            .then(response => {
-                this.setState({
-                    user: response
-                });
-                this.getAgent();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    getUser() {
+        apiGet('users', currentUserId())
+            .then(user => this.setState({ user: user }))
+            .catch(error => console.log(error));
     }
 
-    getAgent () {
-        const userId = window.localStorage.getItem('UserId');
-        apiGet('agents', userId)
-            .then(response => {
-                this.setState({
-                    agent: response
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    getAgent() {
+        apiGet('agents', currentUserId())
+            .then(agent => this.setState({ agent: agent }))
+            .catch(error => console.error(error));
     }
 }

@@ -7,7 +7,7 @@ import {
     MenuItem
 } from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import {logOut, isLoggedIn, isAdmin} from './user/user-utilities';
+import {clearUserInfo, isLoggedIn, isAdmin} from './utilities/user-helper';
 import logo from '../../static/agent.png';
 
 export default class NavigationBar extends React.Component {
@@ -54,7 +54,7 @@ export default class NavigationBar extends React.Component {
     handleLogOut(event) {
         event.preventDefault();
 
-        logOut();
+        clearUserInfo();
         window.dispatchEvent(new CustomEvent('login'));
         window.location.hash = '#/';
     }

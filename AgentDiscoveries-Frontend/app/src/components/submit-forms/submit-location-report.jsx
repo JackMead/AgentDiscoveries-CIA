@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Button, Checkbox, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
-import {apiFormCreate, apiGet} from '../utilities/request-helper';
-import Message from '../message';
+import {apiGet, apiPost} from '../utilities/request-helper';
+import {Messages} from '../message';
 
 
 export default class LocationReportSubmit extends React.Component {
@@ -10,26 +10,26 @@ export default class LocationReportSubmit extends React.Component {
 
         this.state = {
             locations: [],
-            serverMessage: { message: '', type: 'danger' },
-            apiMessage: { message: '', type: 'danger' }
+
+            locationId: '',
+            status: '',
+            reportBody: '',
+            sendExternal: false,
+
+            messages: []
         };
 
-        this.submitForm = {};
+        this.onLocationChange = this.onLocationChange.bind(this);
+        this.onStatusChange = this.onStatusChange.bind(this);
+        this.onReportBodyChange = this.onReportBodyChange.bind(this);
+        this.onExternalChange = this.onExternalChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.getLocationOptions = this.getLocationOptions.bind(this);
     }
 
     componentWillMount() {
         apiGet('locations')
-            .then(results => {
-                this.setState(
-                    { locations: results }
-                );
-            })
-            .catch(error => {
-                // TODO: handle error properly?
-                console.log(error);
-            });
+            .then(results => this.setState({ locations: results }))
+            .catch(() => this.addMessage('Error fetching locations, please try again later', 'danger'));
     }
 
     render() {
@@ -38,44 +38,40 @@ export default class LocationReportSubmit extends React.Component {
                 <Form onSubmit={this.onSubmit}>
                     <h3>Submit Location Report</h3>
 
-                    <Message message={this.state.serverMessage}/>
-                    <Message message={this.state.apiMessage}/>
+                    <Messages messages={this.state.messages}/>
 
                     <FormGroup>
                         <ControlLabel>Location</ControlLabel>
                         <FormControl componentClass='select' required
-                            inputRef={location => {
-                                this.submitForm.locationId = location;
-                            }}
-                            placeholder='enter location ID'>
-                            {this.getLocationOptions()}
+                            value={this.state.locationId}
+                            onChange={this.onLocationChange}>
+                            <option value='' hidden>Choose a location</option>
+                            {this.state.locations.map(location =>
+                                <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>)}
                         </FormControl>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type='number' required
-                            inputRef={status => {
-                                this.submitForm.status = status;
-                            }}
-                            placeholder='enter status (numeric)'
+                            placeholder='Enter numeric status code'
+                            value={this.state.status}
+                            onChange={this.onStatusChange}
                             id="status-input"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Report</ControlLabel>
                         <FormControl type='text' required
                             componentClass='textarea' rows={6}
-                            inputRef={reportBody => {
-                                this.submitForm.reportBody = reportBody;
-                            }}
-                            placeholder='write report'
+                            placeholder='Write report'
+                            value={this.state.reportBody}
+                            onChange={this.onReportBodyChange}
                             id="report-input"/>
                     </FormGroup>
                     <FormGroup>
                         <Checkbox type='checkbox'
-                            inputRef={sendExternal => {
-                                this.submitForm.sendExternal = sendExternal;
-                            }}>
-                Send to external partner
+                            value={this.state.sendExternal}
+                            onChange={this.onExternalChange}>
+                            Send to external partner
                         </Checkbox>
                     </FormGroup>
                     <Button type='submit' id="submit-report">Submit</Button>
@@ -84,33 +80,50 @@ export default class LocationReportSubmit extends React.Component {
         );
     }
 
+    onLocationChange(event) {
+        this.setState({ locationId: parseInt(event.target.value) });
+    }
+
+    onStatusChange(event) {
+        this.setState({ status: parseInt(event.target.value) });
+    }
+
+    onReportBodyChange(event) {
+        this.setState({ reportBody: event.target.value });
+    }
+
+    onExternalChange(event) {
+        this.setState({ sendExternal: event.target.checked });
+    }
+
     onSubmit(event) {
         event.preventDefault();
 
-        // TODO: this seems extremely suspect
-        this.submitForm.reportTime = new Date().toJSON();
+        this.setState({ messages: [] });
 
-        apiFormCreate('reports/locationstatuses', this.submitForm)
-            .then(response => {
-                this.setState({serverMessage: {message: 'Report filed', type: 'info'}});
-            })
-            .catch(error => {
-                this.setState({serverMessage: {message: error.message, type: 'danger'}});
-            });
+        const body = {
+            locationId: this.state.locationId,
+            status: this.state.status,
+            reportBody: this.state.reportBody,
+            sendExternal: this.state.sendExternal,
+            reportTime: new Date().toJSON() // TODO: do this server-side?
+        };
 
-        if (this.submitForm.sendExternal.checked) {
-            apiFormCreate('external/reports', this.submitForm)
-                .then(response => {
-                    this.setState({apiMessage: {message: 'External partner received report', type: 'info'}});
-                })
-                .catch(error => {
-                    this.setState({apiMessage: {message: error.message, type: 'danger'}});
-                });
+        apiPost('reports/locationstatuses', body)
+            .then(() => this.addMessage('Report submitted', 'info'))
+            .catch(() => this.addMessage('Error submitting report, please try again later', 'danger'));
+
+        // TODO: do this server-side?
+        if (this.state.sendExternal) {
+            apiPost('external/reports', body)
+                .then(() => this.addMessage('Report submitted to external partner', 'info'))
+                .catch(() => this.addMessage('Error submitting report externally, please try again later', 'danger'));
         }
     }
 
-    getLocationOptions() {
-        return Object.values(this.state.locations).map(location =>
-            <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>);
+    addMessage(message, type) {
+        this.setState(oldState => {
+            return { messages: [...oldState.messages, { message: message, type: type }] };
+        });
     }
 }
