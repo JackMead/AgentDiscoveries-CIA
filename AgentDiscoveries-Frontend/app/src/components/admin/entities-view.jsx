@@ -10,97 +10,68 @@ export default class Entities extends React.Component {
         super(props);
 
         this.state = {
-            api: props.api,
-            entities: {
-                locations: [],
-                regions: [],
-                agents: [],
-                users: []
-            }
+            entities: []
         };
-
-        this.submitForm = {};
-
-        this.updateEntities = this.updateEntities.bind(this);
-        this.getTable = this.getTable.bind(this);
-        this.getTableHeader = this.getTableHeader.bind(this);
-        this.getTableBody = this.getTableBody.bind(this);
     }
 
-    componentWillMount () {
-        this.updateEntities();
+    componentDidMount() {
+        this.loadEntities();
     }
 
-    // TODO: what is going on here
-    componentWillReceiveProps (props) {
-        this.setState({
-            api: props.api
-        });
-        this.updateEntities();
-    }
-
-    render () {
+    render() {
         return (
             <div className='col-md-8 col-md-offset-2'>
-                <h3>{this.state.api}</h3>
-                <Link to={`/admin/${this.state.api}/add`}>
+                <h3>{this.props.api}</h3>
+                <Link to={`/admin/${this.props.api}/add`}>
                     <Button type='button'>
-                        {`Add ${this.state.api}`}
+                        {`Add ${this.props.api}`}
                     </Button>
                 </Link>
-                {this.getTable()}
+                {this.renderTable()}
             </div>
         );
     }
 
-    getTable () {
-        if (this.state.entities[this.state.api].length > 0) {
+    renderTable () {
+        if (this.state.entities.length > 0) {
             return (
-                <Table key='{this.state.api}-table' striped >
-                    {this.getTableHeader()}
-                    {this.getTableBody()}
+                <Table key={this.props.api + '-table'} striped >
+                    {this.renderTableHeader()}
+                    {this.renderTableBody()}
                 </Table>
             );
         }
     }
 
-    getTableHeader () {
-        let entity = this.state.entities[this.state.api][0];
+    renderTableHeader() {
+        // Only rendering the table if there is an entity.
+        // In this case, use the first to extract the header labels
+        const entity = this.state.entities[0];
         return (
             <thead>
                 <tr>
-                    {Object.keys(entity).map(key => {
-                        return <th key={key}>{key}</th>;
-                    })}
+                    {Object.keys(entity).map(key => <th key={key}>{key}</th>)}
                 </tr>
             </thead>
         );
     }
 
-    getTableBody () {
-        let entities = this.state.entities[this.state.api];
+    renderTableBody() {
         return (
             <tbody>
-                {Object.values(entities).map(val => {
-                    return <Entity key={Object.values(val)[0]} entity={val} type={this.state.api} />;
+                {this.state.entities.map(entity => {
+                    // Assume the first property is the ID, or at least unique enough to use as a key.
+                    const id = Object.values(entity)[0];
+                    return <Entity key={id} entity={entity} type={this.props.api} />;
                 })}
             </tbody>
         );
     }
 
-    updateEntities () {
-        Object.keys(this.state.entities).forEach((api) => {
-            apiGet(api)
-                .then(results => {
-                    const entities = this.state.entities;
-                    entities[api] = results;
-                    this.setState({
-                        entities: entities
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        });
+    loadEntities() {
+        apiGet(this.props.api)
+            .then(results => this.setState({ entities: results }))
+            // TODO: error handling
+            .catch(error => console.log(error));
     }
 }

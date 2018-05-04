@@ -1,23 +1,14 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 
+// TODO: This does not render very nicely - probably want to be less generic
 export default class Entity extends React.Component {
     constructor (props) {
         super();
 
-        this.id = Object.values(props.entity)[0]; // TODO: this assumes that id is the first JSON value
-
-        this.getEntityRow = this.getEntityRow.bind(this);
-        this.getEditButton = this.getEditButton.bind(this);
-    }
-
-    componentWillReceiveProps(props) {
-        this.setState({
-            type: props.type,
-            id: Object.values(props.entity)[0], // this assumes that id is the first JSON value
-            entity: props.entity
-        });
+        // TODO: this assumes that id is the first JSON value
+        this.id = Object.values(props.entity)[0];
     }
 
     render() {
@@ -37,10 +28,9 @@ export default class Entity extends React.Component {
     }
 
     getEditButton() {
-    // TODO: shouldn't use reserved words as properties
         if (this.props.type !== 'regions') {
             return (
-                <Link to={`/admin/${this.state.type}/edit/${this.id}`}>
+                <Link to={`/admin/${this.props.type}/edit/${this.id}`}>
                     <Button type='button'>Edit</Button>
                 </Link>
             );

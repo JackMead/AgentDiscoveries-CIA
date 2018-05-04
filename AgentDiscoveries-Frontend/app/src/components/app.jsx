@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-    HashRouter as Router,
-    Route,
-    Switch
-} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
 import Login from './user/login';
 import Home from './home';
@@ -16,10 +12,11 @@ import LocationReportSearch from './search-forms/search-location-reports';
 import RegionSummarySearch from './search-forms/search-region-summaries';
 import LocationReportSubmit from './submit-forms/submit-location-report';
 import RegionSummarySubmit from './submit-forms/submit-region-summary';
-import AddEntity from './admin/add-entity';
-import EditEntity from './admin/edit-entity';
 import Entities from './admin/entities-view';
 import TodaysCodePage from './todays-code-page';
+import LocationForm from './admin/location-form';
+import RegionForm from './admin/region-form';
+import UserForm from './admin/user-form';
 
 export default class App extends React.Component {
     render () {
@@ -34,16 +31,16 @@ export default class App extends React.Component {
                         <Route path='/submit/location' render={() => <Page><LocationReportSubmit /></Page>} />
                         <Route path='/submit/region' render={() => <Page><RegionSummarySubmit /></Page>} />
 
-                        <Route path='/admin/locations' exact render={() => <Page><Entities api='locations' /></Page>} />
-                        <Route path='/admin/regions' exact render={() => <Page><Entities api='regions' /></Page>} />
-                        <Route path='/admin/users' exact render={() => <Page><Entities api='users' /></Page>} />
+                        <Route path='/admin/locations' exact render={() => <Page><Entities api='locations' key='locations'/></Page>} />
+                        <Route path='/admin/regions' exact render={() => <Page><Entities api='regions' key='regions'/></Page>} />
+                        <Route path='/admin/users' exact render={() => <Page><Entities api='users' key='users'/></Page>} />
 
-                        <Route path='/admin/locations/add' render={() => <Page><AddEntity api='locations' /></Page>} />
-                        <Route path='/admin/regions/add' render={() => <Page><AddEntity api='regions' /></Page>} />
-                        <Route path='/admin/users/add' render={() => <Page><AddEntity api='users' /></Page>} />
+                        <Route path='/admin/locations/add' render={() => <Page><LocationForm/></Page>} />
+                        <Route path='/admin/regions/add' render={() => <Page><RegionForm/></Page>} />
+                        <Route path='/admin/users/add' render={() => <Page><UserForm/></Page>} />
 
-                        <Route path='/admin/locations/edit/:id' render={(props) => <Page><EditEntity api='locations' {...props} /></Page>} />
-                        <Route path='/admin/users/edit/:id' render={(props) => <Page><EditEntity api='users' {...props} /></Page>} />
+                        <Route path='/admin/locations/edit/:id' render={props => <Page><LocationForm id={props.match.id} /></Page>} />
+                        <Route path='/admin/users/edit/:id' render={props => <Page><RegionForm id={props.match.id} /></Page>} />
 
                         <Route path='/message' render={() => <Page><TodaysCodePage /></Page>} />
                         <Route path='/profile' exact render={() => <Page><Profile /></Page>} />
