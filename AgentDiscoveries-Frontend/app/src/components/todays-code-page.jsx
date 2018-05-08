@@ -3,8 +3,8 @@ import {Button, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstra
 import {apiPost} from './utilities/request-helper';
 
 export default class TodaysCodePage extends React.Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             message: '',

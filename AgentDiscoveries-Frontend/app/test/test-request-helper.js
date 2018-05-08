@@ -1,59 +1,16 @@
 import {expect} from 'chai';
-import {getTokenHeader, prepareForm} from '../src/components/utilities/request-helper';
+import {getTokenHeader} from '../src/components/utilities/request-helper';
+import * as UserHelper from '../src/components/utilities/user-helper';
 
 describe('request helper', () => {
     it('should use users token as authorisation', () => {
-        window.localStorage.setItem('Token', 'myToken');
-        const expectedTokenHeader = 'Bearer myToken';
+        const token = 'myToken';
 
-        expect(getTokenHeader()).to.equal(expectedTokenHeader);
-    });
+        UserHelper.storeUserInfo({
+            userId: 123,
+            token: token
+        });
 
-    it('should reduce non-location data to JSON form', () => {
-        const aValue = 'some value';
-        const submitForm = { notLocation: { value: aValue } };
-
-        expect(prepareForm(submitForm)).to.deep.equal({ notLocation: aValue });
-    });
-
-    it('should separate locations into series of integers', () => {
-        const aValue = '10 2 14';
-        const submitForm = { locations: { value: aValue } };
-
-        expect(prepareForm(submitForm)).to.deep.equal({ locations: [10, 2, 14] });
-    });
-
-    it('should be able to combine locations with non-locations', () => {
-        const submitForm = {
-            notLocation: { value: 'someValue' },
-            name: { value: 'myName' },
-            locations: { value: '17 12 41 1' },
-            status: { value: '' }
-        };
-
-        const expectedResponse = {
-            notLocation: 'someValue',
-            name: 'myName',
-            locations: [17,12,41,1],
-            status: ''
-        };
-
-        expect(prepareForm(submitForm)).to.deep.equal(expectedResponse);
-    });
-
-    it('should add timezone identifier Z to `toTime` and `fromTime` keys, and add one to the day for `toTime`', () => {
-        const searchForm = {
-            fromTime: { value: [2000, 12, 1] },
-            toTime: { value: [2000, 12, 1] },
-            notTime: { value: [2000, 12, 1] }
-        };
-
-        const expectedResponse = {
-            fromTime: '2000-12-01T00:00:00Z',
-            toTime: '2000-12-02T00:00:00Z',
-            notTime: [2000, 12, 1]
-        };
-
-        expect(prepareForm(searchForm)).to.deep.equal(expectedResponse);
+        expect(getTokenHeader()).to.equal(`Bearer ${token}`);
     });
 });

@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 public class ToTimeApiLocationStatusSearchCriterion extends ApiReportSearchCriterionBase<LocationStatusReportWithTimeZone> {
 
     public ToTimeApiLocationStatusSearchCriterion(ZonedDateTime fromTime) {
+        // TODO: This is kinda mad
         // Use a DAO search criterion with the largest possible local time to reduce number of results filtered in code
         super(
             new ToTimeSearchCriterion(fromTime.withZoneSameInstant(ZoneOffset.MAX).toLocalDateTime()),

@@ -7,8 +7,8 @@ import {currentUserId} from '../utilities/user-helper';
 const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 
 export default class EditProfilePicture extends React.Component {
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
 
         this.state = {
             file: '',

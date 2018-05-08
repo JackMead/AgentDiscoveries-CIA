@@ -18,37 +18,37 @@ export default class AdminForm extends React.Component {
                 <FormGroup>
                     <ControlLabel>First Name</ControlLabel>
                     <FormControl type='text' required
-                                 placeholder='Enter first name'
-                                 value={this.props.agent.firstName}
-                                 onChange={this.onFirstNameUpdate}/>
+                        placeholder='Enter first name'
+                        value={this.props.agent.firstName}
+                        onChange={this.onFirstNameUpdate}/>
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Last Name</ControlLabel>
                     <FormControl type='text' required
-                                 placeholder='Enter last name'
-                                 value={this.props.agent.lastName}
-                                 onChange={this.onLastNameUpdate}/>
+                        placeholder='Enter last name'
+                        value={this.props.agent.lastName}
+                        onChange={this.onLastNameUpdate}/>
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Date Of Birth</ControlLabel>
                     <FormControl type='date' required
-                                 placeholder='Enter date of birth'
-                                 value={this.props.agent.dateOfBirth}
-                                 onChange={this.onDateOfBirthUpdate}/>
+                        placeholder='Enter date of birth'
+                        value={this.props.agent.dateOfBirth}
+                        onChange={this.onDateOfBirthUpdate}/>
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Rank</ControlLabel>
                     <FormControl type='number' required
-                                 placeholder='Enter numeric rank'
-                                 value={this.props.agent.rank}
-                                 onChange={this.onRankUpdate}/>
+                        placeholder='Enter numeric rank'
+                        value={this.props.agent.rank}
+                        onChange={this.onRankUpdate}/>
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>Call Sign</ControlLabel>
                     <FormControl type='text' required
-                                 placeholder='Enter call sign'
-                                 value={this.props.agent.callSign}
-                                 onChange={this.onCallSignUpdate}/>
+                        placeholder='Enter call sign'
+                        value={this.props.agent.callSign}
+                        onChange={this.onCallSignUpdate}/>
                 </FormGroup>
             </div>
         );

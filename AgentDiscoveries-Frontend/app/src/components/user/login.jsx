@@ -4,8 +4,8 @@ import Message from '../message';
 import * as UserHelper from '../utilities/user-helper';
 
 export default class Login extends React.Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             username: '',
@@ -83,7 +83,8 @@ export default class Login extends React.Component {
             })
             .then(response => {
                 UserHelper.storeUserInfo(response);
-                // TODO: What is this event used for?
+
+                // The nav bar listens for this event and updates accordingly
                 window.dispatchEvent(new Event('login'));
                 window.location.hash = '#/';
             })

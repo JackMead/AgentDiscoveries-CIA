@@ -1,9 +1,5 @@
 package org.softwire.training.models;
 
-import spark.utils.StringUtils;
-
-import java.sql.Blob;
-
 public class User {
 
     private int userId;

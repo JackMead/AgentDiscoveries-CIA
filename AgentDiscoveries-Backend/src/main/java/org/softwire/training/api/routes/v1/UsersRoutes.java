@@ -6,9 +6,7 @@ import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.UserApiModel;
-import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.UsersDao;
-import org.softwire.training.models.Agent;
 import org.softwire.training.models.User;
 import spark.Request;
 import spark.Response;
@@ -16,21 +14,19 @@ import spark.utils.StringUtils;
 
 import javax.inject.Inject;
 import java.util.List;
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 public class UsersRoutes implements EntityCRUDRoutes {
 
     private final UsersDao usersDao;
-    private final AgentsDao agentsDao;
     private final PasswordHasher passwordHasher;
     private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public UsersRoutes(UsersDao usersDao, AgentsDao agentsDao, PasswordHasher passwordHasher, PermissionsVerifier permissionsVerifier) {
+    public UsersRoutes(UsersDao usersDao, PasswordHasher passwordHasher, PermissionsVerifier permissionsVerifier) {
         this.usersDao = usersDao;
-        this.agentsDao = agentsDao;
         this.passwordHasher = passwordHasher;
         this.permissionsVerifier = permissionsVerifier;
     }
@@ -68,9 +64,11 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public List<User> readEntities(Request req, Response res) throws FailedRequestException {
+    public List<UserApiModel> readEntities(Request req, Response res) throws FailedRequestException {
         permissionsVerifier.verifyAdminPermission(req);
-        return usersDao.getUsers();
+        return usersDao.getUsers().stream()
+                .map(this::mapModelToApiModel)
+                .collect(toList());
     }
 
     @Override
@@ -94,6 +92,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
         UserApiModel userApiModel = new UserApiModel();
         userApiModel.setUserId(user.getUserId());
         userApiModel.setUsername(user.getUsername());
+        userApiModel.setAdmin(user.isAdmin());
         // Deliberately do not set the password for security reasons
 
         return userApiModel;

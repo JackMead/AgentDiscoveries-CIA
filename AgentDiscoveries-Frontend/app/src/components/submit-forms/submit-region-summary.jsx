@@ -5,8 +5,8 @@ import {Messages} from '../message';
 import {apiGet, apiPost} from '../utilities/request-helper';
 
 export default class RegionSummarySubmit extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             regions: [],
@@ -72,11 +72,11 @@ export default class RegionSummarySubmit extends React.Component {
     }
 
     onRegionChange(event) {
-        this.setState({ regionId: parseInt(event.target.value) });
+        this.setState({ regionId: event.target.value && parseInt(event.target.value) });
     }
 
     onStatusChange(event) {
-        this.setState({ status: parseInt(event.target.value) });
+        this.setState({ status: event.target.value && parseInt(event.target.value) });
     }
 
     onReportBodyChange(event) {
@@ -89,8 +89,7 @@ export default class RegionSummarySubmit extends React.Component {
         const body = {
             regionId: this.state.regionId,
             status: this.state.status,
-            reportBody: this.state.reportBody,
-            reportTime: new Date().toJSON() // TODO: do this server-side?
+            reportBody: this.state.reportBody
         };
 
         apiPost('reports/regionsummaries', body)

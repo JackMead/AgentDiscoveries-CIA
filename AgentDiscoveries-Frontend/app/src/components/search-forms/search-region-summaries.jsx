@@ -7,8 +7,8 @@ import QueryString from 'query-string';
 import {apiGet} from '../utilities/request-helper';
 
 export default class RegionSummariesSearch extends React.Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             regionId: '',
@@ -28,7 +28,7 @@ export default class RegionSummariesSearch extends React.Component {
     }
 
 
-    render () {
+    render() {
         return (
             <div className='col-md-8 col-md-offset-2'>
                 <Form onSubmit={this.onSubmit}>
@@ -53,13 +53,13 @@ export default class RegionSummariesSearch extends React.Component {
                     <FormGroup className='form-inline'>
                         <ControlLabel className='rm-3'>From</ControlLabel>
                         <FormControl className='rm-3' type='date'
-                                     value={this.state.fromTime}
-                                     onChange={this.onFromChange}/>
+                            value={this.state.fromTime}
+                            onChange={this.onFromChange}/>
 
                         <ControlLabel className='rm-3'>To</ControlLabel>
                         <FormControl className='rm-3' type='date'
-                                     value={this.state.toTime}
-                                     onChange={this.onToChange}/>
+                            value={this.state.toTime}
+                            onChange={this.onToChange}/>
                     </FormGroup>
                     <Button type='submit'>Search</Button>
                 </Form>

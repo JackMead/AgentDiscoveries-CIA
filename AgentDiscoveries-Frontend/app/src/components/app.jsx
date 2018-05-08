@@ -19,7 +19,7 @@ import RegionForm from './admin/region-form';
 import UserForm from './admin/user-form';
 
 export default class App extends React.Component {
-    render () {
+    render() {
         return (
             <React.Fragment>
                 <Router>
@@ -39,8 +39,8 @@ export default class App extends React.Component {
                         <Route path='/admin/regions/add' render={() => <Page><RegionForm/></Page>} />
                         <Route path='/admin/users/add' render={() => <Page><UserForm/></Page>} />
 
-                        <Route path='/admin/locations/edit/:id' render={props => <Page><LocationForm id={props.match.id} /></Page>} />
-                        <Route path='/admin/users/edit/:id' render={props => <Page><RegionForm id={props.match.id} /></Page>} />
+                        <Route path='/admin/locations/edit/:id' render={props => <Page><LocationForm id={props.match.params.id} /></Page>} />
+                        <Route path='/admin/users/edit/:id' render={props => <Page><RegionForm id={props.match.params.id} /></Page>} />
 
                         <Route path='/message' render={() => <Page><TodaysCodePage /></Page>} />
                         <Route path='/profile' exact render={() => <Page><Profile /></Page>} />

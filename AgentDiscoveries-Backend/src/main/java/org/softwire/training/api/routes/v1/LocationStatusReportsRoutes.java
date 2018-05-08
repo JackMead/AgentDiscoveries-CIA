@@ -61,10 +61,11 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             if (!location.isPresent()) {
                 throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Location does not exist");
             } else {
-                TimeZone locationTimeZone = TimeZone.getTimeZone(location.get().getTimeZone());
+                ZoneId locationTimeZone = ZoneId.of(location.get().getTimeZone());
 
-                LocalDateTime dateTimeInReportLocation = apiModel.getReportTime()
-                        .withZoneSameInstant(locationTimeZone.toZoneId())
+                // Ignore any supplied report time and use the current instant
+                LocalDateTime dateTimeInReportLocation = Instant.now()
+                        .atZone(locationTimeZone)
                         .toLocalDateTime();
 
                 LocationStatusReport model = new LocationStatusReport();
@@ -96,13 +97,13 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         private LocationStatusReportApiModel mapReportAndTimezoneToApiModel(LocationStatusReport model, String timeZone) {
             LocationStatusReportApiModel apiModel = new LocationStatusReportApiModel();
 
-            TimeZone locationTimeZone = TimeZone.getTimeZone(timeZone);
+            ZoneId locationTimeZone = ZoneId.of(timeZone);
 
             apiModel.setReportId(model.getReportId());
             apiModel.setCallsign(model.getCallSign());
             apiModel.setLocationId(model.getLocationId());
             apiModel.setStatus(model.getStatus());
-            apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone.toZoneId()));
+            apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone));
             apiModel.setReportBody(model.getReportBody());
 
             return apiModel;
@@ -131,7 +132,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             }
 
             if (!isNullOrEmpty(queryMap.get("toTime").value())) {
-                apiReportSearchCriteria.add(new FromTimeApiLocationStatusSearchCriterion(
+                apiReportSearchCriteria.add(new ToTimeApiLocationStatusSearchCriterion(
                         ZonedDateTime.parse(queryMap.get("toTime").value())));
             }
 

@@ -44,16 +44,6 @@ export function apiDelete(apiPath, id) {
     return apiRequest(path, 'DELETE');
 }
 
-// Form-specific API request methods
-
-export function apiFormCreate(apiPath, form) {
-    return apiPost(apiPath, prepareForm(form));
-}
-
-export function apiFormUpdate(apiPath, form, id) {
-    return apiPut(apiPath, prepareForm(form), id);
-}
-
 // Helper Functions for headers
 
 export function getTokenHeader() {
@@ -66,30 +56,4 @@ function getHeaders() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     };
-}
-
-// Helper functions for forms
-
-export function prepareForm(form) {
-    const result = {};
-
-    Object.keys(form).forEach(key => {
-        if (form[key]) {
-            const value = form[key].type === 'checkbox'
-                ? form[key].checked
-                : form[key].value;
-
-            result[key] = transformFormProperty(key, value);
-        }
-    });
-    return result;
-}
-
-function transformFormProperty(key, value) {
-    switch (key) {
-        case 'locations':
-            return value.split(/\s/).map(item => parseInt(item, 10));
-        default:
-            return value;
-    }
 }

@@ -4,8 +4,8 @@ import {apiGet, apiPost, apiPut} from '../utilities/request-helper';
 import Message from '../message';
 
 export default class RegionForm extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             name: '',
@@ -30,7 +30,7 @@ export default class RegionForm extends React.Component {
                 <Message message={this.state.message} />
                 <div className='col-md-12'>
                     <Form onSubmit={this.onSubmit}>
-                        <h3>Create Region</h3>
+                        <h3>{this.props.id ? 'Edit' : 'Create'} Region</h3>
 
                         <FormGroup>
                             <ControlLabel>Region Name</ControlLabel>
@@ -82,7 +82,7 @@ export default class RegionForm extends React.Component {
 
     loadRegion(id) {
         apiGet('regions', id)
-            .then(this.setState(result))
+            .then(result => this.setState(result))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 }

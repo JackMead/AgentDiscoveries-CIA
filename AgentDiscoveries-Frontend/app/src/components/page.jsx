@@ -3,7 +3,7 @@ import * as React from 'react';
 import NavigationBar from './nav';
 
 export default class Page extends React.Component {
-    render () {
+    render() {
         return (
             <React.Fragment>
                 <NavigationBar />

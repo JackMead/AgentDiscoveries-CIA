@@ -5,7 +5,7 @@ import Link from 'react-router-dom/Link';
 // TODO: This does not render very nicely - probably want to be less generic
 export default class Entity extends React.Component {
     constructor (props) {
-        super();
+        super(props);
 
         // TODO: this assumes that id is the first JSON value
         this.id = Object.values(props.entity)[0];
@@ -24,7 +24,7 @@ export default class Entity extends React.Component {
 
     getEntityRow() {
         return Object.keys(this.props.entity).map(key =>
-            <td key={key}>{this.props.entity[key]}</td>);
+            <td key={key}>{this.props.entity[key].toString()}</td>);
     }
 
     getEditButton() {

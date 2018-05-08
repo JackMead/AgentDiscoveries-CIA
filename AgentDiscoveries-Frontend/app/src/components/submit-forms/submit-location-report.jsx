@@ -5,8 +5,8 @@ import {Messages} from '../message';
 
 
 export default class LocationReportSubmit extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             locations: [],
@@ -81,11 +81,11 @@ export default class LocationReportSubmit extends React.Component {
     }
 
     onLocationChange(event) {
-        this.setState({ locationId: parseInt(event.target.value) });
+        this.setState({ locationId: event.target.value && parseInt(event.target.value) });
     }
 
     onStatusChange(event) {
-        this.setState({ status: parseInt(event.target.value) });
+        this.setState({ status: event.target.value && parseInt(event.target.value) });
     }
 
     onReportBodyChange(event) {
@@ -105,8 +105,7 @@ export default class LocationReportSubmit extends React.Component {
             locationId: this.state.locationId,
             status: this.state.status,
             reportBody: this.state.reportBody,
-            sendExternal: this.state.sendExternal,
-            reportTime: new Date().toJSON() // TODO: do this server-side?
+            sendExternal: this.state.sendExternal
         };
 
         apiPost('reports/locationstatuses', body)

@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import Entity from './entity';
 import {apiGet} from '../utilities/request-helper';
 
-// TODO: this whole class is super suspicious - looks like it's trying to be a stateful store(!)
 export default class Entities extends React.Component {
     constructor (props) {
         super(props);

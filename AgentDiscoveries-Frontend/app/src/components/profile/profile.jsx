@@ -8,8 +8,8 @@ import placeholderPicture from '../../../static/placeholder.jpg';
 import {currentUserId} from '../utilities/user-helper';
 
 export default class Profile extends React.Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             imgSrc: placeholderPicture,
@@ -20,13 +20,13 @@ export default class Profile extends React.Component {
         this.getProfilePicture = this.getProfilePicture.bind(this);
     }
 
-    componentWillMount () {
+    componentWillMount() {
         this.getProfilePicture();
         this.getUser();
         this.getAgent();
     }
 
-    render () {
+    render() {
         return (
             <div className='col-md-8 col-md-offset-2'>
                 <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>

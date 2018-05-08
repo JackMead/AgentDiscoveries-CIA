@@ -110,7 +110,7 @@ export default class UserForm extends React.Component {
             .then(response => {
                 if (this.state.isAgent) {
                     const agent = Object.assign({ userId: response.userId }, this.state.agent);
-                    return apiPost('agents', agent)
+                    return apiPost('agents', agent);
                 }
             })
             .then(window.location.hash = '#/admin/users')

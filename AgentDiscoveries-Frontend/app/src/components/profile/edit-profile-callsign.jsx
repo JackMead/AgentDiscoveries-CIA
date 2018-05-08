@@ -5,8 +5,8 @@ import {currentUserId} from '../utilities/user-helper';
 import Message from '../message';
 
 export default class EditProfileCallSign extends React.Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             callSign: '',

@@ -7,8 +7,9 @@ import SearchResult from './search-result';
 import {apiGet} from '../utilities/request-helper';
 
 export default class LocationReportsSearch extends React.Component {
-    constructor () {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
             callSign: '',
             locationId: '', // TODO: selecting location by ID is super unhelpful, dropdown would be better!
@@ -26,7 +27,7 @@ export default class LocationReportsSearch extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
-    render () {
+    render() {
         return (
             <div className='col-md-8 col-md-offset-2'>
                 <Form onSubmit={this.onSubmit}>

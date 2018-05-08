@@ -13,6 +13,7 @@ import spark.QueryParamsMap;
 import spark.Request;
 
 import javax.inject.Inject;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -57,15 +58,14 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
                 throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Region does not exist");
             }
 
-            LocalDateTime dateTimeInReportLocation = apiModel.getReportTime()
-                    .withZoneSameInstant(ZoneOffset.UTC)
-                    .toLocalDateTime();
+            // Ignore any supplied report time
+            LocalDateTime reportTime = LocalDateTime.now(ZoneOffset.UTC);
 
             RegionSummaryReport model = new RegionSummaryReport();
             model.setUserId(apiModel.getUserId());
             model.setRegionId(apiModel.getRegionId());
             model.setStatus(apiModel.getStatus());
-            model.setReportTime(dateTimeInReportLocation);
+            model.setReportTime(reportTime);
             model.setReportBody(apiModel.getReportBody());
 
             return model;

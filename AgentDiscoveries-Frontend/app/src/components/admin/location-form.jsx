@@ -32,7 +32,7 @@ export default class LocationForm extends React.Component {
                 <Message message={this.state.message} />
                 <div className='col-md-12'>
                     <Form onSubmit={this.onSubmit}>
-                        <h3>{this.id ? 'Edit' : 'Create'} Location</h3>
+                        <h3>{this.props.id ? 'Edit' : 'Create'} Location</h3>
 
                         <FormGroup>
                             <ControlLabel>Site Name</ControlLabel>
@@ -94,7 +94,7 @@ export default class LocationForm extends React.Component {
 
     loadLocation(id) {
         apiGet('locations', id)
-            .then(this.setState(result))
+            .then(result => this.setState(result))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 }

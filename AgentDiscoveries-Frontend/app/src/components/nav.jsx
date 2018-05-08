@@ -1,18 +1,12 @@
 import * as React from 'react';
-import {
-    Navbar,
-    Nav,
-    NavItem,
-    NavDropdown,
-    MenuItem
-} from 'react-bootstrap';
+import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import {clearUserInfo, isLoggedIn, isAdmin} from './utilities/user-helper';
+import {clearUserInfo, isAdmin, isLoggedIn} from './utilities/user-helper';
 import logo from '../../static/agent.png';
 
 export default class NavigationBar extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.setNavOptions = this.setNavOptions.bind(this);
         this.handleLogOut = this.handleLogOut.bind(this);

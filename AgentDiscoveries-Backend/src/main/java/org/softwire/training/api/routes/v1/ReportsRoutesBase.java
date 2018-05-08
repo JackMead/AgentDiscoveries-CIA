@@ -26,6 +26,7 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
     private final ValidatorMapper<T, U, V> validatorThenMapper;
     private final Class<T> apiModelClass;
     private final ReportSearchCriteriaParser<V> searchCriteriaParser;
+
     @Inject
     protected PermissionsVerifier permissionsVerifier;
 
