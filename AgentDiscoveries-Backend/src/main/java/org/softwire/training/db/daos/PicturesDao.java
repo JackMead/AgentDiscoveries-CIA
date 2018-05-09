@@ -2,8 +2,7 @@ package org.softwire.training.db.daos;
 
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.core.mapper.RowMapper;
-import org.softwire.training.api.models.PictureApiModel;
+import org.softwire.training.models.ProfilePicture;
 
 import javax.inject.Inject;
 import java.sql.Blob;
@@ -13,11 +12,11 @@ public class PicturesDao {
     @Inject
     Jdbi jdbi;
 
-    public Optional<PictureApiModel> getPicture(int userId) {
+    public Optional<ProfilePicture> getPicture(int userId) {
         try (Handle handle = jdbi.open()) {
             return handle.createQuery("SELECT * FROM profile_picture WHERE user_id = :userId")
                     .bind("userId", userId)
-                    .map((rs, ctx) -> new PictureApiModel(rs.getBytes("image"), rs.getString("content_type"), rs.getInt("user_id")))
+                    .map((rs, ctx) -> new ProfilePicture(rs.getBytes("image"), rs.getString("content_type"), rs.getInt("user_id")))
                     .findFirst();
         }
     }

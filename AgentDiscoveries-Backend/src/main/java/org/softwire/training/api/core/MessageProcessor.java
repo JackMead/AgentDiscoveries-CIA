@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+// TODO: !!
 public class MessageProcessor {
     private List<String> wordList = Arrays.asList(
             "latch", "chief", "dye", "observe", "volleyball", "disturb", "brain", "boys", "giant", "refer", "rigid",

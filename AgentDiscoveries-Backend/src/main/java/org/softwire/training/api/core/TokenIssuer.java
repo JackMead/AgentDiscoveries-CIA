@@ -10,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class TokenIssuer {
     }
 
     private Instant getExpirationInstantForTokenIssuedNow() {
-        return ZonedDateTime.now(ZoneId.systemDefault())
+        return ZonedDateTime.now(ZoneOffset.UTC)
                 .plusHours(24)
                 .toInstant();
     }

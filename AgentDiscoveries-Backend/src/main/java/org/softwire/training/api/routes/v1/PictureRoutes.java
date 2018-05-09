@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
-import org.softwire.training.api.models.PictureApiModel;
+import org.softwire.training.models.ProfilePicture;
 import org.softwire.training.db.daos.PicturesDao;
 import spark.Request;
 import spark.Response;
@@ -33,7 +33,7 @@ public class PictureRoutes {
         this.configuration = configuration;
     }
 
-    public PictureApiModel updatePicture(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
+    public Object updatePicture(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
         int userId = req.attribute("user_id");
         if (userId != id && userId != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
@@ -61,14 +61,14 @@ public class PictureRoutes {
             filePart.delete();
         }
 
-        return new PictureApiModel(new byte[]{}, contentType, userId);
+        return new Object();
     }
 
     public byte[] readProfilePicture(Request req, Response res, int id) throws FailedRequestException {
-        Optional<PictureApiModel> optionalPicture = picturesDao.getPicture(req.attribute("user_id"));
-        PictureApiModel pictureApiModel = optionalPicture.orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "No picture found for user"));
-        res.type(pictureApiModel.getContentType());
-        return pictureApiModel.getPictureBytes();
+        Optional<ProfilePicture> optionalPicture = picturesDao.getPicture(req.attribute("user_id"));
+        ProfilePicture profilePicture = optionalPicture.orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "No picture found for user"));
+        res.type(profilePicture.getContentType());
+        return profilePicture.getPictureBytes();
     }
 
     public Object deletePicture(Request req, Response res, int id) throws Exception {

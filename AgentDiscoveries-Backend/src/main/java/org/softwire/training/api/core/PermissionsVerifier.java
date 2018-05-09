@@ -48,7 +48,7 @@ public class PermissionsVerifier {
     }
 
     public void verifyIsAgent(Request req) throws FailedRequestException {
-        int userId =  req.attribute("user_id");
+        int userId = req.attribute("user_id");
         agentsDao.getAgentByUserId(userId).orElseThrow(() -> new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "user is not an agent"));
     }
 }
