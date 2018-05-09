@@ -1,6 +1,14 @@
 import {expect} from 'chai';
 import * as UserHelper from '../src/components/utilities/user-helper';
 
+let events = [];
+
+before(() => {
+    global.window.dispatchEvent = (event) => {
+        events.push(event.name);
+    };
+});
+
 describe('User Helper', () => {
     it('should store user info', () => {
         const userInfo = { token: 'a Token', userId: '2' };
@@ -33,5 +41,18 @@ describe('User Helper', () => {
 
         expect(UserHelper.isLoggedIn()).to.be.false;
         expect(UserHelper.currentAuthToken()).to.be.undefined;
+    });
+
+    it('should fire a login event when user info is updated', () => {
+        events = [];
+
+        // Updated
+        const userInfo = { token: 'a Token', userId: '2' };
+        UserHelper.storeUserInfo(userInfo);
+        expect(events).to.have.members(['login']);
+
+        // Cleared
+        UserHelper.clearUserInfo();
+        expect(events).to.have.members(['login', 'login']);
     });
 });

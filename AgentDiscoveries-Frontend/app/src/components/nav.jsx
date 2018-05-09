@@ -8,20 +8,28 @@ export default class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
 
-        this.setNavOptions = this.setNavOptions.bind(this);
+        this.state = {
+            isLoggedIn: isLoggedIn(),
+            isAdmin: isAdmin()
+        };
+
+        this.onLoginEvent = this.onLoginEvent.bind(this);
         this.handleLogOut = this.handleLogOut.bind(this);
     }
 
-    componentWillMount() {
-        this.setNavOptions();
-    }
-
     componentDidMount() {
-        window.addEventListener('login', this.setNavOptions);
+        window.addEventListener('login', this.onLoginEvent);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('login', this.setNavOptions);
+        window.removeEventListener('login', this.onLoginEvent);
+    }
+
+    onLoginEvent() {
+        this.setState({
+            isLoggedIn: isLoggedIn(),
+            isAdmin: isAdmin()
+        });
     }
 
     render() {
@@ -40,8 +48,75 @@ export default class NavigationBar extends React.Component {
                     </Navbar.Brand>
                     <Navbar.Toggle/>
                 </Navbar.Header>
-                {this.state.navOptions}
+                {this.state.isLoggedIn ? this.renderLoggedIn() : this.renderLoggedOut() }
             </Navbar>
+        );
+    }
+
+    renderLoggedIn() {
+        return (
+            <Navbar.Collapse>
+                {this.state.isAdmin ? this.renderAdminOptions() : null}
+                <Nav>
+                    <NavDropdown eventKey={4} title='Submit' id='basic-nav-dropdown'>
+                        <MenuItem componentClass={Link} href='/submit/location' to='/submit/location' eventKey={4.1}>
+                            Location Report
+                        </MenuItem>
+                        <MenuItem componentClass={Link} href='/submit/region' to='/submit/region' eventKey={4.2}>
+                            Region Summary
+                        </MenuItem>
+                    </NavDropdown>
+                    <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>
+                        Today's Message
+                    </NavItem>
+                </Nav>
+                <Nav pullRight>
+                    <NavItem componentClass={Link} href='/profile' to='/profile' eventKey={6}>
+                        Profile
+                    </NavItem>
+                    <NavItem onClick={this.handleLogOut} href='/login' to='/login' eventKey={1}>
+                        Log Out
+                    </NavItem>
+                </Nav>
+            </Navbar.Collapse>
+        );
+    }
+
+    renderAdminOptions() {
+        return (
+            <Nav>
+                <NavDropdown eventKey={2} title='Admin' id='basic-nav-dropdown'>
+                    <MenuItem componentClass={Link} href='/admin/locations' to='/admin/locations' eventKey={2.1}>
+                        Locations
+                    </MenuItem>
+                    <MenuItem componentClass={Link} href='/admin/regions' to='/admin/regions' eventKey={2.2}>
+                        Regions
+                    </MenuItem>
+                    <MenuItem componentClass={Link} href='/admin/users' to='/admin/users' eventKey={2.3}>
+                        Users
+                    </MenuItem>
+                </NavDropdown>
+                <NavDropdown eventKey={3} title='Search' id='basic-nav-dropdown'>
+                    <MenuItem componentClass={Link} href='/search/location' to='/search/location' eventKey={3.1}>
+                        Location Reports
+                    </MenuItem>
+                    <MenuItem componentClass={Link} href='/search/region' to='/search/region' eventKey={3.2}>
+                        Region Summaries
+                    </MenuItem>
+                </NavDropdown>
+            </Nav>
+        );
+    }
+
+    renderLoggedOut() {
+        return (
+            <Navbar.Collapse>
+                <Nav pullRight>
+                    <NavItem componentClass={Link} href='/login' to='/login' eventKey={1}>
+                        Login
+                    </NavItem>
+                </Nav>
+            </Navbar.Collapse>
         );
     }
 
@@ -49,69 +124,6 @@ export default class NavigationBar extends React.Component {
         event.preventDefault();
 
         clearUserInfo();
-        window.dispatchEvent(new CustomEvent('login'));
         window.location.hash = '#/';
-    }
-
-    setNavOptions() {
-        let navBarStandard;
-        let navBarAdmin;
-        let loginBar;
-        if (isLoggedIn()) {
-            if(isAdmin()) {
-                navBarAdmin = (
-                    <Nav>
-                        <NavDropdown eventKey={2} title='Admin' id='basic-nav-dropdown'>
-                            <MenuItem componentClass={Link} href='/admin/locations' to='/admin/locations'
-                                eventKey={2.1}>Locations</MenuItem>
-                            <MenuItem componentClass={Link} href='/admin/regions' to='/admin/regions'
-                                eventKey={2.2}>Regions</MenuItem>
-                            <MenuItem componentClass={Link} href='/admin/users' to='/admin/users' eventKey={2.3}>Users</MenuItem>
-                        </NavDropdown>
-                        <NavDropdown eventKey={3} title='Search' id='basic-nav-dropdown'>
-                            <MenuItem componentClass={Link} href='/search/location' to='/search/location' eventKey={3.1}>Location
-                  Reports</MenuItem>
-                            <MenuItem componentClass={Link} href='/search/region' to='/search/region' eventKey={3.2}>Region
-                  Summaries</MenuItem>
-                        </NavDropdown>
-                    </Nav>
-                );
-            }
-            loginBar = (
-                <Nav pullRight>
-                    <NavItem componentClass={Link} href='/profile' to='/profile' eventKey={6}>Profile</NavItem>
-                    <NavItem onClick={this.handleLogOut} href='/login' to='/login' eventKey={1}>
-              Log Out
-                    </NavItem>
-                </Nav>
-            );
-            navBarStandard = (
-                <Nav>
-                    <NavDropdown eventKey={4} title='Submit' id='basic-nav-dropdown'>
-                        <MenuItem componentClass={Link} href='/submit/location' to='/submit/location' eventKey={4.1}>Location Report</MenuItem>
-                        <MenuItem componentClass={Link} href='/submit/region' to='/submit/region' eventKey={4.2}>Region Summary</MenuItem>
-                    </NavDropdown>
-                    <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>Today's Message</NavItem>
-                </Nav>
-            );
-        } else {
-            loginBar = (
-                <Nav pullRight>
-                    <NavItem componentClass={Link} href='/login' to='/login' eventKey={1}>
-              Login
-                    </NavItem>
-                </Nav>
-            );
-        }
-
-        const navOptions = (
-            <Navbar.Collapse>
-                {navBarAdmin}
-                {navBarStandard}
-                {loginBar}
-            </Navbar.Collapse>
-        );
-
-        this.setState({navOptions: navOptions});
     }
 }

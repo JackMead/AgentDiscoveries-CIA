@@ -1,5 +1,8 @@
 // A set of helper functions for making API calls
 
+import {clearUserInfo, currentAuthToken} from './user-helper';
+import ApiError from './api-error';
+
 export function apiRequest(apiPath, method, body) {
     return fetch(`/v1/api/${apiPath}`, {
         method: method,
@@ -14,11 +17,13 @@ export function apiRequest(apiPath, method, body) {
             } else {
                 return response;
             }
+        } else if (response.status === 401) {
+            // Token is no longer valid - clear it and redirect to login
+            clearUserInfo();
+            window.location.hash = '#/';
+            throw new Error('Authentication Token has expired, please log in');
         } else {
-            // TODO: create custom error class to include the error?
-            const message = `Received ${response.status} ${response.statusText} when performing ${method} ${apiPath}`;
-            console.error(message);
-            throw new Error(message);
+            throw new ApiError(response);
         }
     });
 }
@@ -47,7 +52,7 @@ export function apiDelete(apiPath, id) {
 // Helper Functions for headers
 
 export function getTokenHeader() {
-    return `Bearer ${window.localStorage.getItem('Token')}`;
+    return `Bearer ${currentAuthToken()}`;
 }
 
 function getHeaders() {

@@ -45,7 +45,7 @@ public class TokenIssuer {
         try {
             Claims claims = Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(token).getBody();
             return claims.getSubject();
-        } catch (SignatureException e) {
+        } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
             throw new FailedRequestException(ErrorCode.INVALID_TOKEN, "Token is invalid");
         } catch (ExpiredJwtException expiredToken) {
             throw new FailedRequestException(ErrorCode.TOKEN_EXPIRED, "Token has already expired");

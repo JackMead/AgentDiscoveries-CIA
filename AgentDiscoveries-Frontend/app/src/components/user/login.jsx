@@ -83,9 +83,6 @@ export default class Login extends React.Component {
             })
             .then(response => {
                 UserHelper.storeUserInfo(response);
-
-                // The nav bar listens for this event and updates accordingly
-                window.dispatchEvent(new Event('login'));
                 window.location.hash = '#/';
             })
             .catch(error => {
