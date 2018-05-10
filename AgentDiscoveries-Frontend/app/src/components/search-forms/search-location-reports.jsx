@@ -12,7 +12,7 @@ export default class LocationReportsSearch extends React.Component {
 
         this.state = {
             callSign: '',
-            locationId: '', // TODO: selecting location by ID is super unhelpful, dropdown would be better!
+            locationId: '',
             fromTime: '',
             toTime: '',
 

@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.softwire.training.api.core.MessageProcessor;
 import org.softwire.training.api.integration.helper.LoginHelper;
 import org.softwire.training.api.integration.helper.WebDriverHelper;
-import org.softwire.training.models.Message;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -29,14 +28,11 @@ public class DailyMessageIT {
     }
 
     @Test
-    public void testCanEncodeAndDecodeMessage() throws InterruptedException {
-        String startingMessage = "aTestMessage";
-        Message encodedMessage = new Message(startingMessage);
-        Message decodedMessage = new Message(startingMessage);
-
+    public void testCanEncodeAndDecodeMessage() {
         MessageProcessor messageProcessor = new MessageProcessor();
-        messageProcessor.encrypt(encodedMessage);
-        messageProcessor.decrypt(decodedMessage);
+
+        String plaintext = "aTestMessage";
+        String encoded = messageProcessor.encode(plaintext);
 
         LoginHelper.login(driver, TARGET_ADDRESS);
         try {
@@ -47,17 +43,15 @@ public class DailyMessageIT {
             }
         }
         WebElement userNameInput = driver.findElement(By.id("message-input"));
-        userNameInput.sendKeys(startingMessage);
+        userNameInput.sendKeys(plaintext);
 
         WebElement encodeButton = driver.findElement(By.id("encode-button"));
         encodeButton.click();
         WebElement resultDiv = driver.findElement(By.id("code-result"));
-        wait.until(ExpectedConditions.textToBePresentInElement(resultDiv, encodedMessage.getMessage()));
-        assert(resultDiv.getText().contains(encodedMessage.getMessage()));
+        wait.until(ExpectedConditions.textToBePresentInElement(resultDiv, encoded));
 
         WebElement decodeButton = driver.findElement(By.id("decode-button"));
         decodeButton.click();
-        wait.until(ExpectedConditions.textToBePresentInElement(resultDiv, decodedMessage.getMessage()));
-        assertTrue(resultDiv.getText().contains(decodedMessage.getMessage()));
+        wait.until(ExpectedConditions.textToBePresentInElement(resultDiv, plaintext));
     }
 }

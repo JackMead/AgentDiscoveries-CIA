@@ -9,24 +9,23 @@ import spark.Response;
 import javax.inject.Inject;
 
 public class MessageProcessorRoutes {
-    private Request req;
-    private Response res;
+
     private MessageProcessor messageProcessor;
 
     @Inject
-    public MessageProcessorRoutes( ) {
-        this.messageProcessor = new MessageProcessor();
+    public MessageProcessorRoutes(MessageProcessor messageProcessor) {
+        this.messageProcessor = messageProcessor;
     }
 
-    public Message EncryptMessage(Request req, Response res) {
+    public Message encodeMessage(Request req, Response res) {
         Message message = JsonRequestUtils.readBodyAsType(req, Message.class);
-        messageProcessor.encrypt(message);
-        return message;
+        String encoded = messageProcessor.encode(message.getMessage());
+        return new Message(encoded);
     }
 
-    public Message DecryptMessage(Request req, Response res) {
+    public Message decodeMessage(Request req, Response res) {
         Message message = JsonRequestUtils.readBodyAsType(req, Message.class);
-        messageProcessor.decrypt(message);
-        return message;
+        String decoded = messageProcessor.decode(message.getMessage());
+        return new Message(decoded);
     }
 }

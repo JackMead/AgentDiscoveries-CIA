@@ -6,6 +6,7 @@ import AgentInfo from './agent-info';
 import EditProfilePicture from './edit-profile-picture';
 import placeholderPicture from '../../../static/placeholder.jpg';
 import {currentUserId} from '../utilities/user-helper';
+import {errorLogAndRedirect} from '../error';
 
 export default class Profile extends React.Component {
     constructor(props) {
@@ -48,23 +49,36 @@ export default class Profile extends React.Component {
         );
     }
 
-    // TODO: Error handling here and below
     getProfilePicture() {
         apiGet('pictures', currentUserId())
             .then(response => response.blob())
             .then(blob => this.setState({imgSrc: URL.createObjectURL(blob)}))
-            .catch(error => console.error(error));
+            .catch(error => {
+                if (error.response && error.response.status === 404) {
+                    this.setState({ imgSrc: placeholderPicture });
+                } else {
+                    throw error;
+                }
+            })
+            .catch(errorLogAndRedirect);
     }
 
     getUser() {
         apiGet('users', currentUserId())
             .then(user => this.setState({ user: user }))
-            .catch(error => console.log(error));
+            .catch(errorLogAndRedirect);
     }
 
     getAgent() {
         apiGet('agents', currentUserId())
             .then(agent => this.setState({ agent: agent }))
-            .catch(error => console.error(error));
+            .catch(error => {
+                if (error.response && error.response.status === 404) {
+                    this.setState({ agent: {} });
+                } else {
+                    throw error;
+                }
+            })
+            .catch(errorLogAndRedirect);
     }
 }

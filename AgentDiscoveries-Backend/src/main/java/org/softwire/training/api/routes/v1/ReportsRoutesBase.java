@@ -51,8 +51,8 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "reportId cannot be specified on create");
         }
 
-        int user_id = req.attribute("user_id");
-        reportApiModel.setUserId(user_id);
+        int userId = req.attribute("user_id");
+        reportApiModel.setUserId(userId);
 
         // Validate report model before storing
         U reportModel = validatorThenMapper.validateThenMap(reportApiModel);

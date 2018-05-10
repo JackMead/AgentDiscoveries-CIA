@@ -1,7 +1,6 @@
 package org.softwire.training.api.core;
 
 import org.junit.jupiter.api.Test;
-import org.softwire.training.models.Message;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -11,27 +10,24 @@ public class MessageProcessorTest {
     private final MessageProcessor messageProcessor = new MessageProcessor();
 
     @Test
-    public void EncryptModifiesMessage() {
-        String startingMessageString = "Some test message! :)";
-        Message messageToModify = new Message(startingMessageString);
-        messageProcessor.encrypt(messageToModify);
-        assertNotEquals(startingMessageString, messageToModify.getMessage());
+    public void encodeModifiesMessage() {
+        String input = "Some test message! :)";
+        String encoded = messageProcessor.encode(input);
+        assertNotEquals(input, encoded);
     }
 
     @Test
-    public void DecryptModifiesMessage() {
-        String startingMessageString = "Some test message! :)";
-        Message messageToModify = new Message(startingMessageString);
-        messageProcessor.decrypt(messageToModify);
-        assertNotEquals(startingMessageString, messageToModify.getMessage());
+    public void decodeModifiesMessage() {
+        String input = "Some test message! :)";
+        String decode = messageProcessor.decode(input);
+        assertNotEquals(input, decode);
     }
 
     @Test
-    public void EncryptsAndDecryptsMessageToStartingMessage() {
-        String startingMessageString = "hello";
-        Message messageToModify = new Message(startingMessageString);
-        messageProcessor.encrypt(messageToModify);
-        messageProcessor.decrypt(messageToModify);
-        assertEquals(startingMessageString, messageToModify.getMessage());
+    public void encodeAndDecodeRoundTrip() {
+        String input = "hello";
+        String encoded = messageProcessor.encode(input);
+        String decoded = messageProcessor.decode(encoded);
+        assertEquals(input, decoded);
     }
 }

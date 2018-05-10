@@ -116,12 +116,6 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
                         ZonedDateTime.parse(queryMap.get("toTime").value())));
             }
 
-            // TODO: unused?
-            // If specified then the reportBody should include exactly this many digits.
-            Optional.ofNullable(queryMap.get("digitsInBody").integerValue())
-                    .ifPresent(digitsInBody ->
-                            apiReportSearchCriteria.add(new DigitsInBodyApiSearchCriterion<>(digitsInBody)));
-
             return apiReportSearchCriteria;
         }
     }

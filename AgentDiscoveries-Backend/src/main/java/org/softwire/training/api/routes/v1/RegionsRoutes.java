@@ -35,11 +35,7 @@ public class RegionsRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "regionId cannot be specified on create");
         }
 
-        // Verify all locations actually exist
-        List<Integer> foundLocations = locationsDao.findWhichLocationIdsExist(region.getLocations());
-        if (foundLocations.size() < region.getLocations().size()) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Not all specified locations exist");
-        }
+        validateRegion(region);
 
         int newRegionId = regionsDao.addRegion(region);
 
@@ -59,6 +55,16 @@ public class RegionsRoutes {
         return regionsDao.getRegions();
     }
 
+    public Region updateRegion(Request req, Response res, int id) throws FailedRequestException {
+        Region region = JsonRequestUtils.readBodyAsType(req, Region.class);
+        region.setRegionId(id);
+
+        validateRegion(region);
+        regionsDao.updateRegion(region);
+
+        return region;
+    }
+
     public Object deleteRegion(Request req, Response res, int id) throws FailedRequestException {
         permissionsVerifier.verifyAdminPermission(req);
         if (StringUtils.isNotEmpty(req.body())) {
@@ -70,5 +76,13 @@ public class RegionsRoutes {
         res.status(204);
 
         return new Object();
+    }
+
+    private void validateRegion(Region region) throws FailedRequestException {
+        // Verify all locations actually exist
+        List<Integer> foundLocations = locationsDao.findWhichLocationIdsExist(region.getLocations());
+        if (foundLocations.size() < region.getLocations().size()) {
+            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Not all specified locations exist");
+        }
     }
 }

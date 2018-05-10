@@ -76,13 +76,13 @@ export default class RegionForm extends React.Component {
             : apiPost('regions', body);
 
         request
-            .then(window.location.hash = '#/admin/regions')
+            .then(() => window.location.hash = '#/admin/regions')
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 
     loadRegion(id) {
         apiGet('regions', id)
-            .then(result => this.setState(result))
+            .then(result => this.setState({ name: result.name, locations: result.locations.join(', ') }))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 }

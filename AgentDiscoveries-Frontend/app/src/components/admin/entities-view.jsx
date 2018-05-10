@@ -3,6 +3,7 @@ import {Button, Table} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import Entity from './entity';
 import {apiGet} from '../utilities/request-helper';
+import {errorLogAndRedirect} from '../error';
 
 export default class Entities extends React.Component {
     constructor (props) {
@@ -70,7 +71,6 @@ export default class Entities extends React.Component {
     loadEntities() {
         apiGet(this.props.api)
             .then(results => this.setState({ entities: results }))
-            // TODO: error handling
-            .catch(error => console.log(error));
+            .catch(errorLogAndRedirect);
     }
 }

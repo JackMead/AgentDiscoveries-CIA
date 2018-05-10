@@ -66,15 +66,26 @@ public class RegionsDao {
         }
     }
 
-    public int deleteRegion(int region_id) {
+    public void updateRegion(Region region) {
+        try (Handle handle = jdbi.open()) {
+            handle.createUpdate("UPDATE region SET name = :name WHERE region_id = :region_id")
+                    .bind("name", region.getName())
+                    .bind("region_id", region.getRegionId())
+                    .execute();
+
+            // TODO: Update locations or refactor DB model!
+        }
+    }
+
+    public int deleteRegion(int regionId) {
         try (Handle handle = jdbi.open()) {
             try {
                 return handle.createUpdate("DELETE FROM location_region WHERE region_id = :region_id")
-                        .bind("region_id", region_id)
+                        .bind("region_id", regionId)
                         .execute();
             } finally {
                 handle.createUpdate("DELETE FROM region WHERE region_id = :region_id")
-                        .bind("region_id", region_id)
+                        .bind("region_id", regionId)
                         .execute();
             }
         }

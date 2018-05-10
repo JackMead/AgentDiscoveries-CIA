@@ -80,8 +80,8 @@ public class AgentDiscoveriesApplication implements Runnable {
                 get("/locations", locationsRoutes::readEntities, responseTransformer);
                 setupBasicEntityCrudRoutes("/users", usersRoutes);
 
-                post("/decodemessage", messageProcessorRoutes::DecryptMessage, responseTransformer);
-                post("/encodemessage", messageProcessorRoutes::EncryptMessage, responseTransformer);
+                post("/decodemessage", messageProcessorRoutes::decodeMessage, responseTransformer);
+                post("/encodemessage", messageProcessorRoutes::encodeMessage, responseTransformer);
 
                 // API endpoint to initiate shutdown
                 put("/operations/shutdown", this::shutdown);
@@ -125,6 +125,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     private void regionsRouteGroup() {
         post("", regionsRoutes::createRegion, responseTransformer);
         get("/:id", (req, res) -> regionsRoutes.readRegion(req, res, idParamAsInt(req)), responseTransformer);
+        put("/:id", (req, res) -> regionsRoutes.updateRegion(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> regionsRoutes.deleteRegion(req, res, idParamAsInt(req)), responseTransformer);
         get("", (req, res) -> regionsRoutes.readRegions(req, res), responseTransformer);
     }

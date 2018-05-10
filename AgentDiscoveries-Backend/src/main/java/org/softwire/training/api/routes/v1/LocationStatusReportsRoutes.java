@@ -113,7 +113,6 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
     private static class LocationStatusReportSearchCriteriaParser
             implements ReportSearchCriteriaParser<LocationStatusReportWithTimeZone> {
 
-        // TODO: This is a bit overly generic and confusing - would be easier to parse query parameters into a direct representation
         public List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> parseApiReportSearchCriteria(Request req) {
             QueryParamsMap queryMap = req.queryMap();
             List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> apiReportSearchCriteria = new ArrayList<>();
@@ -135,12 +134,6 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
                 apiReportSearchCriteria.add(new ToTimeApiLocationStatusSearchCriterion(
                         ZonedDateTime.parse(queryMap.get("toTime").value())));
             }
-
-            // TODO: unused?
-            // If specified then the reportBody should include exactly this many digits.
-            Optional.ofNullable(queryMap.get("digitsInBody").integerValue())
-                    .ifPresent(digitsInBody ->
-                            apiReportSearchCriteria.add(new DigitsInBodyApiSearchCriterion<>(digitsInBody)));
 
             return apiReportSearchCriteria;
         }

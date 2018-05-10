@@ -17,6 +17,7 @@ import TodaysCodePage from './todays-code-page';
 import LocationForm from './admin/location-form';
 import RegionForm from './admin/region-form';
 import UserForm from './admin/user-form';
+import Error from './error';
 
 export default class App extends React.Component {
     render() {
@@ -40,12 +41,14 @@ export default class App extends React.Component {
                         <Route path='/admin/users/add' render={() => <Page><UserForm/></Page>} />
 
                         <Route path='/admin/locations/edit/:id' render={props => <Page><LocationForm id={props.match.params.id} /></Page>} />
-                        <Route path='/admin/users/edit/:id' render={props => <Page><RegionForm id={props.match.params.id} /></Page>} />
+                        <Route path='/admin/regions/edit/:id' render={props => <Page><RegionForm id={props.match.params.id} /></Page>} />
 
                         <Route path='/message' render={() => <Page><TodaysCodePage /></Page>} />
                         <Route path='/profile' exact render={() => <Page><Profile /></Page>} />
                         <Route path='/profile/edit/callsign' render={() => <Page><EditProfileCallSign /></Page>} />
                         <Route path='/profile/edit/picture' render={() => <Page><EditProfilePicture /></Page>} />
+
+                        <Route path='/error' render={() => <Page><Error/></Page>}/>
                     </Switch>
                 </Router>
             </React.Fragment>

@@ -113,7 +113,7 @@ export default class UserForm extends React.Component {
                     return apiPost('agents', agent);
                 }
             })
-            .then(window.location.hash = '#/admin/users')
+            .then(() => window.location.hash = '#/admin/users')
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 }

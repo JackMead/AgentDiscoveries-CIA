@@ -88,7 +88,7 @@ export default class LocationForm extends React.Component {
             : apiPost('locations', body);
 
         request
-            .then(window.location.hash = '#/admin/locations')
+            .then(() => window.location.hash = '#/admin/locations')
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {Panel} from 'react-bootstrap';
 
 export default class SearchResult extends React.Component {
     render() {
@@ -13,16 +14,15 @@ export default class SearchResult extends React.Component {
     renderResults(results) {
         return results.map((result, index) => {
             return (
-                <div key={index} id={index} className='col-md-12'>
-                    <h3 className='search-name'>Result {index + 1}</h3>
-                    {this.getItemHTML(result)}
-                </div>
+                <Panel key={index}>
+                    <Panel.Heading>Result</Panel.Heading>
+                    <Panel.Body>{this.renderResultBody(result)}</Panel.Body>
+                </Panel>
             );
         });
     }
 
-    // TODO: This looks pretty bad!
-    getItemHTML(result) {
+    renderResultBody(result) {
         return Object.keys(result).map(key => {
             return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>;
         });

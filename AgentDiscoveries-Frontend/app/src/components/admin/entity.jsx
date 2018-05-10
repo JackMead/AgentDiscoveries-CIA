@@ -2,12 +2,11 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 
-// TODO: This does not render very nicely - probably want to be less generic
 export default class Entity extends React.Component {
     constructor (props) {
         super(props);
 
-        // TODO: this assumes that id is the first JSON value
+        // Assume that the first JSON property is the ID property
         this.id = Object.values(props.entity)[0];
     }
 
@@ -28,12 +27,10 @@ export default class Entity extends React.Component {
     }
 
     getEditButton() {
-        if (this.props.type !== 'regions') {
-            return (
-                <Link to={`/admin/${this.props.type}/edit/${this.id}`}>
-                    <Button type='button'>Edit</Button>
-                </Link>
-            );
-        }
+        return (
+            <Link to={`/admin/${this.props.type}/edit/${this.id}`}>
+                <Button type='button'>Edit</Button>
+            </Link>
+        );
     }
 }
