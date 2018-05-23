@@ -1,6 +1,6 @@
 package org.softwire.training.api.models;
 
-public class FailedRequestException extends Exception {
+public class FailedRequestException extends RuntimeException {
 
     private ErrorCode errorCode;
 

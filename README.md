@@ -40,6 +40,19 @@ The application homepage can be found at `http://localhost:8080`.
 There is also a health-check at `http://localhost:8080/healthcheck`.
 If there are any problems starting the application take a look at the logs first, it is probably a database or port already in use issue.
 
+### Test users
+
+The app comes with some test users added by the migrations:
+
+| Username     | Password | Role  |
+| ------------ | -------- | ----- |
+| test_user    | password | User  |
+| test_agent   | password | Agent |
+| test_corrupt | N/A      | User with a corrupt password |
+| test_admin   | password | Admin |
+
+These should be deleted in the production environment.
+
 ## IntelliJ Configuration
 
 You can run `AgentDiscoveriesApplication` directly, but the frontend project must also have been built for it to serve the website.

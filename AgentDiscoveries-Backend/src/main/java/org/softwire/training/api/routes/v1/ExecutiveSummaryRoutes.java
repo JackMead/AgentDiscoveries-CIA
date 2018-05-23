@@ -1,5 +1,7 @@
 package org.softwire.training.api.routes.v1;
 
+import org.softwire.training.api.core.ExecutiveSummaryBuilder;
+import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.LocationReportsDao;
@@ -17,12 +19,14 @@ import spark.Response;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-// TODO: needs work?
 public class ExecutiveSummaryRoutes {
+
+    private static final int MAX_REPORTS = 5;
 
     private final LocationReportsDao locationReportsDao;
     private final RegionSummaryReportsDao regionSummaryReportsDao;
@@ -37,84 +41,44 @@ public class ExecutiveSummaryRoutes {
         this.locationsDao = locationsDao;
     }
 
-    public String readExecutiveSummary(Request req, Response res) throws FailedRequestException {
-        int numberOfDays = Integer.parseInt(req.body());
-        LocalDateTime fromTime = LocalDateTime.now().minus(Period.ofDays(numberOfDays));
+    public String readExecutiveSummary(Request req, Response res) {
+        int numberOfDays = Integer.parseInt(req.queryParams("days"));
+        LocalDateTime fromTime = LocalDateTime.now(ZoneOffset.UTC).minus(Period.ofDays(numberOfDays));
+
         List<LocationStatusReportWithTimeZone> locationStatusReports = getLocationStatusReports(fromTime);
         List<RegionSummaryReport> regionSummaryReports = getRegionSummaryReports(fromTime);
-        return buildSummaryString(numberOfDays, locationStatusReports, regionSummaryReports, 5);
+
+        return buildSummaryString(numberOfDays, locationStatusReports, regionSummaryReports);
     }
 
     private List<LocationStatusReportWithTimeZone> getLocationStatusReports(LocalDateTime fromTime) {
         List<ReportSearchCriterion> searchCriteria = new ArrayList<>();
         searchCriteria.add(new FromTimeSearchCriterion(fromTime));
-        List<LocationStatusReportWithTimeZone> locationStatusReports = locationReportsDao.searchReports(searchCriteria);
-        System.out.print(locationStatusReports.size());
-        return locationStatusReports;
+        return locationReportsDao.searchReports(searchCriteria);
     }
 
     private List<RegionSummaryReport> getRegionSummaryReports(LocalDateTime fromTime) {
         List<ReportSearchCriterion> searchCriteria = new ArrayList<>();
         searchCriteria.add(new FromTimeSearchCriterion(fromTime));
-        List<RegionSummaryReport> regionSummaryReports = regionSummaryReportsDao.searchReports(searchCriteria);
-        System.out.print(regionSummaryReports.size());
-        return regionSummaryReports;
+        return regionSummaryReportsDao.searchReports(searchCriteria);
     }
 
-    private String buildSummaryString(int numberOfDays, List<LocationStatusReportWithTimeZone> locationStatusReports, List<RegionSummaryReport> regionSummaryReports, int numberOfEntries) {
-        StringBuilder summary = new StringBuilder();
-        summary.append(createSummaryTitle(numberOfDays, locationStatusReports, regionSummaryReports));
-        summary.append("The ");
-        summary.append(numberOfEntries);
-        summary.append("most important location status reports in this period are as follows:\n");
-        summary.append(generateLocationStatusReportsString(locationStatusReports, numberOfEntries));
-        return summary.toString();
-    }
+    private String buildSummaryString(int numberOfDays, List<LocationStatusReportWithTimeZone> locationStatusReports, List<RegionSummaryReport> regionSummaryReports) {
+        ExecutiveSummaryBuilder builder = new ExecutiveSummaryBuilder();
+        builder.appendSummaryTitle(numberOfDays, regionSummaryReports.size(), locationStatusReports.size(), MAX_REPORTS);
 
-    private String createSummaryTitle(int numberOfDays, List<LocationStatusReportWithTimeZone> locationStatusReports, List<RegionSummaryReport> regionSummaryReports) {
-        StringBuilder summaryTitleBuilder = new StringBuilder();
+        AtomicInteger index = new AtomicInteger(0);
+        locationStatusReports.stream()
+                .sorted((a, b) -> b.getStatus() - a.getStatus())
+                .limit(MAX_REPORTS)
+                .forEachOrdered(report -> {
+                    Agent agent = agentsDao.getAgent(report.getAgentId())
+                            .orElseThrow(() -> new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Unknown Agent: " + report.getAgentId()));
+                    Location location = locationsDao.getLocation(report.getLocationId())
+                            .orElseThrow(() -> new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Unknown Location: " + report.getLocationId()));;
+                    builder.appendLocationStatusReport(index.incrementAndGet(), report, agent, location);
+                });
 
-        summaryTitleBuilder.append("Over the past ");
-        summaryTitleBuilder.append(numberOfDays);
-        summaryTitleBuilder.append(" days there have been ");
-        summaryTitleBuilder.append(regionSummaryReports.size());
-        summaryTitleBuilder.append(" region summary reports and ");
-        summaryTitleBuilder.append(locationStatusReports.size());
-        summaryTitleBuilder.append(" location status reports.\n\n");
-        return summaryTitleBuilder.toString();
-    }
-
-    private String generateLocationStatusReportsString(List<LocationStatusReportWithTimeZone> locationStatusReports, int numberOfReports) {
-        StringBuilder locationStatusReportsBuilder = new StringBuilder();
-        locationStatusReports.sort((a, b) -> b.getStatus() - a.getStatus());
-        for (int i = 0; i < Math.min(numberOfReports, locationStatusReports.size()); i++) {
-            locationStatusReportsBuilder.append("\n** Report ");
-            locationStatusReportsBuilder.append(i + 1);
-            locationStatusReportsBuilder.append(" **\n\n");
-
-            locationStatusReportsBuilder.append(generateIndividualLocationStatusReportString(locationStatusReports.get(i)));
-        }
-        return locationStatusReportsBuilder.toString();
-    }
-
-    private String generateIndividualLocationStatusReportString(LocationStatusReportWithTimeZone locationStatusReport) {
-        Agent agent = agentsDao.getAgent(locationStatusReport.getAgentId()).get();
-        Location location = locationsDao.getLocation(locationStatusReport.getLocationId()).get();
-        StringBuilder individualLocationStatusReportBuilder = new StringBuilder();
-        individualLocationStatusReportBuilder.append("Submitted by: ");
-        individualLocationStatusReportBuilder.append(agent.getFirstName());
-        individualLocationStatusReportBuilder.append(" (");
-        individualLocationStatusReportBuilder.append(agent.getCallSign());
-        individualLocationStatusReportBuilder.append(")\nSubmuitted at: ");
-        individualLocationStatusReportBuilder.append(locationStatusReport.getReportTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        individualLocationStatusReportBuilder.append("\nLocation Name: ");
-        individualLocationStatusReportBuilder.append(location.getLocation());
-        individualLocationStatusReportBuilder.append("\nLocation Status: ");
-        individualLocationStatusReportBuilder.append(locationStatusReport.getStatus());
-        individualLocationStatusReportBuilder.append("\n\n");
-        individualLocationStatusReportBuilder.append(locationStatusReport.getReportBody());
-        individualLocationStatusReportBuilder.append("\n\n");
-
-        return individualLocationStatusReportBuilder.toString();
+        return builder.toString();
     }
 }

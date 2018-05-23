@@ -15,7 +15,7 @@ public class WebDriverHelper {
     /**
      * Set this to 'false' to disable headless mode and allow debugging with developer tools.
      */
-    private static final boolean HEADLESS = false; // TODO
+    private static final boolean HEADLESS = true;
 
     /**
      * Shared webdriver
