@@ -1,2 +1,1 @@
-alter table user
-add `admin` bit NOT NULL DEFAULT 0
+ALTER TABLE users ADD admin BOOLEAN NOT NULL DEFAULT FALSE;

@@ -19,19 +19,19 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
 
     public Optional<LocationStatusReport> getReport(int reportId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM agent_location_report WHERE report_id = :report_id")
+            return handle.createQuery("SELECT * FROM location_reports WHERE report_id = :report_id")
                     .bind("report_id", reportId)
                     .mapToBean(LocationStatusReport.class)
                     .findFirst();
         }
     }
 
-    public int addReport(LocationStatusReport report) {
+    public int createReport(LocationStatusReport report) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO agent_location_report (location_id, call_sign, status, report_time, report_body)" +
-                    " VALUES (:location_id, :call_sign, :status, :report_time, :report_body)")
+            return handle.createUpdate("INSERT INTO location_reports (location_id, agent_id, status, report_time, report_body)" +
+                    " VALUES (:location_id, :agent_id, :status, :report_time, :report_body)")
                     .bind("location_id", report.getLocationId())
-                    .bind("call_sign", report.getCallSign())
+                    .bind("agent_id", report.getAgentId())
                     .bind("status", report.getStatus())
                     .bind("report_time", report.getReportTime())
                     .bind("report_body", report.getReportBody())
@@ -41,9 +41,9 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
         }
     }
 
-    public int deleteReport(int report_id) {
+    public void deleteReport(int report_id) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM agent_location_report WHERE report_id = :report_id")
+            handle.createUpdate("DELETE FROM location_reports WHERE report_id = :report_id")
                     .bind("report_id", report_id)
                     .execute();
         }
@@ -53,7 +53,7 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
         String whereClause = ReportsDaoUtils.buildWhereSubClaseFromCriteria(searchCriteria);
 
         try (Handle handle = jdbi.open()) {
-             Query query = handle.createQuery("SELECT agent_location_report.*, location.time_zone as location_time_zone " +
+             Query query = handle.createQuery("SELECT location_reports.*, location.time_zone as location_time_zone " +
                     "FROM agent_location_report JOIN location " +
                     " ON agent_location_report.location_id = location.location_id" + whereClause);
 

@@ -1,10 +1,16 @@
 package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.models.FailedRequestException;
-import org.softwire.training.db.daos.*;
+import org.softwire.training.db.daos.AgentsDao;
+import org.softwire.training.db.daos.LocationReportsDao;
+import org.softwire.training.db.daos.LocationsDao;
+import org.softwire.training.db.daos.RegionSummaryReportsDao;
 import org.softwire.training.db.daos.searchcriteria.FromTimeSearchCriterion;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
-import org.softwire.training.models.*;
+import org.softwire.training.models.Agent;
+import org.softwire.training.models.Location;
+import org.softwire.training.models.LocationStatusReportWithTimeZone;
+import org.softwire.training.models.RegionSummaryReport;
 import spark.Request;
 import spark.Response;
 
@@ -13,25 +19,15 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-class SortByStatus implements Comparator<LocationStatusReportWithTimeZone>
-{
-    // Used for sorting in ascending order of
-    // roll number
-    public int compare(LocationStatusReportWithTimeZone a, LocationStatusReportWithTimeZone b)
-    {
-        return b.getStatus() - a.getStatus();
-    }
-}
-
+// TODO: needs work?
 public class ExecutiveSummaryRoutes {
-    @Inject
-    LocationReportsDao locationReportsDao;
-    RegionSummaryReportsDao regionSummaryReportsDao;
-    AgentsDao agentsDao;
-    LocationsDao locationsDao;
+
+    private final LocationReportsDao locationReportsDao;
+    private final RegionSummaryReportsDao regionSummaryReportsDao;
+    private final AgentsDao agentsDao;
+    private final LocationsDao locationsDao;
 
     @Inject
     public ExecutiveSummaryRoutes(LocationReportsDao locationReportsDao, RegionSummaryReportsDao regionSummaryReportsDao, AgentsDao agentsDao, LocationsDao locationsDao) {
@@ -90,7 +86,7 @@ public class ExecutiveSummaryRoutes {
 
     private String generateLocationStatusReportsString(List<LocationStatusReportWithTimeZone> locationStatusReports, int numberOfReports) {
         StringBuilder locationStatusReportsBuilder = new StringBuilder();
-        locationStatusReports.sort(new SortByStatus());
+        locationStatusReports.sort((a, b) -> b.getStatus() - a.getStatus());
         for (int i = 0; i < Math.min(numberOfReports, locationStatusReports.size()); i++) {
             locationStatusReportsBuilder.append("\n** Report ");
             locationStatusReportsBuilder.append(i + 1);
@@ -102,7 +98,7 @@ public class ExecutiveSummaryRoutes {
     }
 
     private String generateIndividualLocationStatusReportString(LocationStatusReportWithTimeZone locationStatusReport) {
-        Agent agent = agentsDao.getAgent(locationStatusReport.getCallSign()).get();
+        Agent agent = agentsDao.getAgent(locationStatusReport.getAgentId()).get();
         Location location = locationsDao.getLocation(locationStatusReport.getLocationId()).get();
         StringBuilder individualLocationStatusReportBuilder = new StringBuilder();
         individualLocationStatusReportBuilder.append("Submitted by: ");

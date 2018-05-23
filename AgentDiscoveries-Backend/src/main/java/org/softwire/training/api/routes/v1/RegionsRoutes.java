@@ -16,13 +16,11 @@ import java.util.List;
 
 public class RegionsRoutes {
 
-    private final LocationsDao locationsDao;
     private final RegionsDao regionsDao;
     private final PermissionsVerifier permissionsVerifier;
 
     @Inject
-    public RegionsRoutes(LocationsDao locationsDao, RegionsDao regionsDao, PermissionsVerifier permissionsVerifier) {
-        this.locationsDao = locationsDao;
+    public RegionsRoutes(RegionsDao regionsDao, PermissionsVerifier permissionsVerifier) {
         this.regionsDao = regionsDao;
         this.permissionsVerifier=permissionsVerifier;
     }
@@ -35,9 +33,7 @@ public class RegionsRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "regionId cannot be specified on create");
         }
 
-        validateRegion(region);
-
-        int newRegionId = regionsDao.addRegion(region);
+        int newRegionId = regionsDao.createRegion(region);
 
         // Create requests should return 201
         region.setRegionId(newRegionId);
@@ -59,7 +55,6 @@ public class RegionsRoutes {
         Region region = JsonRequestUtils.readBodyAsType(req, Region.class);
         region.setRegionId(id);
 
-        validateRegion(region);
         regionsDao.updateRegion(region);
 
         return region;
@@ -76,13 +71,5 @@ public class RegionsRoutes {
         res.status(204);
 
         return new Object();
-    }
-
-    private void validateRegion(Region region) throws FailedRequestException {
-        // Verify all locations actually exist
-        List<Integer> foundLocations = locationsDao.findWhichLocationIdsExist(region.getLocations());
-        if (foundLocations.size() < region.getLocations().size()) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Not all specified locations exist");
-        }
     }
 }

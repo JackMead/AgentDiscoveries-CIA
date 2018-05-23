@@ -15,89 +15,45 @@ public class RegionsDao {
 
     public Optional<Region> getRegion(int regionId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM region WHERE region_id = :region_id")
+            return handle.createQuery("SELECT * FROM regions WHERE region_id = :region_id")
                     .bind("region_id", regionId)
                     .mapToBean(Region.class)
-                    .findFirst()
-                    .map(r -> {
-                        r.setLocations(handle.createQuery("SELECT location_id FROM location_region " +
-                                "WHERE region_id = :region_id")
-                                .bind("region_id", regionId)
-                                .mapTo(Integer.class)
-                                .list());
-                        return r;
-                    });
+                    .findFirst();
         }
     }
 
     public List<Region> getRegions() {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM region")
+            return handle.createQuery("SELECT * FROM regions")
                     .mapToBean(Region.class)
                     .list();
         }
     }
 
-    public int addRegion(Region region) {
+    public int createRegion(Region region) {
         try (Handle handle = jdbi.open()) {
-            int regionId = handle.createUpdate("INSERT INTO region (name) VALUE (:name)")
+            return handle.createUpdate("INSERT INTO regions (name) VALUE (:name)")
                     .bind("name", region.getName())
                     .executeAndReturnGeneratedKeys("region_id")
                     .mapTo(Integer.class)
                     .findOnly();
-
-            boolean allLocationsInserted = false;
-            try {
-                for (int locationId: region.getLocations()) {
-                    handle.createUpdate("INSERT INTO location_region (location_id, region_id) " +
-                            "VALUES (:location_id, :region_id)")
-                            .bind("location_id", locationId)
-                            .bind("region_id", regionId)
-                            .execute();
-                }
-                allLocationsInserted = true;
-
-                return regionId;
-            } finally {
-                if (!allLocationsInserted) {
-                    deleteRegion(regionId);
-                }
-            }
         }
     }
 
     public void updateRegion(Region region) {
         try (Handle handle = jdbi.open()) {
-            handle.createUpdate("UPDATE region SET name = :name WHERE region_id = :region_id")
+            handle.createUpdate("UPDATE regions SET name = :name WHERE region_id = :region_id")
                     .bind("name", region.getName())
                     .bind("region_id", region.getRegionId())
                     .execute();
-
-            // TODO: Update locations or refactor DB model!
         }
     }
 
-    public int deleteRegion(int regionId) {
+    public void deleteRegion(int regionId) {
         try (Handle handle = jdbi.open()) {
-            try {
-                return handle.createUpdate("DELETE FROM location_region WHERE region_id = :region_id")
-                        .bind("region_id", regionId)
-                        .execute();
-            } finally {
-                handle.createUpdate("DELETE FROM region WHERE region_id = :region_id")
-                        .bind("region_id", regionId)
-                        .execute();
-            }
-        }
-    }
-
-    public boolean regionExistWithLocationId(int locationId) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT region_id FROM location_region WHERE location_id = :location_id LIMIT 1")
-                    .bind("location_id", locationId)
-                    .mapTo(Integer.class)
-                    .findFirst()
-                    .isPresent();
+            handle.createUpdate("DELETE FROM regions WHERE region_id = :region_id")
+                    .bind("region_id", regionId)
+                    .execute();
         }
     }
 }

@@ -31,7 +31,11 @@ public class CustomisedGsonBuilder {
 
         @Override
         public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
-            jsonWriter.value(localDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            if (localDate == null) {
+                jsonWriter.nullValue();
+            } else {
+                jsonWriter.value(localDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+            }
         }
 
         @Override
@@ -58,7 +62,11 @@ public class CustomisedGsonBuilder {
 
         @Override
         public void write(JsonWriter jsonWriter, ZonedDateTime localDateTime) throws IOException {
-            jsonWriter.value(localDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            if (localDateTime == null) {
+                jsonWriter.nullValue();
+            } else {
+                jsonWriter.value(localDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            }
         }
 
         @Override

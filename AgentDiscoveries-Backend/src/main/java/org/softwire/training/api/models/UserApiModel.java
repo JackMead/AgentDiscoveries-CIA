@@ -10,6 +10,7 @@ public class UserApiModel {
     private int userId;
     private String username;
     private String password;
+    private Integer agentId; // Nullable
     private boolean admin;
 
     public String getUsername() {
@@ -36,7 +37,19 @@ public class UserApiModel {
         this.userId = userId;
     }
 
-    public boolean isAdmin(){ return admin; }
+    public Integer getAgentId() {
+        return agentId;
+    }
 
-    public void setAdmin(boolean admin){ this.admin=admin; }
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
 }

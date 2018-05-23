@@ -9,13 +9,11 @@ export default class RegionForm extends React.Component {
 
         this.state = {
             name: '',
-            locations: '',
 
             message: {}
         };
 
         this.onNameChange = this.onNameChange.bind(this);
-        this.onLocationsChange = this.onLocationsChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         // In edit mode, the ID of the region is passed in through props
@@ -39,13 +37,6 @@ export default class RegionForm extends React.Component {
                                 value={this.state.name}
                                 onChange={this.onNameChange}/>
                         </FormGroup>
-                        <FormGroup>
-                            <ControlLabel>Location IDs</ControlLabel>
-                            <FormControl type='text' required
-                                placeholder='Enter location IDs (comma separated)'
-                                value={this.state.locations}
-                                onChange={this.onLocationsChange}/>
-                        </FormGroup>
                         <Button type='submit'>Submit</Button>
                     </Form>
                 </div>
@@ -57,18 +48,11 @@ export default class RegionForm extends React.Component {
         this.setState({ name: event.target.value });
     }
 
-    onLocationsChange(event) {
-        this.setState({ locations: event.target.value });
-    }
-
     onSubmit(event) {
         event.preventDefault();
 
         const body = {
-            name: this.state.name,
-            locations: this.state.locations.split(/,/)
-                .map(item => parseInt(item.trim()))
-                .filter(item => !isNaN(item))
+            name: this.state.name
         };
 
         const request = this.props.id

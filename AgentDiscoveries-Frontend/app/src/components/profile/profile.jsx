@@ -24,7 +24,6 @@ export default class Profile extends React.Component {
     componentWillMount() {
         this.getProfilePicture();
         this.getUser();
-        this.getAgent();
     }
 
     render() {
@@ -65,12 +64,17 @@ export default class Profile extends React.Component {
 
     getUser() {
         apiGet('users', currentUserId())
-            .then(user => this.setState({ user: user }))
+            .then(user => {
+                this.setState({ user: user });
+                if (user.agentId) {
+                    this.getAgent(user.agentId);
+                }
+            })
             .catch(errorLogAndRedirect);
     }
 
-    getAgent() {
-        apiGet('agents', currentUserId())
+    getAgent(agentId) {
+        apiGet('agents', agentId)
             .then(agent => this.setState({ agent: agent }))
             .catch(error => {
                 if (error.response && error.response.status === 404) {

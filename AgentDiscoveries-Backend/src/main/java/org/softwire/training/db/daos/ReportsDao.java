@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface ReportsDao<T, U> {
 
-    int addReport(T model);
+    int createReport(T model);
 
     Optional<T> getReport(int reportId);
 
-    int deleteReport(int reportId);
+    void deleteReport(int reportId);
 
     List<U> searchReports(List<ReportSearchCriterion> searchCriteria);
 }

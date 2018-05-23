@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ControlLabel, FormControl, FormGroup} from 'react-bootstrap';
 
-export default class AdminForm extends React.Component {
+export default class AgentForm extends React.Component {
     constructor(props) {
         super(props);
 

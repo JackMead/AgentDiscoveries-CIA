@@ -1,15 +1,13 @@
 package org.softwire.training.api.routes.v1;
 
-import com.google.common.base.Strings;
 import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.LocationStatusReportApiModel;
 import org.softwire.training.api.models.searchcriteria.*;
-import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.db.daos.LocationReportsDao;
 import org.softwire.training.db.daos.LocationsDao;
-import org.softwire.training.models.Agent;
+import org.softwire.training.db.daos.UsersDao;
 import org.softwire.training.models.Location;
 import org.softwire.training.models.LocationStatusReport;
 import org.softwire.training.models.LocationStatusReportWithTimeZone;
@@ -18,7 +16,6 @@ import spark.Request;
 
 import javax.inject.Inject;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -26,12 +23,13 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
     @Inject
-    public LocationStatusReportsRoutes(LocationReportsDao locationReportsDao, AgentsDao agentsDao, LocationsDao locationsDao, PermissionsVerifier permissionsVerifier) {
+    public LocationStatusReportsRoutes(LocationReportsDao locationReportsDao, LocationsDao locationsDao, UsersDao usersDao, PermissionsVerifier permissionsVerifier) {
         super(
                 LocationStatusReportApiModel.class,
-                new LocationStatusValidationMapper(locationsDao, agentsDao),
+                new LocationStatusValidationMapper(locationsDao),
                 locationReportsDao,
                 new LocationStatusReportSearchCriteriaParser(),
+                usersDao,
                 permissionsVerifier);
     }
 
@@ -39,23 +37,13 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             implements ValidatorMapper<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
         private final LocationsDao locationsDao;
-        private final AgentsDao agentsDao;
 
-        LocationStatusValidationMapper(LocationsDao locationReportsDao, AgentsDao agentsDao) {
+        LocationStatusValidationMapper(LocationsDao locationReportsDao) {
             this.locationsDao = locationReportsDao;
-            this.agentsDao = agentsDao;
         }
 
         @Override
         public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) throws FailedRequestException {
-            Optional<Agent> optionalAgent = agentsDao.getAgentByUserId(apiModel.getUserId());
-
-            // First check agent exists
-            if (!optionalAgent.isPresent()) {
-                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Agent does not exist");
-            }
-
-            Agent agent = optionalAgent.get();
             Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
 
             if (!location.isPresent()) {
@@ -69,7 +57,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
                         .toLocalDateTime();
 
                 LocationStatusReport model = new LocationStatusReport();
-                model.setCallSign(agent.getCallSign());
+                model.setAgentId(apiModel.getAgentId());
                 model.setLocationId(apiModel.getLocationId());
                 model.setStatus(apiModel.getStatus());
                 model.setReportTime(dateTimeInReportLocation);
@@ -100,7 +88,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
             ZoneId locationTimeZone = ZoneId.of(timeZone);
 
             apiModel.setReportId(model.getReportId());
-            apiModel.setCallsign(model.getCallSign());
+            apiModel.setAgentId(model.getAgentId());
             apiModel.setLocationId(model.getLocationId());
             apiModel.setStatus(model.getStatus());
             apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone));

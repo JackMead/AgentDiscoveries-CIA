@@ -18,19 +18,19 @@ public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport, 
 
     public Optional<RegionSummaryReport> getReport(int reportId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM region_summary_report WHERE report_id = :report_id")
+            return handle.createQuery("SELECT * FROM region_summary_reports WHERE report_id = :report_id")
                     .bind("report_id", reportId)
                     .mapToBean(RegionSummaryReport.class)
                     .findFirst();
         }
     }
 
-    public int addReport(RegionSummaryReport report) {
+    public int createReport(RegionSummaryReport report) {
         try (Handle handle = jdbi.open()) {
-            return handle.createScript("INSERT INTO region_summary_report (region_id, user_id, status, report_time, report_body)" +
+            return handle.createScript("INSERT INTO region_summary_reports (region_id, agent_id, status, report_time, report_body)" +
                     " VALUES ("
                     + report.getRegionId() + ", "
-                    + report.getUserId() + ", "
+                    + report.getAgentId() + ", "
                     + report.getStatus() + ", '"
                     + report.getReportTime() + "', '"
                     + report.getReportBody()
@@ -38,9 +38,9 @@ public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport, 
         }
     }
 
-    public int deleteReport(int report_id) {
+    public void deleteReport(int report_id) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM region_summary_report WHERE report_id = :report_id")
+            handle.createUpdate("DELETE FROM region_summary_reports WHERE report_id = :report_id")
                     .bind("report_id", report_id)
                     .execute();
         }
@@ -50,7 +50,7 @@ public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport, 
         String whereClause = ReportsDaoUtils.buildWhereSubClaseFromCriteria(searchCriteria);
 
         try (Handle handle = jdbi.open()) {
-             Query query = handle.createQuery("SELECT * FROM region_summary_report " + whereClause);
+             Query query = handle.createQuery("SELECT * FROM region_summary_reports " + whereClause);
 
              for (ReportSearchCriterion criterion : searchCriteria) {
                  for (Map.Entry<String, Object> bindingEntry : criterion.getBindingsForSql().entrySet()) {

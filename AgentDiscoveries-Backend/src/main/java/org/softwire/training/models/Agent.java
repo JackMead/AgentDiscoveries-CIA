@@ -4,24 +4,30 @@ import java.time.LocalDate;
 
 public class Agent {
 
-    private int userId;
+    private int agentId;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private int rank;
     private String callSign;
 
-    public Agent() {
+    public Agent() {}
 
-    }
-
-    public Agent(int userId, String firstName, String lastName, LocalDate dateOfBirth, int rank, String callSign) {
-        this.userId = userId;
+    public Agent(int agentId, String firstName, String lastName, LocalDate dateOfBirth, int rank, String callSign) {
+        this.agentId = agentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.rank = rank;
         this.callSign = callSign;
+    }
+
+    public int getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(int agentId) {
+        this.agentId = agentId;
     }
 
     public String getFirstName() {
@@ -63,8 +69,4 @@ public class Agent {
     public void setCallSign(String callSign) {
         this.callSign = callSign;
     }
-
-    public int getUserId(){return userId;}
-
-    public void setUserId(int userId){this.userId = userId;}
 }

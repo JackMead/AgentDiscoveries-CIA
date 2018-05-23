@@ -6,6 +6,7 @@ public class Location {
     private String siteName;
     private String location;
     private String timeZone;
+    private Integer regionId; // Nullable
 
     public int getLocationId() {
         return locationId;
@@ -37,5 +38,13 @@ public class Location {
 
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public Integer getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(Integer regionId) {
+        this.regionId = regionId;
     }
 }

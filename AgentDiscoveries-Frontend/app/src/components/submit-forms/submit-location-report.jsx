@@ -44,7 +44,8 @@ export default class LocationReportSubmit extends React.Component {
                         <ControlLabel>Location</ControlLabel>
                         <FormControl componentClass='select' required
                             value={this.state.locationId}
-                            onChange={this.onLocationChange}>
+                            onChange={this.onLocationChange}
+                            id='location-select'>
                             <option value='' hidden>Choose a location</option>
                             {this.state.locations.map(location =>
                                 <option key={location.locationId} value={location.locationId}>{location.location}, {location.siteName}</option>)}

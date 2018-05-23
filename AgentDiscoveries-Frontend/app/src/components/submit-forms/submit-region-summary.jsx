@@ -42,7 +42,8 @@ export default class RegionSummarySubmit extends React.Component {
                         <ControlLabel>Region</ControlLabel>
                         <FormControl componentClass='select' required
                             value={this.state.regionId}
-                            onChange={this.onRegionChange}>
+                            onChange={this.onRegionChange}
+                            id='region-select'>
                             <option value='' hidden>Choose a region</option>
                             {this.state.regions.map(region =>
                                 <option key={region.regionId} value={region.regionId}>{region.name}</option>)}

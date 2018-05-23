@@ -11,5 +11,4 @@ public class RegionSummaryReport extends ReportBase {
     public void setRegionId(int regionId) {
         this.regionId = regionId;
     }
-
 }

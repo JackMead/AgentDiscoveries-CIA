@@ -16,7 +16,7 @@ public class LocationsDao {
 
     public Optional<Location> getLocation(int locationId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM location WHERE location_id = :location_id")
+            return handle.createQuery("SELECT * FROM locations WHERE location_id = :location_id")
                     .bind("location_id", locationId)
                     .mapToBean(Location.class)
                     .findFirst();
@@ -25,56 +25,44 @@ public class LocationsDao {
 
     public List<Location> getLocations() {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM location")
+            return handle.createQuery("SELECT * FROM locations")
                     .mapToBean(Location.class)
                     .list();
         }
     }
 
-    public int addLocation(Location location) {
+    public int createLocation(Location location) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO location (location, site_name, time_zone) " +
-                    "VALUES (:location, :site_name, :time_zone)")
+            return handle.createUpdate("INSERT INTO locations (location, site_name, time_zone, region_id) " +
+                    "VALUES (:location, :site_name, :time_zone, :region_id)")
                     .bind("location", location.getLocation())
                     .bind("site_name", location.getSiteName())
                     .bind("time_zone", location.getTimeZone())
+                    .bind("region_id", location.getRegionId())
                     .executeAndReturnGeneratedKeys("location_id")
                     .mapTo(Integer.class)
                     .findOnly();
         }
     }
 
-    public int deleteLocation(int locationId) {
+    public void deleteLocation(int locationId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM location WHERE location_id = :location_id")
+            handle.createUpdate("DELETE FROM locations WHERE location_id = :location_id")
                     .bind("location_id", locationId)
                     .execute();
         }
     }
 
-    public int updateLocation(Location location) {
+    public void updateLocation(Location location) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("UPDATE location SET location = :location, site_name = :site_name, " +
-                    "time_zone = :time_zone WHERE location_id = :location_id")
+            handle.createUpdate("UPDATE locations SET location = :location, site_name = :site_name, " +
+                    "time_zone = :time_zone, region_id = :region_id WHERE location_id = :location_id")
                     .bind("location_id", location.getLocationId())
                     .bind("location", location.getLocation())
                     .bind("site_name", location.getSiteName())
                     .bind("time_zone", location.getTimeZone())
+                    .bind("region_id", location.getRegionId())
                     .execute();
-        }
-    }
-
-    public List<Integer> findWhichLocationIdsExist(List<Integer> locationIdsToSearchFor) {
-        if (locationIdsToSearchFor.isEmpty()) {
-            // Cannot bind empty lists so manually return no locations when provided empty list
-            return new ArrayList<>();
-        }
-
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT location_id FROM location WHERE location_id IN (<locations>)")
-                    .bindList("locations", locationIdsToSearchFor)
-                    .mapTo(Integer.class)
-                    .list();
         }
     }
 }

@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.softwire.training.api.integration.helper.LoginHelper;
 import org.softwire.training.api.integration.helper.WebDriverHelper;
@@ -26,10 +27,12 @@ public class SubmitReportsIT {
 
     @Test
     public void testCanSubmitLocationReport() {
-        LoginHelper.login(driver, TARGET_ADDRESS);
-
+        driver.get(TARGET_ADDRESS);
+        LoginHelper.ensureLoggedIn(driver);
         driver.get(TARGET_ADDRESS + "/#/submit/location");
 
+        WebElement locationSelect = driver.findElement(By.id("location-select"));
+        new Select(locationSelect).selectByIndex(1);
         WebElement statusInput = driver.findElement(By.id("status-input"));
         statusInput.sendKeys("1");
         WebElement reportInput = driver.findElement(By.id("report-input"));
@@ -39,15 +42,17 @@ public class SubmitReportsIT {
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert-info")));
         WebElement alert = driver.findElement(By.className("alert-info"));
-        assertTrue(alert.getText().contains("Report filed"));
+        assertTrue(alert.getText().contains("Report submitted"));
     }
 
     @Test
     public void testCanSubmitRegionReport(){
-        LoginHelper.login(driver, TARGET_ADDRESS);
-
+        driver.get(TARGET_ADDRESS);
+        LoginHelper.ensureLoggedIn(driver);
         driver.get(TARGET_ADDRESS + "/#/submit/region");
 
+        WebElement regionSelect = driver.findElement(By.id("region-select"));
+        new Select(regionSelect).selectByIndex(1);
         WebElement statusInput = driver.findElement(By.id("status-input"));
         statusInput.sendKeys("1");
         WebElement reportInput = driver.findElement(By.id("report-input"));
@@ -57,6 +62,6 @@ public class SubmitReportsIT {
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert-info")));
         WebElement alert = driver.findElement(By.className("alert-info"));
-        assertTrue(alert.getText().contains("Report sent"));
+        assertTrue(alert.getText().contains("Report submitted"));
     }
 }

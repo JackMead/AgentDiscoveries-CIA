@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Button, Checkbox, Form, FormControl, FormGroup} from 'react-bootstrap';
-import AdminForm from './admin-form';
-import {apiPost} from '../utilities/request-helper';
+import AgentForm from './agent-form';
+import {apiGet, apiPost, apiPut} from '../utilities/request-helper';
 import Message from '../message';
 
 export default class UserForm extends React.Component {
@@ -13,6 +13,8 @@ export default class UserForm extends React.Component {
             password: '',
             isAgent: false,
             isAdmin: false,
+
+            agentId: '',
 
             agent: {
                 firstName: '',
@@ -31,6 +33,10 @@ export default class UserForm extends React.Component {
         this.onIsAdminUpdate = this.onIsAdminUpdate.bind(this);
         this.onAgentUpdate = this.onAgentUpdate.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+
+        if (this.props.id) {
+            this.loadUser(this.props.id);
+        }
     }
 
     render() {
@@ -39,7 +45,7 @@ export default class UserForm extends React.Component {
                 <Message message={this.state.message} />
                 <div className='col-md-12'>
                     <Form onSubmit={this.onSubmit}>
-                        <h3>Create User</h3>
+                        <h3>{this.props.id ? 'Edit' : 'Create'} User</h3>
                         <FormGroup>
                             <FormControl type='text' required
                                 placeholder='Enter username'
@@ -47,8 +53,8 @@ export default class UserForm extends React.Component {
                                 onChange={this.onUsernameUpdate}/>
                         </FormGroup>
                         <FormGroup>
-                            <FormControl type='password' required
-                                placeholder='enter password'
+                            <FormControl type='password' required={!this.props.id}
+                                placeholder={'Enter password' + (this.props.id ? ' (leave blank if unchanged)' : '')}
                                 value={this.state.password}
                                 onChange={this.onPasswordUpdate}/>
                         </FormGroup>
@@ -60,7 +66,7 @@ export default class UserForm extends React.Component {
                             </Checkbox>
                         </FormGroup>
 
-                        {this.state.isAgent && <AdminForm agent={this.state.agent} onUpdate={this.onAgentUpdate}/>}
+                        {this.state.isAgent && <AgentForm agent={this.state.agent} onUpdate={this.onAgentUpdate}/>}
 
                         <FormGroup>
                             <Checkbox type='checkbox'
@@ -99,21 +105,42 @@ export default class UserForm extends React.Component {
     onSubmit(event) {
         event.preventDefault();
 
-        const user = {
-            username: this.state.username,
-            password: this.state.password,
-            admin: this.state.isAdmin
-        };
+        const agentIdPromise = this.state.isAgent
+            ? this.state.agentId
+                ? apiPut('agents', this.state.agent, this.state.agentId).then(() => this.state.agentId)
+                : apiPost('agents', this.state.agent).then(response => response.agentId)
+            : Promise.resolve(null);
 
-        // TODO: create admin entity independently?
-        apiPost('users', user)
-            .then(response => {
-                if (this.state.isAgent) {
-                    const agent = Object.assign({ userId: response.userId }, this.state.agent);
-                    return apiPost('agents', agent);
-                }
+        agentIdPromise
+            .then(agentId => {
+                const user = {
+                    username: this.state.username,
+                    password: this.state.password,
+                    agentId: agentId,
+                    admin: this.state.admin
+                };
+                return this.props.id
+                    ? apiPut('users', user, this.props.id)
+                    : apiPost('users', user);
             })
             .then(() => window.location.hash = '#/admin/users')
+            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+    }
+
+    loadUser(id) {
+        apiGet('users', id)
+            .then(result => {
+                this.setState(result);
+                if (result.agentId) {
+                    this.loadAgent(result.agentId);
+                }
+            })
+            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+    }
+
+    loadAgent(id) {
+        apiGet('agents', id)
+            .then(result => this.setState({ isAgent: true, agent: result }))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
 }

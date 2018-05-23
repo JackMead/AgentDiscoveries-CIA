@@ -13,19 +13,10 @@ public class AgentsDao {
     @Inject
     Jdbi jdbi;
 
-    public Optional<Agent> getAgent(String callSign) {
+    public Optional<Agent> getAgent(int agentId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM agent WHERE call_sign = :call_sign")
-                    .bind("call_sign", callSign)
-                    .mapToBean(Agent.class)
-                    .findFirst();
-        }
-    }
-
-    public Optional<Agent> getAgentByUserId(int userId) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM agent WHERE user_id = :user_id")
-                    .bind("user_id", userId)
+            return handle.createQuery("SELECT * FROM agents WHERE agent_id = :agent_id")
+                    .bind("agent_id", agentId)
                     .mapToBean(Agent.class)
                     .findFirst();
         }
@@ -33,40 +24,41 @@ public class AgentsDao {
 
     public List<Agent> getAgents() {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM agent")
+            return handle.createQuery("SELECT * FROM agents")
                     .mapToBean(Agent.class)
                     .list();
         }
     }
 
-    public int addAgent(Agent agent) {
+    public int createAgent(Agent agent) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO agent (user_id, first_name, last_name, date_of_birth, rank, call_sign)" +
-                    " VALUES (:user_id, :first_name, :last_name, :date_of_birth, :rank, :call_sign)")
+            return handle.createUpdate("INSERT INTO agents (first_name, last_name, date_of_birth, rank, call_sign)" +
+                    " VALUES (:first_name, :last_name, :date_of_birth, :rank, :call_sign)")
                     .bind("first_name", agent.getFirstName())
-                    .bind("user_id", agent.getUserId())
                     .bind("last_name", agent.getLastName())
                     .bind("date_of_birth", agent.getDateOfBirth())
                     .bind("rank", agent.getRank())
                     .bind("call_sign", agent.getCallSign())
+                    .executeAndReturnGeneratedKeys("agent_id")
+                    .mapTo(Integer.class)
+                    .findOnly();
+        }
+    }
+
+    public void deleteAgent(int agentId) {
+        try (Handle handle = jdbi.open()) {
+            handle.createUpdate("DELETE FROM agents WHERE agent_id = :agent_id")
+                    .bind("agent_id", agentId)
                     .execute();
         }
     }
 
-    public int deleteAgent(int userId) {
+    public void updateAgent(Agent agent) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM agent WHERE user_id = :user_id")
-                    .bind("user_id", userId)
-                    .execute();
-        }
-    }
-
-    public int updateAgent(Agent agent) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("UPDATE agent SET first_name = :first_name, last_name = :last_name, " +
+            handle.createUpdate("UPDATE agents SET first_name = :first_name, last_name = :last_name, " +
                     "date_of_birth = :date_of_birth, rank = :rank, call_sign = :call_sign " +
-                    "WHERE user_id = :user_id")
-                    .bind("user_id", agent.getUserId())
+                    "WHERE agent_id = :agent_id")
+                    .bind("agent_id", agent.getAgentId())
                     .bind("first_name", agent.getFirstName())
                     .bind("last_name", agent.getLastName())
                     .bind("date_of_birth", agent.getDateOfBirth())

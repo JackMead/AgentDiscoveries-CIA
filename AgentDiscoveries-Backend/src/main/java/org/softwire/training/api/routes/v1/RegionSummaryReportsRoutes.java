@@ -1,7 +1,6 @@
 package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.PermissionsVerifier;
-import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.RegionSummaryReportApiModel;
 import org.softwire.training.api.models.searchcriteria.*;
@@ -13,14 +12,11 @@ import spark.QueryParamsMap;
 import spark.Request;
 
 import javax.inject.Inject;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -33,6 +29,7 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
                 new RegionSummaryValidationMapper(regionsDao, usersDao),
                 regionSummaryReportsDao,
                 new RegionSummaryReportSearchCriteriaParser(),
+                usersDao,
                 permissionsVerifier);
     }
 
@@ -49,20 +46,11 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
 
         @Override
         public RegionSummaryReport validateThenMap(RegionSummaryReportApiModel apiModel) throws FailedRequestException {
-            // First check agent exists
-            if (!usersDao.getUser(apiModel.getUserId()).isPresent()) {
-                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "User does not exist");
-            }
-
-            if (!regionsDao.getRegion(apiModel.getRegionId()).isPresent()) {
-                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Region does not exist");
-            }
-
             // Ignore any supplied report time
             LocalDateTime reportTime = LocalDateTime.now(ZoneOffset.UTC);
 
             RegionSummaryReport model = new RegionSummaryReport();
-            model.setUserId(apiModel.getUserId());
+            model.setAgentId(apiModel.getAgentId());
             model.setRegionId(apiModel.getRegionId());
             model.setStatus(apiModel.getStatus());
             model.setReportTime(reportTime);
@@ -76,7 +64,7 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
             RegionSummaryReportApiModel apiModel = new RegionSummaryReportApiModel();
 
             apiModel.setReportId(model.getReportId());
-            apiModel.setUserId(model.getUserId());
+            apiModel.setAgentId(model.getAgentId());
             apiModel.setRegionId(model.getRegionId());
             apiModel.setStatus(model.getStatus());
             apiModel.setReportTime(model.getReportTime().atZone(ZoneOffset.UTC));

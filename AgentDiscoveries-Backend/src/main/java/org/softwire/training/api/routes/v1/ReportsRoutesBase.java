@@ -7,6 +7,7 @@ import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.ReportApiModelBase;
 import org.softwire.training.api.models.searchcriteria.ApiReportSearchCriterion;
 import org.softwire.training.db.daos.ReportsDao;
+import org.softwire.training.db.daos.UsersDao;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
 import org.softwire.training.models.ReportBase;
 import spark.Request;
@@ -26,8 +27,8 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
     private final ValidatorMapper<T, U, V> validatorThenMapper;
     private final Class<T> apiModelClass;
     private final ReportSearchCriteriaParser<V> searchCriteriaParser;
+    private final UsersDao usersDao;
 
-    @Inject
     protected PermissionsVerifier permissionsVerifier;
 
     protected ReportsRoutesBase(
@@ -35,29 +36,33 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
             ValidatorMapper<T, U, V> validatorThenMapper,
             ReportsDao<U, V> reportsDao,
             ReportSearchCriteriaParser<V> searchCriteriaParser,
+            UsersDao usersDao,
             PermissionsVerifier permissionsVerifier) {
         this.apiModelClass = apiModelClass;
         this.validatorThenMapper = validatorThenMapper;
         this.reportsDao = reportsDao;
         this.searchCriteriaParser = searchCriteriaParser;
-        this.permissionsVerifier=permissionsVerifier;
+        this.usersDao = usersDao;
+        this.permissionsVerifier = permissionsVerifier;
     }
 
     public T createReport(Request req, Response res) throws FailedRequestException {
-        permissionsVerifier.verifyIsAgent(req);
+        int agentId = usersDao.getUser(req.attribute("user_id"))
+                .flatMap(user -> Optional.ofNullable(user.getAgentId()))
+                .orElseThrow(() -> new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "Insufficient permissions"));
+
         T reportApiModel = JsonRequestUtils.readBodyAsType(req, apiModelClass);
 
         if (reportApiModel.getReportId() != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "reportId cannot be specified on create");
         }
 
-        int userId = req.attribute("user_id");
-        reportApiModel.setUserId(userId);
+        reportApiModel.setAgentId(agentId);
 
         // Validate report model before storing
         U reportModel = validatorThenMapper.validateThenMap(reportApiModel);
 
-        int newReportId = reportsDao.addReport(reportModel);
+        int newReportId = reportsDao.createReport(reportModel);
 
         // Create requests should return 201
         reportApiModel.setReportId(newReportId);

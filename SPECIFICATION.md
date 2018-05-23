@@ -7,8 +7,11 @@ Specification
 
 A location is a physical place that an agent may be stationed
 - *Site Name* is the codename for that location, e.g. `MI6`
-- *Location* is the long description of the location, e.g. `Vauxhall, London`
-- *Time Zone* is the time zone in ISO format, e.g. `+00:00[Europe/London]`
+- *Location* is the long description of the location, e.g. `London`
+- *Time Zone* is the time zone in one of the following formats:
+  - UTC: 'UTC', 'UT or 'GMT'
+  - Offsets: '+01:00', 'UTC-02:00', 'GMT+03:00' etc.
+  - Zone ID: 'Europe/London', 'America/New_York' etc.
 
 ## Region
 

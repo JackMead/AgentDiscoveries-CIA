@@ -15,7 +15,7 @@ public class WebDriverHelper {
     /**
      * Set this to 'false' to disable headless mode and allow debugging with developer tools.
      */
-    private static final boolean HEADLESS = true;
+    private static final boolean HEADLESS = false; // TODO
 
     /**
      * Shared webdriver
@@ -46,6 +46,9 @@ public class WebDriverHelper {
         driver.manage().timeouts()
                 .implicitlyWait(10, TimeUnit.SECONDS)
                 .pageLoadTimeout(2, TimeUnit.SECONDS);
+
+        // Ensure Chrome is closed when the JVM exits
+        Runtime.getRuntime().addShutdownHook(new Thread(driver::close));
 
         return driver;
     }

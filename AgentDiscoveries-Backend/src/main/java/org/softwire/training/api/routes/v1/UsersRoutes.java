@@ -1,5 +1,6 @@
 package org.softwire.training.api.routes.v1;
 
+import com.google.common.base.Strings;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PasswordHasher;
 import org.softwire.training.api.core.PermissionsVerifier;
@@ -40,7 +41,11 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.isAdmin());
+        User user = new User(
+                userApiModel.getUsername(),
+                passwordHasher.hashPassword(userApiModel.getPassword()),
+                userApiModel.getAgentId(),
+                userApiModel.isAdmin());
 
         int newUserId = usersDao.addUser(user);
 
@@ -76,12 +81,22 @@ public class UsersRoutes implements EntityCRUDRoutes {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
+
         Optional<User> optionalUser = usersDao.getUser(id);
-        if(!optionalUser.isPresent()){
+        if (!optionalUser.isPresent()) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be found");
         }
+
         User oldUser = optionalUser.get();
-        User user = new User(userApiModel.getUsername(), passwordHasher.hashPassword(userApiModel.getPassword()), userApiModel.isAdmin());
+
+        User user = new User(
+                userApiModel.getUsername(),
+                Strings.isNullOrEmpty(userApiModel.getPassword())
+                        ? oldUser.getHashedPassword()
+                        : passwordHasher.hashPassword(userApiModel.getPassword()),
+                userApiModel.getAgentId(),
+                userApiModel.isAdmin());
+
         user.setUserId(id);
         usersDao.updateUser(user);
 
@@ -92,6 +107,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
         UserApiModel userApiModel = new UserApiModel();
         userApiModel.setUserId(user.getUserId());
         userApiModel.setUsername(user.getUsername());
+        userApiModel.setAgentId(user.getAgentId());
         userApiModel.setAdmin(user.isAdmin());
         // Deliberately do not set the password for security reasons
 

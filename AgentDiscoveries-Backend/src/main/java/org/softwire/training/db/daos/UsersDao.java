@@ -15,7 +15,7 @@ public class UsersDao {
 
     public Optional<User> getUserByUsername(String username) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM user WHERE username = :username")
+            return handle.createQuery("SELECT * FROM users WHERE username = :username")
                     .bind("username", username)
                     .mapToBean(User.class)
                     .findFirst();
@@ -24,7 +24,7 @@ public class UsersDao {
 
     public Optional<User> getUser(int userId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM user WHERE user_id = :userId")
+            return handle.createQuery("SELECT * FROM users WHERE user_id = :userId")
                     .bind("userId", userId)
                     .mapToBean(User.class)
                     .findFirst();
@@ -33,7 +33,7 @@ public class UsersDao {
 
     public List<User> getUsers() {
         try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM user")
+            return handle.createQuery("SELECT * FROM users")
                     .mapToBean(User.class)
                     .list();
         }
@@ -41,10 +41,11 @@ public class UsersDao {
 
     public int addUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO user (username, hashed_password, admin) " +
-                    "VALUES (:username, :hashed_password, :admin)")
+            return handle.createUpdate("INSERT INTO users (username, hashed_password, agent_id, admin) " +
+                    "VALUES (:username, :hashed_password, :agent_id, :admin)")
                     .bind("username", user.getUsername())
                     .bind("hashed_password", user.getHashedPassword())
+                    .bind("agent_id", user.getAgentId())
                     .bind("admin", user.isAdmin())
                     .executeAndReturnGeneratedKeys("user_id")
                     .mapTo(Integer.class)
@@ -52,21 +53,22 @@ public class UsersDao {
         }
     }
 
-    public int deleteUser(int userId) {
+    public void deleteUser(int userId) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("DELETE FROM user WHERE user_id = :user_id")
+            handle.createUpdate("DELETE FROM users WHERE user_id = :user_id")
                     .bind("user_id", userId)
                     .execute();
         }
     }
 
-    public int updateUser(User user) {
+    public void updateUser(User user) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("UPDATE user SET username = :username , hashed_password = :password , admin = :admin " +
+            handle.createUpdate("UPDATE users SET username = :username , hashed_password = :password , agent_id = :agent_id, admin = :admin " +
                     "WHERE user_id = :user_id")
                     .bind("user_id", user.getUserId())
                     .bind("username", user.getUsername())
                     .bind("password", user.getHashedPassword())
+                    .bind("agent_id", user.getAgentId())
                     .bind("admin", user.isAdmin())
                     .execute();
         }

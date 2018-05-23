@@ -9,6 +9,7 @@ import org.softwire.training.api.integration.helper.LoginHelper;
 import org.softwire.training.api.integration.helper.WebDriverHelper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginIT {
@@ -30,8 +31,21 @@ public class LoginIT {
 
     @Test
     public void testCanLogIn() {
-        LoginHelper.login(driver, TARGET_ADDRESS);
+        driver.get(TARGET_ADDRESS);
+        LoginHelper.ensureLoggedOut(driver);
+        LoginHelper.login(driver);
+
         WebElement navBarRight = driver.findElement(By.className("navbar-right"));
         assertTrue(navBarRight.getText().contains("Log Out"));
+    }
+
+    @Test
+    public void testCanLogOut() {
+        driver.get(TARGET_ADDRESS);
+        LoginHelper.ensureLoggedIn(driver);
+        LoginHelper.logOut(driver);
+
+        WebElement navBarRight = driver.findElement(By.className("navbar-right"));
+        assertFalse(navBarRight.getText().contains("Log Out"));
     }
 }

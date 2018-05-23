@@ -31,6 +31,7 @@ public class MessageProcessor {
                     Resources.getResource("codewords.txt"),
                     Charsets.UTF_8);
         } catch (IOException e) {
+            // Should never fail!
             throw new RuntimeException(e);
         }
     }

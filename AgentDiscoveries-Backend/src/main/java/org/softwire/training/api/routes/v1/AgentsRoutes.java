@@ -30,7 +30,8 @@ public class AgentsRoutes {
         Agent agentModel = JsonRequestUtils.readBodyAsType(req, Agent.class);
         permissionsVerifier.verifyAdminPermission(req);
 
-        agentsDao.addAgent(agentModel);
+        int agentId = agentsDao.createAgent(agentModel);
+        agentModel.setAgentId(agentId);
 
         // Create requests should return 201
         res.status(201);
@@ -39,8 +40,8 @@ public class AgentsRoutes {
     }
 
     public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
-        permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
-        return agentsDao.getAgentByUserId(id)
+        permissionsVerifier.verifyIsAdminOrRelevantAgent(req, id);
+        return agentsDao.getAgent(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
@@ -50,16 +51,12 @@ public class AgentsRoutes {
     }
 
     public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
-        permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
+        permissionsVerifier.verifyIsAdminOrRelevantAgent(req, id);
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
-        Optional<Agent> optionalAgent = agentsDao.getAgentByUserId(id);
-        if (!optionalAgent.isPresent()) {
-            throw new FailedRequestException(ErrorCode.NOT_FOUND, "user Id not found");
-        }
-        Agent oldAgent = optionalAgent.get();
-        agent = mergeAgents(agent, oldAgent);
+        agent.setAgentId(id);
         agentsDao.updateAgent(agent);
+
         return agent;
     }
 
@@ -75,30 +72,5 @@ public class AgentsRoutes {
         res.status(204);
 
         return new Object();
-    }
-
-    private Agent mergeAgents(Agent newAgentDetails, Agent oldAgentDetails){
-        int newRank = newAgentDetails.getRank();
-        String newCallSign = newAgentDetails.getCallSign();
-        String newFirstName = newAgentDetails.getFirstName();
-        String newLastName = newAgentDetails.getLastName();
-        LocalDate newDateOfBirth = newAgentDetails.getDateOfBirth();
-
-        if(newRank!=0){
-            oldAgentDetails.setRank(newRank);
-        }
-        if(StringUtils.isNotEmpty(newCallSign)){
-            oldAgentDetails.setCallSign(newCallSign);
-        }
-        if(StringUtils.isNotEmpty(newFirstName)){
-            oldAgentDetails.setCallSign(newFirstName);
-        }
-        if(StringUtils.isNotEmpty(newLastName)){
-            oldAgentDetails.setCallSign(newLastName);
-        }
-        if(newDateOfBirth!=null){
-            oldAgentDetails.setDateOfBirth(newDateOfBirth);
-        }
-        return oldAgentDetails;
     }
 }

@@ -11,6 +11,7 @@ export default class LocationForm extends React.Component {
             siteName: '',
             location: '',
             timeZone: '',
+            regionId: '',
 
             message: {}
         };
@@ -18,6 +19,7 @@ export default class LocationForm extends React.Component {
         this.onSiteChange = this.onSiteChange.bind(this);
         this.onLocationChange = this.onLocationChange.bind(this);
         this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
+        this.onRegionIdChange = this.onRegionIdChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         // In edit mode, the ID of the location is passed in through props
@@ -51,9 +53,16 @@ export default class LocationForm extends React.Component {
                         <FormGroup>
                             <ControlLabel>Time Zone</ControlLabel>
                             <FormControl type='text' required
-                                placeholder='Enter time zone (e.g. GMT+1)'
+                                placeholder='Enter time zone (e.g. "Europe/London")'
                                 value={this.state.timeZone}
                                 onChange={this.onTimeZoneChange}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Region</ControlLabel>
+                            <FormControl type='number'
+                                placeholder='Enter region ID (optional)'
+                                value={this.state.regionId}
+                                onChange={this.onRegionIdChange}/>
                         </FormGroup>
                         <Button type='submit'>Submit</Button>
                     </Form>
@@ -74,13 +83,18 @@ export default class LocationForm extends React.Component {
         this.setState({ timeZone: event.target.value });
     }
 
+    onRegionIdChange(event) {
+        this.setState({ regionId: parseInt(event.target.value) });
+    }
+
     onSubmit(event) {
         event.preventDefault();
 
         const body = {
             siteName: this.state.siteName,
             location: this.state.location,
-            timeZone: this.state.timeZone
+            timeZone: this.state.timeZone,
+            regionId: this.state.regionId ? this.state.regionId : null
         };
 
         const request = this.props.id
