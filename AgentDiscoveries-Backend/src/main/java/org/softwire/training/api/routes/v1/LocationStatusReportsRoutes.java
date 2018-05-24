@@ -4,23 +4,27 @@ import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.LocationStatusReportApiModel;
-import org.softwire.training.api.models.searchcriteria.*;
 import org.softwire.training.db.daos.LocationReportsDao;
 import org.softwire.training.db.daos.LocationsDao;
 import org.softwire.training.db.daos.UsersDao;
+import org.softwire.training.db.daos.searchcriteria.*;
 import org.softwire.training.models.Location;
 import org.softwire.training.models.LocationStatusReport;
-import org.softwire.training.models.LocationStatusReportWithTimeZone;
 import spark.QueryParamsMap;
 import spark.Request;
 
 import javax.inject.Inject;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
+public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport> {
 
     private final LocationsDao locationsDao;
 
@@ -29,50 +33,34 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         super(
                 LocationStatusReportApiModel.class,
                 locationReportsDao,
-                new LocationStatusReportSearchCriteriaParser(),
                 usersDao,
                 permissionsVerifier);
         this.locationsDao = locationsDao;
     }
 
     @Override
-    public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) {
-        Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
+    protected LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) {
+        // Ignore any supplied report time
+        LocalDateTime reportTimeUtc = LocalDateTime.now(ZoneOffset.UTC);
 
-        if (!location.isPresent()) {
-            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Location does not exist");
-        } else {
-            ZoneId locationTimeZone = ZoneId.of(location.get().getTimeZone());
+        LocationStatusReport model = new LocationStatusReport();
+        model.setAgentId(apiModel.getAgentId());
+        model.setLocationId(apiModel.getLocationId());
+        model.setStatus(apiModel.getStatus());
+        model.setReportTime(reportTimeUtc);
+        model.setReportBody(apiModel.getReportBody());
 
-            // Ignore any supplied report time and use the current instant
-            LocalDateTime dateTimeInReportLocation = Instant.now()
-                    .atZone(locationTimeZone)
-                    .toLocalDateTime();
-
-            LocationStatusReport model = new LocationStatusReport();
-            model.setAgentId(apiModel.getAgentId());
-            model.setLocationId(apiModel.getLocationId());
-            model.setStatus(apiModel.getStatus());
-            model.setReportTime(dateTimeInReportLocation);
-            model.setReportBody(apiModel.getReportBody());
-
-            return model;
-        }
+        return model;
     }
 
     @Override
-    public LocationStatusReportApiModel mapToApiModel(LocationStatusReport model) {
+    protected LocationStatusReportApiModel mapToApiModel(LocationStatusReport model) {
         Optional<Location> location = locationsDao.getLocation(model.getLocationId());
         if (!location.isPresent()) {
             throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Could not successfully get location info");
         }
 
         return mapReportAndTimezoneToApiModel(model, location.get().getTimeZone());
-    }
-
-    @Override
-    public LocationStatusReportApiModel mapSearchResultToApiModel(LocationStatusReportWithTimeZone model) {
-        return mapReportAndTimezoneToApiModel(model, model.getLocationTimeZone());
     }
 
     private LocationStatusReportApiModel mapReportAndTimezoneToApiModel(LocationStatusReport model, String timeZone) {
@@ -90,32 +78,27 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         return apiModel;
     }
 
-    private static class LocationStatusReportSearchCriteriaParser
-            implements ReportSearchCriteriaParser<LocationStatusReportWithTimeZone> {
+    @Override
+    protected List<ReportSearchCriterion> parseSearchCriteria(Request req) {
+        QueryParamsMap queryMap = req.queryMap();
+        List<ReportSearchCriterion> searchCriteria = new ArrayList<>();
 
-        public List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> parseApiReportSearchCriteria(Request req) {
-            QueryParamsMap queryMap = req.queryMap();
-            List<ApiReportSearchCriterion<LocationStatusReportWithTimeZone>> apiReportSearchCriteria = new ArrayList<>();
-
-            if (!isNullOrEmpty(queryMap.get("callSign").value())) {
-                apiReportSearchCriteria.add(new AgentCallSignApiSearchCriterion(queryMap.get("callSign").value()));
-            }
-
-            if (!isNullOrEmpty(queryMap.get("locationId").value())) {
-                apiReportSearchCriteria.add(new LocationIdApiSearchCriterion(queryMap.get("locationId").integerValue()));
-            }
-
-            if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
-                apiReportSearchCriteria.add(new FromTimeApiLocationStatusSearchCriterion(
-                        ZonedDateTime.parse(queryMap.get("fromTime").value())));
-            }
-
-            if (!isNullOrEmpty(queryMap.get("toTime").value())) {
-                apiReportSearchCriteria.add(new ToTimeApiLocationStatusSearchCriterion(
-                        ZonedDateTime.parse(queryMap.get("toTime").value())));
-            }
-
-            return apiReportSearchCriteria;
+        if (!isNullOrEmpty(queryMap.get("callSign").value())) {
+            searchCriteria.add(new AgentCallSignSearchCriterion(queryMap.get("callSign").value()));
         }
+
+        if (!isNullOrEmpty(queryMap.get("locationId").value())) {
+            searchCriteria.add(new LocationIdSearchCriterion(queryMap.get("locationId").integerValue()));
+        }
+
+        if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
+            searchCriteria.add(new FromTimeSearchCriterion(ZonedDateTime.parse(queryMap.get("fromTime").value())));
+        }
+
+        if (!isNullOrEmpty(queryMap.get("toTime").value())) {
+            searchCriteria.add(new ToTimeSearchCriterion(ZonedDateTime.parse(queryMap.get("toTime").value())));
+        }
+
+        return searchCriteria;
     }
 }

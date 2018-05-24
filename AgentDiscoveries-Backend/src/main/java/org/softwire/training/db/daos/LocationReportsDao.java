@@ -5,14 +5,13 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.core.statement.Query;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
 import org.softwire.training.models.LocationStatusReport;
-import org.softwire.training.models.LocationStatusReportWithTimeZone;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class LocationReportsDao implements ReportsDao<LocationStatusReport, LocationStatusReportWithTimeZone> {
+public class LocationReportsDao implements ReportsDao<LocationStatusReport> {
 
     @Inject
     Jdbi jdbi;
@@ -49,13 +48,11 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
         }
     }
 
-    public List<LocationStatusReportWithTimeZone> searchReports(List<ReportSearchCriterion> searchCriteria) {
-        String whereClause = ReportsDaoUtils.buildWhereSubClaseFromCriteria(searchCriteria);
+    public List<LocationStatusReport> searchReports(List<ReportSearchCriterion> searchCriteria) {
+        String whereClause = ReportsDaoUtils.buildWhereSubClauseFromCriteria(searchCriteria);
 
         try (Handle handle = jdbi.open()) {
-             Query query = handle.createQuery("SELECT location_reports.*, location.time_zone as location_time_zone " +
-                    "FROM agent_location_report JOIN location " +
-                    " ON agent_location_report.location_id = location.location_id" + whereClause);
+             Query query = handle.createQuery("SELECT * FROM location_reports" + whereClause);
 
              for (ReportSearchCriterion criterion : searchCriteria) {
                  for (Map.Entry<String, Object> bindingEntry : criterion.getBindingsForSql().entrySet()) {
@@ -63,7 +60,7 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport, Loca
                  }
              }
 
-             return query.mapToBean(LocationStatusReportWithTimeZone.class).list();
+             return query.mapToBean(LocationStatusReport.class).list();
         }
     }
 }

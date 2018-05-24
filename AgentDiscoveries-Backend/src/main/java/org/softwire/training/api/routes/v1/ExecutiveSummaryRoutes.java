@@ -9,10 +9,7 @@ import org.softwire.training.db.daos.LocationsDao;
 import org.softwire.training.db.daos.RegionSummaryReportsDao;
 import org.softwire.training.db.daos.searchcriteria.FromTimeSearchCriterion;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
-import org.softwire.training.models.Agent;
-import org.softwire.training.models.Location;
-import org.softwire.training.models.LocationStatusReportWithTimeZone;
-import org.softwire.training.models.RegionSummaryReport;
+import org.softwire.training.models.*;
 import spark.Request;
 import spark.Response;
 
@@ -20,7 +17,9 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -43,27 +42,25 @@ public class ExecutiveSummaryRoutes {
 
     public String readExecutiveSummary(Request req, Response res) {
         int numberOfDays = Integer.parseInt(req.queryParams("days"));
-        LocalDateTime fromTime = LocalDateTime.now(ZoneOffset.UTC).minus(Period.ofDays(numberOfDays));
+        ZonedDateTime fromTime = ZonedDateTime.now(ZoneOffset.UTC).minus(Period.ofDays(numberOfDays));
 
-        List<LocationStatusReportWithTimeZone> locationStatusReports = getLocationStatusReports(fromTime);
+        List<LocationStatusReport> locationStatusReports = getLocationStatusReports(fromTime);
         List<RegionSummaryReport> regionSummaryReports = getRegionSummaryReports(fromTime);
 
         return buildSummaryString(numberOfDays, locationStatusReports, regionSummaryReports);
     }
 
-    private List<LocationStatusReportWithTimeZone> getLocationStatusReports(LocalDateTime fromTime) {
-        List<ReportSearchCriterion> searchCriteria = new ArrayList<>();
-        searchCriteria.add(new FromTimeSearchCriterion(fromTime));
-        return locationReportsDao.searchReports(searchCriteria);
+    private List<LocationStatusReport> getLocationStatusReports(ZonedDateTime fromTime) {
+        return locationReportsDao.searchReports(
+                Collections.singletonList(new FromTimeSearchCriterion(fromTime)));
     }
 
-    private List<RegionSummaryReport> getRegionSummaryReports(LocalDateTime fromTime) {
-        List<ReportSearchCriterion> searchCriteria = new ArrayList<>();
-        searchCriteria.add(new FromTimeSearchCriterion(fromTime));
-        return regionSummaryReportsDao.searchReports(searchCriteria);
+    private List<RegionSummaryReport> getRegionSummaryReports(ZonedDateTime fromTime) {
+        return regionSummaryReportsDao.searchReports(
+                Collections.singletonList(new FromTimeSearchCriterion(fromTime)));
     }
 
-    private String buildSummaryString(int numberOfDays, List<LocationStatusReportWithTimeZone> locationStatusReports, List<RegionSummaryReport> regionSummaryReports) {
+    private String buildSummaryString(int numberOfDays, List<LocationStatusReport> locationStatusReports, List<RegionSummaryReport> regionSummaryReports) {
         ExecutiveSummaryBuilder builder = new ExecutiveSummaryBuilder();
         builder.appendSummaryTitle(numberOfDays, regionSummaryReports.size(), locationStatusReports.size(), MAX_REPORTS);
 

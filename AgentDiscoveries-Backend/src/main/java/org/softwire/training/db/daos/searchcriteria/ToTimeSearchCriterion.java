@@ -1,6 +1,8 @@
 package org.softwire.training.db.daos.searchcriteria;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.Map;
 
@@ -9,8 +11,8 @@ public final class ToTimeSearchCriterion extends ReportSearchCriterion {
     private static final String REPORT_BINDING_NAME = "to_time_sc_report_time";
     private final LocalDateTime toTime;
 
-    public ToTimeSearchCriterion(LocalDateTime dateTime) {
-        this.toTime = dateTime;
+    public ToTimeSearchCriterion(ZonedDateTime dateTime) {
+        this.toTime = dateTime.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
     }
 
     @Override

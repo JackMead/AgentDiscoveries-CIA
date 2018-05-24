@@ -5,7 +5,11 @@ import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReportsDao<T, U> {
+/**
+ * A DAO for accessing different report types
+ * @param <T> The report DB class
+ */
+public interface ReportsDao<T> {
 
     int createReport(T model);
 
@@ -13,5 +17,5 @@ public interface ReportsDao<T, U> {
 
     void deleteReport(int reportId);
 
-    List<U> searchReports(List<ReportSearchCriterion> searchCriteria);
+    List<T> searchReports(List<ReportSearchCriterion> searchCriteria);
 }

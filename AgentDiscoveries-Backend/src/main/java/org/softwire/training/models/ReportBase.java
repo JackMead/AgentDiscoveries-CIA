@@ -6,7 +6,7 @@ public class ReportBase {
 
     private int reportId;
     private byte status;
-    private LocalDateTime reportTime;
+    private LocalDateTime reportTime; // Always UTC in the DB
     private String reportBody;
     private int agentId;
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport, RegionSummaryReport> {
+public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport> {
 
     @Inject
     Jdbi jdbi;
@@ -47,7 +47,7 @@ public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport, 
     }
 
     public List<RegionSummaryReport> searchReports(List<ReportSearchCriterion> searchCriteria) {
-        String whereClause = ReportsDaoUtils.buildWhereSubClaseFromCriteria(searchCriteria);
+        String whereClause = ReportsDaoUtils.buildWhereSubClauseFromCriteria(searchCriteria);
 
         try (Handle handle = jdbi.open()) {
              Query query = handle.createQuery("SELECT * FROM region_summary_reports " + whereClause);

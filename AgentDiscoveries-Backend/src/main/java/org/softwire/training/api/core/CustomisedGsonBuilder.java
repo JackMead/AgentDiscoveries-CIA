@@ -57,7 +57,6 @@ public class CustomisedGsonBuilder {
      * Gson does not have an adapter for LocalDateTime so expands into an object with day, month, year fields.
      * This adapter allows serializing and derserializing the value as yyyy-mm-ddThh:mm:ss+offset the ISO standard.
      */
-    // TODO: mixing offset and zoned datetimes
     private static class ZonedDateTimeAdapter extends TypeAdapter<ZonedDateTime> {
 
         @Override

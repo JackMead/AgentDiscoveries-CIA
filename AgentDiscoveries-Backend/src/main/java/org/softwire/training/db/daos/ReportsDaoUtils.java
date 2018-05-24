@@ -10,9 +10,7 @@ import java.util.List;
  */
 public class ReportsDaoUtils {
 
-    public static String buildWhereSubClaseFromCriteria(List<ReportSearchCriterion> searchCriteria) {
-        String whereClause = "";
-
+    public static String buildWhereSubClauseFromCriteria(List<ReportSearchCriterion> searchCriteria) {
         if (!searchCriteria.isEmpty()) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(" WHERE (");
@@ -27,9 +25,9 @@ public class ReportsDaoUtils {
 
             }
 
-            whereClause = stringBuilder.toString();
+            return stringBuilder.toString();
+        } else {
+            return "";
         }
-
-        return whereClause;
     }
 }

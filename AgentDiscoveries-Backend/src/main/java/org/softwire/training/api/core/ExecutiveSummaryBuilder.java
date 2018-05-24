@@ -4,6 +4,8 @@ import org.softwire.training.models.Agent;
 import org.softwire.training.models.Location;
 import org.softwire.training.models.LocationStatusReport;
 
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -43,8 +45,13 @@ public class ExecutiveSummaryBuilder {
         builder.append("\n** Report ").append(index).append(" **\n\n");
         builder.append("Submitted by: ").append(agent.getFirstName()).append(" ").append(agent.getLastName());
         builder.append(" (").append(agent.getCallSign()).append(")");
+
+        // Submission time should be in local time
         builder.append("\nSubmitted at: ").append(locationStatusReport.getReportTime()
+                .atZone(ZoneOffset.UTC)
+                .withZoneSameInstant(ZoneId.of(location.getTimeZone()))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+
         builder.append("\nLocation Name: ").append(location.getLocation());
         builder.append("\nLocation Status: ").append(locationStatusReport.getStatus());
         builder.append("\n\n");

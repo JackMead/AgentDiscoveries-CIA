@@ -130,7 +130,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("", (req, res) -> regionsRoutes.readRegions(req, res), responseTransformer);
     }
 
-    private void reportsRouteGroup(ReportsRoutesBase<?, ?, ?> reportsRoutes) {
+    private void reportsRouteGroup(ReportsRoutesBase<?, ?> reportsRoutes) {
         post("", reportsRoutes::createReport, responseTransformer);
         get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);

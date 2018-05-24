@@ -1,12 +1,13 @@
 package org.softwire.training.api.routes.v1;
 
 import org.softwire.training.api.core.PermissionsVerifier;
-import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.api.models.RegionSummaryReportApiModel;
-import org.softwire.training.api.models.searchcriteria.*;
 import org.softwire.training.db.daos.RegionSummaryReportsDao;
-import org.softwire.training.db.daos.RegionsDao;
 import org.softwire.training.db.daos.UsersDao;
+import org.softwire.training.db.daos.searchcriteria.FromTimeSearchCriterion;
+import org.softwire.training.db.daos.searchcriteria.RegionIdSearchCriterion;
+import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
+import org.softwire.training.db.daos.searchcriteria.UserIdSearchCriterion;
 import org.softwire.training.models.RegionSummaryReport;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -20,35 +21,34 @@ import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryReportApiModel, RegionSummaryReport, RegionSummaryReport> {
+public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryReportApiModel, RegionSummaryReport> {
 
     @Inject
-    public RegionSummaryReportsRoutes(RegionSummaryReportsDao regionSummaryReportsDao, RegionsDao regionsDao, UsersDao usersDao, PermissionsVerifier permissionsVerifier) {
+    public RegionSummaryReportsRoutes(RegionSummaryReportsDao regionSummaryReportsDao, UsersDao usersDao, PermissionsVerifier permissionsVerifier) {
         super(
                 RegionSummaryReportApiModel.class,
                 regionSummaryReportsDao,
-                new RegionSummaryReportSearchCriteriaParser(),
                 usersDao,
                 permissionsVerifier);
     }
 
     @Override
-    public RegionSummaryReport validateThenMap(RegionSummaryReportApiModel apiModel) {
+    protected RegionSummaryReport validateThenMap(RegionSummaryReportApiModel apiModel) {
         // Ignore any supplied report time
-        LocalDateTime reportTime = LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime reportTimeUtc = LocalDateTime.now(ZoneOffset.UTC);
 
         RegionSummaryReport model = new RegionSummaryReport();
         model.setAgentId(apiModel.getAgentId());
         model.setRegionId(apiModel.getRegionId());
         model.setStatus(apiModel.getStatus());
-        model.setReportTime(reportTime);
+        model.setReportTime(reportTimeUtc);
         model.setReportBody(apiModel.getReportBody());
 
         return model;
     }
 
     @Override
-    public RegionSummaryReportApiModel mapToApiModel(RegionSummaryReport model) {
+    protected RegionSummaryReportApiModel mapToApiModel(RegionSummaryReport model) {
         RegionSummaryReportApiModel apiModel = new RegionSummaryReportApiModel();
 
         apiModel.setReportId(model.getReportId());
@@ -62,36 +62,26 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
     }
 
     @Override
-    public RegionSummaryReportApiModel mapSearchResultToApiModel(RegionSummaryReport model) {
-        return mapToApiModel(model);
-    }
+    protected List<ReportSearchCriterion> parseSearchCriteria(Request req) {
+        QueryParamsMap queryMap = req.queryMap();
+        List<ReportSearchCriterion> apiReportSearchCriteria = new ArrayList<>();
 
-    private static class RegionSummaryReportSearchCriteriaParser
-            implements ReportSearchCriteriaParser<RegionSummaryReport> {
-
-        public List<ApiReportSearchCriterion<RegionSummaryReport>> parseApiReportSearchCriteria(Request req) {
-            QueryParamsMap queryMap = req.queryMap();
-            List<ApiReportSearchCriterion<RegionSummaryReport>> apiReportSearchCriteria = new ArrayList<>();
-
-            if (!isNullOrEmpty(queryMap.get("regionId").value())) {
-                apiReportSearchCriteria.add(new RegionIdApiSearchCriterion(queryMap.get("regionId").integerValue()));
-            }
-
-            if (!isNullOrEmpty(queryMap.get("userId").value())) {
-                apiReportSearchCriteria.add(new UserIdApiSearchCriterion(queryMap.get("userId").integerValue()));
-            }
-
-            if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
-                apiReportSearchCriteria.add(new FromTimeApiRegionSummarySearchCriterion(
-                        ZonedDateTime.parse(queryMap.get("fromTime").value())));
-            }
-
-            if (!isNullOrEmpty(queryMap.get("toTime").value())) {
-                apiReportSearchCriteria.add(new FromTimeApiRegionSummarySearchCriterion(
-                        ZonedDateTime.parse(queryMap.get("toTime").value())));
-            }
-
-            return apiReportSearchCriteria;
+        if (!isNullOrEmpty(queryMap.get("regionId").value())) {
+            apiReportSearchCriteria.add(new RegionIdSearchCriterion(queryMap.get("regionId").integerValue()));
         }
+
+        if (!isNullOrEmpty(queryMap.get("userId").value())) {
+            apiReportSearchCriteria.add(new UserIdSearchCriterion(queryMap.get("userId").integerValue()));
+        }
+
+        if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
+            apiReportSearchCriteria.add(new FromTimeSearchCriterion(ZonedDateTime.parse(queryMap.get("fromTime").value())));
+        }
+
+        if (!isNullOrEmpty(queryMap.get("toTime").value())) {
+            apiReportSearchCriteria.add(new FromTimeSearchCriterion(ZonedDateTime.parse(queryMap.get("toTime").value())));
+        }
+
+        return apiReportSearchCriteria;
     }
 }
