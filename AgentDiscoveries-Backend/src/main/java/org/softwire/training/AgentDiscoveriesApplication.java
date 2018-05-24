@@ -151,7 +151,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         });
     }
 
-    private int idParamAsInt(Request request) throws FailedRequestException {
+    private int idParamAsInt(Request request) {
         try {
             return Integer.parseInt(request.params("id"));
         } catch (NumberFormatException exception) {

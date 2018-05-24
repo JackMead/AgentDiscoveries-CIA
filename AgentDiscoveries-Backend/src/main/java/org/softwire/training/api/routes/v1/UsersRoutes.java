@@ -33,7 +33,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public UserApiModel createEntity(Request req, Response res) throws FailedRequestException {
+    public UserApiModel createEntity(Request req, Response res) {
         permissionsVerifier.verifyAdminPermission(req);
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
@@ -60,7 +60,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public UserApiModel readEntity(Request req, Response res, int id) throws FailedRequestException {
+    public UserApiModel readEntity(Request req, Response res, int id) {
         permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
 
         return usersDao.getUser(id)
@@ -69,7 +69,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public List<UserApiModel> readEntities(Request req, Response res) throws FailedRequestException {
+    public List<UserApiModel> readEntities(Request req, Response res) {
         permissionsVerifier.verifyAdminPermission(req);
         return usersDao.getUsers().stream()
                 .map(this::mapModelToApiModel)
@@ -77,7 +77,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public UserApiModel updateEntity(Request req, Response res, int id) throws FailedRequestException {
+    public UserApiModel updateEntity(Request req, Response res, int id) {
         UserApiModel userApiModel = JsonRequestUtils.readBodyAsType(req, UserApiModel.class);
 
         permissionsVerifier.verifyIsAdminOrRelevantUser(req, id);
@@ -115,7 +115,7 @@ public class UsersRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public Object deleteEntity(Request req, Response res, int id) throws Exception {
+    public Object deleteEntity(Request req, Response res, int id) {
         permissionsVerifier.verifyAdminPermission(req);
 
         if (StringUtils.isNotEmpty(req.body())) {

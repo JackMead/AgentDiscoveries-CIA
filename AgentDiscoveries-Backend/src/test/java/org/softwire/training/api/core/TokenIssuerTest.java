@@ -27,7 +27,7 @@ public class TokenIssuerTest {
     }
 
     @Test
-    public void generatedTokenIsConsideredValid() throws FailedRequestException {
+    public void generatedTokenIsConsideredValid() {
         String subject = "subject-line";
 
         TokenIssuer.IssuedToken issuedToken = tokenIssuer.generateToken(subject);
@@ -37,7 +37,7 @@ public class TokenIssuerTest {
     }
 
     @Test
-    public void generatedTokenExpiryDateShouldBeSufficientlyInFuture() throws FailedRequestException {
+    public void generatedTokenExpiryDateShouldBeSufficientlyInFuture() {
         String subject = "subject-line";
 
         // Act
@@ -64,7 +64,7 @@ public class TokenIssuerTest {
     }
 
     @Test
-    public void nonsenseTokenIsNotAcceptedWithInvalidToken() throws FailedRequestException {
+    public void nonsenseTokenIsNotAcceptedWithInvalidToken() {
         // Token without a valid signature
         String invalidToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdWJqZWN0IiwiZXhwIjoxNTE3MzM0Mjg2fQ.kSuDmt3uDpCvOmS3dqjYLAaYc-gaZxHIrmye0changedn82LVwxgl3jqFIx2EMZFtFA4CUrE6FxhM3RSR6U67zw";
         FailedRequestException exception = assertThrows(

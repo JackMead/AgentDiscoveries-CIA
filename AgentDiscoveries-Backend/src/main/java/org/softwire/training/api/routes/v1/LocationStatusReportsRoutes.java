@@ -22,80 +22,72 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
 
+    private final LocationsDao locationsDao;
+
     @Inject
     public LocationStatusReportsRoutes(LocationReportsDao locationReportsDao, LocationsDao locationsDao, UsersDao usersDao, PermissionsVerifier permissionsVerifier) {
         super(
                 LocationStatusReportApiModel.class,
-                new LocationStatusValidationMapper(locationsDao),
                 locationReportsDao,
                 new LocationStatusReportSearchCriteriaParser(),
                 usersDao,
                 permissionsVerifier);
+        this.locationsDao = locationsDao;
     }
 
-    private static class LocationStatusValidationMapper
-            implements ValidatorMapper<LocationStatusReportApiModel, LocationStatusReport, LocationStatusReportWithTimeZone> {
+    @Override
+    public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) {
+        Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
 
-        private final LocationsDao locationsDao;
+        if (!location.isPresent()) {
+            throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Location does not exist");
+        } else {
+            ZoneId locationTimeZone = ZoneId.of(location.get().getTimeZone());
 
-        LocationStatusValidationMapper(LocationsDao locationReportsDao) {
-            this.locationsDao = locationReportsDao;
+            // Ignore any supplied report time and use the current instant
+            LocalDateTime dateTimeInReportLocation = Instant.now()
+                    .atZone(locationTimeZone)
+                    .toLocalDateTime();
+
+            LocationStatusReport model = new LocationStatusReport();
+            model.setAgentId(apiModel.getAgentId());
+            model.setLocationId(apiModel.getLocationId());
+            model.setStatus(apiModel.getStatus());
+            model.setReportTime(dateTimeInReportLocation);
+            model.setReportBody(apiModel.getReportBody());
+
+            return model;
+        }
+    }
+
+    @Override
+    public LocationStatusReportApiModel mapToApiModel(LocationStatusReport model) {
+        Optional<Location> location = locationsDao.getLocation(model.getLocationId());
+        if (!location.isPresent()) {
+            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Could not successfully get location info");
         }
 
-        @Override
-        public LocationStatusReport validateThenMap(LocationStatusReportApiModel apiModel) throws FailedRequestException {
-            Optional<Location> location = locationsDao.getLocation(apiModel.getLocationId());
+        return mapReportAndTimezoneToApiModel(model, location.get().getTimeZone());
+    }
 
-            if (!location.isPresent()) {
-                throw new FailedRequestException(ErrorCode.OPERATION_INVALID, "Location does not exist");
-            } else {
-                ZoneId locationTimeZone = ZoneId.of(location.get().getTimeZone());
+    @Override
+    public LocationStatusReportApiModel mapSearchResultToApiModel(LocationStatusReportWithTimeZone model) {
+        return mapReportAndTimezoneToApiModel(model, model.getLocationTimeZone());
+    }
 
-                // Ignore any supplied report time and use the current instant
-                LocalDateTime dateTimeInReportLocation = Instant.now()
-                        .atZone(locationTimeZone)
-                        .toLocalDateTime();
+    private LocationStatusReportApiModel mapReportAndTimezoneToApiModel(LocationStatusReport model, String timeZone) {
+        LocationStatusReportApiModel apiModel = new LocationStatusReportApiModel();
 
-                LocationStatusReport model = new LocationStatusReport();
-                model.setAgentId(apiModel.getAgentId());
-                model.setLocationId(apiModel.getLocationId());
-                model.setStatus(apiModel.getStatus());
-                model.setReportTime(dateTimeInReportLocation);
-                model.setReportBody(apiModel.getReportBody());
+        ZoneId locationTimeZone = ZoneId.of(timeZone);
 
-                return model;
-            }
-        }
+        apiModel.setReportId(model.getReportId());
+        apiModel.setAgentId(model.getAgentId());
+        apiModel.setLocationId(model.getLocationId());
+        apiModel.setStatus(model.getStatus());
+        apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone));
+        apiModel.setReportBody(model.getReportBody());
 
-        @Override
-        public LocationStatusReportApiModel mapToApiModel(LocationStatusReport model) throws FailedRequestException {
-            Optional<Location> location = locationsDao.getLocation(model.getLocationId());
-            if (!location.isPresent()) {
-                throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Could not successfully get location info");
-            }
-
-            return mapReportAndTimezoneToApiModel(model, location.get().getTimeZone());
-        }
-
-        @Override
-        public LocationStatusReportApiModel mapSearchResultToApiModel(LocationStatusReportWithTimeZone model) {
-            return mapReportAndTimezoneToApiModel(model, model.getLocationTimeZone());
-        }
-
-        private LocationStatusReportApiModel mapReportAndTimezoneToApiModel(LocationStatusReport model, String timeZone) {
-            LocationStatusReportApiModel apiModel = new LocationStatusReportApiModel();
-
-            ZoneId locationTimeZone = ZoneId.of(timeZone);
-
-            apiModel.setReportId(model.getReportId());
-            apiModel.setAgentId(model.getAgentId());
-            apiModel.setLocationId(model.getLocationId());
-            apiModel.setStatus(model.getStatus());
-            apiModel.setReportTime(model.getReportTime().atZone(locationTimeZone));
-            apiModel.setReportBody(model.getReportBody());
-
-            return apiModel;
-        }
+        return apiModel;
     }
 
     private static class LocationStatusReportSearchCriteriaParser

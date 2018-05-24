@@ -19,23 +19,23 @@ public class PermissionsVerifier {
         this.usersDao = usersDao;
     }
 
-    public void verifyAdminPermission(Request req) throws FailedRequestException {
+    public void verifyAdminPermission(Request req) {
         verifyUser(req, User::isAdmin);
     }
 
-    public void verifyIsAdminOrRelevantUser(Request req, int relevantUserId) throws FailedRequestException {
+    public void verifyIsAdminOrRelevantUser(Request req, int relevantUserId) {
         verifyUser(req, user -> user.isAdmin() || user.getUserId() == relevantUserId);
     }
 
-    public void verifyIsAdminOrRelevantAgent(Request req, int relevantAgentId) throws FailedRequestException {
+    public void verifyIsAdminOrRelevantAgent(Request req, int relevantAgentId) {
         verifyUser(req, user -> user.getAgentId() == relevantAgentId);
     }
 
-    public void verifyIsAgent(Request req) throws FailedRequestException {
+    public void verifyIsAgent(Request req) {
         verifyUser(req, user -> user.getAgentId() != null);
     }
 
-    private void verifyUser(Request req, Predicate<User> condition) throws FailedRequestException {
+    private void verifyUser(Request req, Predicate<User> condition) {
         usersDao.getUser(req.attribute("user_id"))
                 .filter(condition)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "Insufficient permissions"));

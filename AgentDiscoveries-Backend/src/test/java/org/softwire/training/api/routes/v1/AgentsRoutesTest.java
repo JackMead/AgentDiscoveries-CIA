@@ -61,7 +61,7 @@ public class AgentsRoutesTest {
     }
 
     @Test
-    public void readAgentReturnsAgentIfAgentExists() throws FailedRequestException {
+    public void readAgentReturnsAgentIfAgentExists() {
         // Given
         int agentId = 17;
         Agent agent = new Agent();

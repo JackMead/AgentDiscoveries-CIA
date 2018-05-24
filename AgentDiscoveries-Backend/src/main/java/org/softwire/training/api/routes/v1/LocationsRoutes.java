@@ -27,7 +27,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public Location createEntity(Request req, Response res) throws FailedRequestException {
+    public Location createEntity(Request req, Response res) {
         permissionsVerifier.verifyAdminPermission(req);
         Location location = JsonRequestUtils.readBodyAsType(req, Location.class);
 
@@ -48,7 +48,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public Location readEntity(Request req, Response res, int id) throws FailedRequestException {
+    public Location readEntity(Request req, Response res, int id) {
         return locationsDao.getLocation(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Location not found"));
     }
@@ -59,7 +59,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     }
 
     @Override
-    public Location updateEntity(Request req, Response res, int id) throws FailedRequestException {
+    public Location updateEntity(Request req, Response res, int id) {
         Location location = JsonRequestUtils.readBodyAsType(req, Location.class);
 
         if (location.getLocationId() != id && location.getLocationId() != 0) {
@@ -74,7 +74,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
         return location;
     }
 
-    private void validateLocationModel(Location location) throws FailedRequestException {
+    private void validateLocationModel(Location location) {
         if (StringUtils.isEmpty(location.getTimeZone())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "timeZone must be specified for location");
         }

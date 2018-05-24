@@ -25,7 +25,7 @@ public class RegionsRoutes {
         this.permissionsVerifier=permissionsVerifier;
     }
 
-    public Region createRegion(Request req, Response res) throws FailedRequestException {
+    public Region createRegion(Request req, Response res) {
         permissionsVerifier.verifyAdminPermission(req);
         Region region = JsonRequestUtils.readBodyAsType(req, Region.class);
 
@@ -42,7 +42,7 @@ public class RegionsRoutes {
         return region;
     }
 
-    public Region readRegion(Request req, Response res, int id) throws FailedRequestException {
+    public Region readRegion(Request req, Response res, int id) {
         return regionsDao.getRegion(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Region not found"));
     }
@@ -51,7 +51,7 @@ public class RegionsRoutes {
         return regionsDao.getRegions();
     }
 
-    public Region updateRegion(Request req, Response res, int id) throws FailedRequestException {
+    public Region updateRegion(Request req, Response res, int id) {
         Region region = JsonRequestUtils.readBodyAsType(req, Region.class);
         region.setRegionId(id);
 
@@ -60,7 +60,7 @@ public class RegionsRoutes {
         return region;
     }
 
-    public Object deleteRegion(Request req, Response res, int id) throws FailedRequestException {
+    public Object deleteRegion(Request req, Response res, int id) {
         permissionsVerifier.verifyAdminPermission(req);
         if (StringUtils.isNotEmpty(req.body())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Region delete request should have no body");

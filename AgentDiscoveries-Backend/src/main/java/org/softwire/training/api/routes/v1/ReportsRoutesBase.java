@@ -14,17 +14,22 @@ import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBase, V> {
+/**
+ * Base class for Region and Location reports
+ *
+ * @param <T> the API model class
+ * @param <U> the DB model class
+ * @param <V> a search-specific DB model class
+ */
+public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBase, V> {
 
     private final ReportsDao<U, V> reportsDao;
-    private final ValidatorMapper<T, U, V> validatorThenMapper;
     private final Class<T> apiModelClass;
     private final ReportSearchCriteriaParser<V> searchCriteriaParser;
     private final UsersDao usersDao;
@@ -33,20 +38,25 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
 
     protected ReportsRoutesBase(
             Class<T> apiModelClass,
-            ValidatorMapper<T, U, V> validatorThenMapper,
             ReportsDao<U, V> reportsDao,
             ReportSearchCriteriaParser<V> searchCriteriaParser,
             UsersDao usersDao,
             PermissionsVerifier permissionsVerifier) {
         this.apiModelClass = apiModelClass;
-        this.validatorThenMapper = validatorThenMapper;
         this.reportsDao = reportsDao;
         this.searchCriteriaParser = searchCriteriaParser;
         this.usersDao = usersDao;
         this.permissionsVerifier = permissionsVerifier;
     }
 
-    public T createReport(Request req, Response res) throws FailedRequestException {
+    /**
+     * Abstract Validation and Mapping methods
+     */
+    protected abstract U validateThenMap(T model);
+    protected abstract T mapToApiModel(U model);
+    protected abstract T mapSearchResultToApiModel(V model);
+
+    public T createReport(Request req, Response res) {
         int agentId = usersDao.getUser(req.attribute("user_id"))
                 .flatMap(user -> Optional.ofNullable(user.getAgentId()))
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.OPERATION_FORBIDDEN, "Insufficient permissions"));
@@ -60,7 +70,7 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
         reportApiModel.setAgentId(agentId);
 
         // Validate report model before storing
-        U reportModel = validatorThenMapper.validateThenMap(reportApiModel);
+        U reportModel = validateThenMap(reportApiModel);
 
         int newReportId = reportsDao.createReport(reportModel);
 
@@ -71,9 +81,9 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
         return reportApiModel;
     }
 
-    public T readReport(Request req, Response res, int id) throws FailedRequestException {
+    public T readReport(Request req, Response res, int id) {
         permissionsVerifier.verifyAdminPermission(req);
-        return validatorThenMapper.mapToApiModel(reportsDao.getReport(id)
+        return mapToApiModel(reportsDao.getReport(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Report not found")));
     }
 
@@ -90,7 +100,7 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
         return new Object();
     }
 
-    public List<T> searchReports(Request req, Response res) throws FailedRequestException {
+    public List<T> searchReports(Request req, Response res) {
         permissionsVerifier.verifyAdminPermission(req);
         List<ApiReportSearchCriterion<V>> apiReportSearchCriteria = searchCriteriaParser.parseApiReportSearchCriteria(req);
 
@@ -111,6 +121,6 @@ public class ReportsRoutesBase<T extends ReportApiModelBase, U extends ReportBas
             statusReports = statusReports.filter(optionalFurtherFiltering.get());
         }
 
-        return statusReports.map(validatorThenMapper::mapSearchResultToApiModel).collect(Collectors.toList());
+        return statusReports.map(this::mapSearchResultToApiModel).collect(Collectors.toList());
     }
 }

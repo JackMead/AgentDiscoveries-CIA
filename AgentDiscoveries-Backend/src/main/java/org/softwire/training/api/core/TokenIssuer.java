@@ -41,7 +41,7 @@ public class TokenIssuer {
                 .toInstant();
     }
 
-    public String validateToken(String token) throws FailedRequestException {
+    public String validateToken(String token) {
         try {
             Claims claims = Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(token).getBody();
             return claims.getSubject();

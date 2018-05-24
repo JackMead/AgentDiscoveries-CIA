@@ -33,7 +33,7 @@ public class PictureRoutes {
         this.configuration = configuration;
     }
 
-    public Object updatePicture(Request req, Response res, int id) throws FailedRequestException, IOException, ServletException {
+    public Object updatePicture(Request req, Response res, int id) throws IOException, ServletException {
         int userId = req.attribute("user_id");
         if (userId != id && userId != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");
@@ -64,14 +64,14 @@ public class PictureRoutes {
         return new Object();
     }
 
-    public byte[] readProfilePicture(Request req, Response res, int id) throws FailedRequestException {
+    public byte[] readProfilePicture(Request req, Response res, int id) {
         Optional<ProfilePicture> optionalPicture = picturesDao.getPicture(req.attribute("user_id"));
         ProfilePicture profilePicture = optionalPicture.orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "No picture found for user"));
         res.type(profilePicture.getContentType());
         return profilePicture.getPictureBytes();
     }
 
-    public Object deletePicture(Request req, Response res, int id) throws Exception {
+    public Object deletePicture(Request req, Response res, int id) {
         int userId = req.attribute("user_id");
         if (userId != id && userId != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified differently to URI");

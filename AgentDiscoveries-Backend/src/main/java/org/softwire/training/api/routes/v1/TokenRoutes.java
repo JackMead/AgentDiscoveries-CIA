@@ -29,7 +29,7 @@ public class TokenRoutes {
         this.tokenIssuer = tokenIssuer;
     }
 
-    public void validateToken(Request req, Response res) throws FailedRequestException {
+    public void validateToken(Request req, Response res) {
         String headerValue = req.headers("Authorization");
 
         if (StringUtils.isEmpty(headerValue) || !headerValue.startsWith("Bearer ")) {
@@ -41,7 +41,7 @@ public class TokenRoutes {
         }
     }
 
-    public TokenResponseApiModel createToken(Request req, Response res) throws FailedRequestException {
+    public TokenResponseApiModel createToken(Request req, Response res) {
         TokenRequestApiModel tokenRequest = JsonRequestUtils.readBodyAsType(req, TokenRequestApiModel.class);
 
         Optional<User> userOptional = usersDao.getUserByUsername(tokenRequest.getUsername());

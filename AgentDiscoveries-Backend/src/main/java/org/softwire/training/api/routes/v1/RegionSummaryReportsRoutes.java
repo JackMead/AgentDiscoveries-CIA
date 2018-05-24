@@ -26,57 +26,44 @@ public class RegionSummaryReportsRoutes extends ReportsRoutesBase<RegionSummaryR
     public RegionSummaryReportsRoutes(RegionSummaryReportsDao regionSummaryReportsDao, RegionsDao regionsDao, UsersDao usersDao, PermissionsVerifier permissionsVerifier) {
         super(
                 RegionSummaryReportApiModel.class,
-                new RegionSummaryValidationMapper(regionsDao, usersDao),
                 regionSummaryReportsDao,
                 new RegionSummaryReportSearchCriteriaParser(),
                 usersDao,
                 permissionsVerifier);
     }
 
-    private static class RegionSummaryValidationMapper
-            implements ValidatorMapper<RegionSummaryReportApiModel, RegionSummaryReport, RegionSummaryReport> {
+    @Override
+    public RegionSummaryReport validateThenMap(RegionSummaryReportApiModel apiModel) {
+        // Ignore any supplied report time
+        LocalDateTime reportTime = LocalDateTime.now(ZoneOffset.UTC);
 
-        private final RegionsDao regionsDao;
-        private final UsersDao usersDao;
+        RegionSummaryReport model = new RegionSummaryReport();
+        model.setAgentId(apiModel.getAgentId());
+        model.setRegionId(apiModel.getRegionId());
+        model.setStatus(apiModel.getStatus());
+        model.setReportTime(reportTime);
+        model.setReportBody(apiModel.getReportBody());
 
-        RegionSummaryValidationMapper(RegionsDao regionsDao, UsersDao usersDao) {
-            this.regionsDao = regionsDao;
-            this.usersDao = usersDao;
-        }
+        return model;
+    }
 
-        @Override
-        public RegionSummaryReport validateThenMap(RegionSummaryReportApiModel apiModel) throws FailedRequestException {
-            // Ignore any supplied report time
-            LocalDateTime reportTime = LocalDateTime.now(ZoneOffset.UTC);
+    @Override
+    public RegionSummaryReportApiModel mapToApiModel(RegionSummaryReport model) {
+        RegionSummaryReportApiModel apiModel = new RegionSummaryReportApiModel();
 
-            RegionSummaryReport model = new RegionSummaryReport();
-            model.setAgentId(apiModel.getAgentId());
-            model.setRegionId(apiModel.getRegionId());
-            model.setStatus(apiModel.getStatus());
-            model.setReportTime(reportTime);
-            model.setReportBody(apiModel.getReportBody());
+        apiModel.setReportId(model.getReportId());
+        apiModel.setAgentId(model.getAgentId());
+        apiModel.setRegionId(model.getRegionId());
+        apiModel.setStatus(model.getStatus());
+        apiModel.setReportTime(model.getReportTime().atZone(ZoneOffset.UTC));
+        apiModel.setReportBody(model.getReportBody());
 
-            return model;
-        }
+        return apiModel;
+    }
 
-        @Override
-        public RegionSummaryReportApiModel mapToApiModel(RegionSummaryReport model) {
-            RegionSummaryReportApiModel apiModel = new RegionSummaryReportApiModel();
-
-            apiModel.setReportId(model.getReportId());
-            apiModel.setAgentId(model.getAgentId());
-            apiModel.setRegionId(model.getRegionId());
-            apiModel.setStatus(model.getStatus());
-            apiModel.setReportTime(model.getReportTime().atZone(ZoneOffset.UTC));
-            apiModel.setReportBody(model.getReportBody());
-
-            return apiModel;
-        }
-
-        @Override
-        public RegionSummaryReportApiModel mapSearchResultToApiModel(RegionSummaryReport model) {
-            return mapToApiModel(model);
-        }
+    @Override
+    public RegionSummaryReportApiModel mapSearchResultToApiModel(RegionSummaryReport model) {
+        return mapToApiModel(model);
     }
 
     private static class RegionSummaryReportSearchCriteriaParser

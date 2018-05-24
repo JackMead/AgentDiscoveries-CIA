@@ -26,7 +26,7 @@ public class AgentsRoutes {
         this.permissionsVerifier = permissionsVerifier;
     }
 
-    public Agent createAgent(Request req, Response res) throws FailedRequestException {
+    public Agent createAgent(Request req, Response res) {
         Agent agentModel = JsonRequestUtils.readBodyAsType(req, Agent.class);
         permissionsVerifier.verifyAdminPermission(req);
 
@@ -39,18 +39,18 @@ public class AgentsRoutes {
         return agentModel;
     }
 
-    public Agent readAgent(Request req, Response res, int id) throws FailedRequestException {
+    public Agent readAgent(Request req, Response res, int id) {
         permissionsVerifier.verifyIsAdminOrRelevantAgent(req, id);
         return agentsDao.getAgent(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Agent not found"));
     }
 
-    public List<Agent> readAgents(Request req, Response res) throws FailedRequestException {
+    public List<Agent> readAgents(Request req, Response res) {
         permissionsVerifier.verifyAdminPermission(req);
         return agentsDao.getAgents();
     }
 
-    public Agent updateAgent(Request req, Response res, int id) throws FailedRequestException {
+    public Agent updateAgent(Request req, Response res, int id) {
         permissionsVerifier.verifyIsAdminOrRelevantAgent(req, id);
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
@@ -60,7 +60,7 @@ public class AgentsRoutes {
         return agent;
     }
 
-    public Object deleteAgent(Request req, Response res, int id) throws Exception {
+    public Object deleteAgent(Request req, Response res, int id) {
         permissionsVerifier.verifyAdminPermission(req);
 
         if (StringUtils.isNotEmpty(req.body())) {

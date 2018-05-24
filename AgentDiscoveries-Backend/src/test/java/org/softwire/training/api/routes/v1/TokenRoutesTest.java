@@ -72,7 +72,7 @@ public class TokenRoutesTest {
     }
 
     @Test
-    public void createTokenCallsTokenIssuerForValidUsernameAndPassword() throws FailedRequestException {
+    public void createTokenCallsTokenIssuerForValidUsernameAndPassword() {
         // Given
         String username = "valid-username";
         String password = "valid-password";
@@ -142,7 +142,7 @@ public class TokenRoutesTest {
     }
 
     @Test
-    public void validateTokenFailsIfTokenIsNotValid() throws FailedRequestException {
+    public void validateTokenFailsIfTokenIsNotValid() {
         // Given
         String invalidToken = "invalid-token";
         Request request = createRequestWithAuthorizationHeaderValue("Bearer " + invalidToken);
@@ -160,7 +160,7 @@ public class TokenRoutesTest {
     }
 
     @Test
-    public void validateTokenSetsUserIdAttributeOnRequestForValidToken() throws FailedRequestException {
+    public void validateTokenSetsUserIdAttributeOnRequestForValidToken() {
         // Given
         String validToken = "valid-token";
         int userId = 20;
