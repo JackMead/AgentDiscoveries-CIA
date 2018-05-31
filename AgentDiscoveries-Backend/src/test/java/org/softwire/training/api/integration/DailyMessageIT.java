@@ -30,7 +30,7 @@ public class DailyMessageIT {
 
     @Test
     public void testCanEncodeAndDecodeMessage() {
-        MessageProcessor messageProcessor = new MessageProcessor(1234);
+        MessageProcessor messageProcessor = new MessageProcessor("dev");
 
         String plaintext = "aTestMessage";
         String encoded = messageProcessor.encode(plaintext);

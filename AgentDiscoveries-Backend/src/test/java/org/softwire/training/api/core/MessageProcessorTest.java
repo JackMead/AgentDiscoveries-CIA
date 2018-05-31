@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class MessageProcessorTest {
 
-    private final MessageProcessor messageProcessor = new MessageProcessor(123);
+    private final MessageProcessor messageProcessor = new MessageProcessor("dev");
 
     @Test
     public void encodeModifiesMessage() {
