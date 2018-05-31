@@ -168,8 +168,8 @@
       <properties>
         <target.address>http://localhost:8080</target.address>
         <skip.unit.tests>false</skip.unit.tests>
-        <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
-        <skip.integration.tests>true</skip.integration.tests>
+        <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
+        <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
   </profiles>

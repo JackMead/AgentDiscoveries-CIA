@@ -31,14 +31,16 @@ export default class Profile extends React.Component {
             <div className='col-md-8 col-md-offset-2'>
                 <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>
 
-                <div className='col-md-6'>
-                    {this.state.agent ? <AgentInfo agent={this.state.agent} /> : ''}
-                    <Link to='/profile/edit/callsign'>
-                        <Button type='button'>
-                            Change Call Sign
-                        </Button>
-                    </Link>
-                </div>
+                {this.state.agent.callSign ? (
+                    <div className='col-md-6'>
+                        <AgentInfo agent={this.state.agent} />
+                        <Link to='/profile/edit/callsign'>
+                            <Button type='button'>
+                                Change Call Sign
+                            </Button>
+                        </Link>
+                    </div>
+                ) : ''}
 
                 <div className='profile-img-container col-md-6'>
                     <Image className='img' src={this.state.imgSrc} />

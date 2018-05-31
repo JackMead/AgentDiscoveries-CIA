@@ -49,8 +49,8 @@
             </activation>
             <properties>
                 <skip.unit.tests>false</skip.unit.tests>
-                <skip.integration.tests>true</skip.integration.tests>
-                <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
                 <target.address>http://localhost:8080</target.address>
             </properties>
         </profile>

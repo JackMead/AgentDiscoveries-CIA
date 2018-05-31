@@ -6,7 +6,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.flywaydb.core.Flyway;
 import org.jdbi.v3.core.Jdbi;
 
-@Module(injects=AgentDiscoveriesApplication.class)
+@Module(injects = AgentDiscoveriesApplication.class)
 public class AgentDiscoveriesModule {
 
     private final Configuration config;

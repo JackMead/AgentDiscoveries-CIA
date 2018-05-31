@@ -1,8 +1,7 @@
 package org.softwire.training;
 
 import dagger.ObjectGraph;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.*;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
@@ -20,6 +19,7 @@ import spark.ResponseTransformer;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -187,11 +187,16 @@ public class AgentDiscoveriesApplication implements Runnable {
 
     private static Configuration getConfiguration(File configFile) {
         try {
-            FileBasedConfigurationBuilder<PropertiesConfiguration> builder =new FileBasedConfigurationBuilder<PropertiesConfiguration>(PropertiesConfiguration.class)
+            FileBasedConfigurationBuilder<PropertiesConfiguration> builder = new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
                     .configure(new Parameters().properties()
                     .setFile(configFile)
                     .setListDelimiterHandler(new DefaultListDelimiterHandler(',')));
-            return builder.getConfiguration();
+
+            // Use a composite configuration which checks system properties before using the config file
+            // This allows us to override properties by setting properties like '-Dserver.port=5678'
+            return new CompositeConfiguration(
+                    new SystemConfiguration(),
+                    Collections.singleton(builder.getConfiguration()));
         } catch (ConfigurationException exception) {
             throw new RuntimeException("Invalid configuration", exception);
         }

@@ -2,13 +2,15 @@ package org.softwire.training.api.core;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import spark.utils.IOUtils;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.configuration2.Configuration;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,8 +38,16 @@ public class MessageProcessor {
         }
     }
 
+    private final String seed;
+
+    public MessageProcessor(String seed) {
+        this.seed = seed;
+    }
+
     @Inject
-    public MessageProcessor() {}
+    public MessageProcessor(Configuration configuration) {
+        this(configuration.getString("message.encoding.seed"));
+    }
 
     public String encode(String input){
         return applyShiftCipher(input, getCodeWord(), false);
@@ -63,10 +73,28 @@ public class MessageProcessor {
         return result.toString();
     }
 
+    /**
+     * Use a combination of the secret seed and the date to generate a hash.
+     * This is used to select a word from the list.
+     *
+     * It should be cryptographically difficult to deduce the seed,
+     * the date or the next word given any of the others.
+     */
     private String getCodeWord() {
-        LocalDate today = LocalDate.now(ZoneOffset.UTC);
-        int hashCode = today.hashCode();
-        return WORD_LIST.get(hashCode % (WORD_LIST.size()));
+        // Input bytes from the seed and current date
+        byte[] input = ByteBuffer.allocate(8)
+                .putInt(LocalDate.now(ZoneOffset.UTC).hashCode())
+                .put(seed.getBytes(StandardCharsets.UTF_8))
+                .array();
+
+        // Hash the input
+        byte[] hash = DigestUtils.md5(input);
+
+        // Extract the first 4 bytes as an int
+        int result = ByteBuffer.wrap(hash).getInt();
+
+        // Select a word using the result
+        return WORD_LIST.get(Math.floorMod(result, WORD_LIST.size()));
     }
 
     private boolean isAsciiPrintable(char ch) {
