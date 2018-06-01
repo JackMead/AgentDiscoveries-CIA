@@ -42,16 +42,16 @@ public class ExecutiveSummaryBuilderTest {
         String expected =
                 "\n** Report 2 **\n\n" +
                 "Submitted by: Dave Johnson (FoxHoundBloodEagle)\n" +
-                "Submitted at: 2018-05-23 07:29\n" +
-                "Location Name: Area 51\n" +
+                "Submitted at: 2018-05-23 14:29\n" +
+                "Location Name: London\n" +
                 "Location Status: 40\n\n" +
                 "Everything going well with the new arrival\n\n";
 
         Agent agent = new Agent(0, "Dave", "Johnson", LocalDate.now(), 15, "FoxHoundBloodEagle");
 
         Location location = new Location();
-        location.setLocation("Area 51");
-        location.setTimeZone("US/Pacific");
+        location.setLocation("London");
+        location.setTimeZone("UTC");
 
         LocationStatusReport report = new LocationStatusReport();
         report.setStatus((byte) 40);

@@ -9,6 +9,7 @@ import java.util.Map;
 public final class ToTimeSearchCriterion extends ReportSearchCriterion {
 
     private static final String REPORT_BINDING_NAME = "to_time_sc_report_time";
+
     private final LocalDateTime toTime;
 
     public ToTimeSearchCriterion(ZonedDateTime dateTime) {
