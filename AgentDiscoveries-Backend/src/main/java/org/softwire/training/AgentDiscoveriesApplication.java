@@ -1,5 +1,6 @@
 package org.softwire.training;
 
+import com.google.common.collect.ImmutableList;
 import dagger.ObjectGraph;
 import org.apache.commons.configuration2.*;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
@@ -195,8 +196,7 @@ public class AgentDiscoveriesApplication implements Runnable {
             // Use a composite configuration which checks system properties before using the config file
             // This allows us to override properties by setting properties like '-Dserver.port=5678'
             return new CompositeConfiguration(
-                    new SystemConfiguration(),
-                    Collections.singleton(builder.getConfiguration()));
+                    ImmutableList.of(new SystemConfiguration(), builder.getConfiguration()));
         } catch (ConfigurationException exception) {
             throw new RuntimeException("Invalid configuration", exception);
         }

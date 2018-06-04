@@ -1,26 +1,32 @@
 package org.softwire.training.models;
 
+/**
+ * A report to be sent to the external API
+ */
 public class ExternalReport {
-    private int agentId;
-    private String reportBody;
-    private int locationId;
 
-    public ExternalReport(int agentId, String reportBody, int locationId) {
-        this.agentId = agentId;
+    private String callSign;
+    private String reportBody;
+
+    public ExternalReport(String callSign, String reportBody) {
+        this.callSign = callSign;
         this.reportBody = reportBody;
-        this.locationId = locationId;
     }
 
-    public int getAgentId() {return agentId;}
+    public String getCallSign() {
+        return callSign;
+    }
 
-    public void setAgentId(int agentId){this.agentId=agentId;}
+    public void setAgentId(String callSign) {
+        this.callSign = callSign;
+    }
 
-    public String getReportBody() {return reportBody;}
+    public String getReportBody() {
+        return reportBody;
+    }
 
-    public void setReportBody(String reportBody){this.reportBody=reportBody;}
-
-    public int getLocationId() {return locationId;}
-
-    public void setLocationId(int locationId){this.locationId=locationId;}
+    public void setReportBody(String reportBody) {
+        this.reportBody=reportBody;
+    }
 
 }
