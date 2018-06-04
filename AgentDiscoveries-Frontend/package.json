@@ -1,7 +1,8 @@
 {
   "name": "agentdiscoveries-frontend",
   "version": "1.0.0-SNAPSHOT",
-  "description": "",
+  "description": "Frontend for Agent Discoveries",
+  "private": true,
   "main": "./app/src",
   "scripts": {
     "build": "webpack",

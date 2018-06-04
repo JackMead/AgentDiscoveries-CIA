@@ -30,7 +30,6 @@
                 <skip.unit.tests>true</skip.unit.tests>
                 <skip.integration.tests>false</skip.integration.tests>
                 <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
-                <target.address>http://localhost:8080</target.address>
             </properties>
         </profile>
         <profile>
@@ -39,7 +38,9 @@
                 <skip.unit.tests>true</skip.unit.tests>
                 <skip.integration.tests>false</skip.integration.tests>
                 <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
-                <target.address>http://localhost:8080</target.address>
+                <target.address>http://localhost:8089</target.address>
+                <server.port>8089</server.port>
+                <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
             </properties>
         </profile>
         <profile>
@@ -51,7 +52,9 @@
                 <skip.unit.tests>false</skip.unit.tests>
                 <skip.integration.tests>false</skip.integration.tests>
                 <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
-                <target.address>http://localhost:8080</target.address>
+                <target.address>http://localhost:8089</target.address>
+                <server.port>8089</server.port>
+                <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
             </properties>
         </profile>
     </profiles>
@@ -323,9 +326,13 @@
                             <waitForInterrupt>false</waitForInterrupt>
                             <arguments>
                                 <argument>${java.home}/bin/java</argument>
+                                <argument>-Dserver.port=${server.port}</argument>
+                                <argument>-Ddatabase.url=${database.url}</argument>
                                 <argument>-jar</argument>
                                 <argument>${basedir}/target/agentdiscoveries-backend-1.0-SNAPSHOT.jar</argument>
                             </arguments>
+                            <processLogFile>target/application.log</processLogFile>
+                            <healthCheckUrl>${target.address}/healthcheck</healthCheckUrl>
                         </configuration>
                     </execution>
                     <execution>

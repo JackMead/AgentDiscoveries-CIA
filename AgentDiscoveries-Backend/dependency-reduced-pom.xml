@@ -126,9 +126,13 @@
               <waitForInterrupt>false</waitForInterrupt>
               <arguments>
                 <argument>${java.home}/bin/java</argument>
+                <argument>-Dserver.port=${server.port}</argument>
+                <argument>-Ddatabase.url=${database.url}</argument>
                 <argument>-jar</argument>
                 <argument>${basedir}/target/agentdiscoveries-backend-1.0-SNAPSHOT.jar</argument>
               </arguments>
+              <processLogFile>target/application.log</processLogFile>
+              <healthCheckUrl>${target.address}/healthcheck</healthCheckUrl>
             </configuration>
           </execution>
           <execution>
@@ -149,7 +153,6 @@
     <profile>
       <id>integration-test-live</id>
       <properties>
-        <target.address>http://localhost:8080</target.address>
         <skip.unit.tests>true</skip.unit.tests>
         <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
         <skip.integration.tests>false</skip.integration.tests>
@@ -158,17 +161,21 @@
     <profile>
       <id>integration-test-local</id>
       <properties>
-        <target.address>http://localhost:8080</target.address>
+        <target.address>http://localhost:8089</target.address>
+        <server.port>8089</server.port>
         <skip.unit.tests>true</skip.unit.tests>
         <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
+        <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
         <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
     <profile>
       <properties>
-        <target.address>http://localhost:8080</target.address>
+        <target.address>http://localhost:8089</target.address>
+        <server.port>8089</server.port>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
+        <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
         <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
