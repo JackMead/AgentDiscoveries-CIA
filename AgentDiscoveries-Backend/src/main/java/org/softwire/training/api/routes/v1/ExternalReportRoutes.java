@@ -3,6 +3,8 @@ package org.softwire.training.api.routes.v1;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import org.apache.commons.configuration2.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
@@ -19,6 +21,8 @@ import java.util.Optional;
 
 public class ExternalReportRoutes {
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     private final String externalApiAddress;
     private final UsersDao usersDao;
     private final AgentsDao agentsDao;
@@ -33,7 +37,7 @@ public class ExternalReportRoutes {
         this.agentsDao = agentsDao;
     }
 
-    public String forwardReport(Request req, Response res) throws Exception {
+    public Object forwardReport(Request req, Response res) throws Exception {
         Agent agent = usersDao.getUser(req.attribute("user_id"))
                 .flatMap(user -> Optional.ofNullable(user.getAgentId()))
                 .flatMap(agentsDao::getAgent)
@@ -51,7 +55,13 @@ public class ExternalReportRoutes {
                 .body(JsonRequestUtils.writeJsonString(externalReport))
                 .asString();
 
-        res.status(externalResponse.getStatus());
-        return externalResponse.getBody();
+        if (externalResponse.getStatus() >= 200 && externalResponse.getStatus() < 300) {
+            res.status(204);
+            return new Object();
+        } else {
+            log.error("Error posting to external API. Got {} {}: {}",
+                    externalResponse.getStatus(), externalResponse.getStatusText(), externalResponse.getBody());
+            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Error posting to external API");
+        }
     }
 }

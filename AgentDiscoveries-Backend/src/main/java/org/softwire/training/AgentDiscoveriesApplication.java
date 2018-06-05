@@ -95,7 +95,7 @@ public class AgentDiscoveriesApplication implements Runnable {
             // Ensure response has appropriate content type
             notFound("{\"errorCode\": \"1005\", \"message\": \"Not found\"}");
             after("/*", (req, res) -> {
-                if (res.type() == null) {
+                if (res.status() != 204 && res.type() == null) {
                     // If content type not already set to be JSON
                     res.type("application/json;charset=utf-8");
                 }
