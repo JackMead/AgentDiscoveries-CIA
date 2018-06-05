@@ -38,7 +38,7 @@ public class LoginHelper {
 
     public static void ensureLoggedOut(WebDriver driver) {
         try {
-            driver.findElement(By.id("logout-link"));
+            logOut(driver);
         } catch (NoSuchElementException e) {
             // Fine
         }
