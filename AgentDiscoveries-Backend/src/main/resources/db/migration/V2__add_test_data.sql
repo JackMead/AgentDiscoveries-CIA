@@ -1,4 +1,4 @@
-INSERT INTO agents (call_sign, first_name, last_name, date_of_birth, rank) VALUES
+INSERT INTO agents (call_sign, first_name, last_name, date_of_birth, `rank`) VALUES
   ('Test Fox', 'Test', 'Agent', '1993-02-01', 4);
 
 INSERT INTO users (username, hashed_password, agent_id) VALUES

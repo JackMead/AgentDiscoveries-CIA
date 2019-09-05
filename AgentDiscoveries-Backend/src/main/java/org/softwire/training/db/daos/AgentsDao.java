@@ -32,7 +32,7 @@ public class AgentsDao {
 
     public int createAgent(Agent agent) {
         try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO agents (first_name, last_name, date_of_birth, rank, call_sign)" +
+            return handle.createUpdate("INSERT INTO agents (first_name, last_name, date_of_birth, `rank`, call_sign)" +
                     " VALUES (:first_name, :last_name, :date_of_birth, :rank, :call_sign)")
                     .bind("first_name", agent.getFirstName())
                     .bind("last_name", agent.getLastName())
@@ -56,7 +56,7 @@ public class AgentsDao {
     public void updateAgent(Agent agent) {
         try (Handle handle = jdbi.open()) {
             handle.createUpdate("UPDATE agents SET first_name = :first_name, last_name = :last_name, " +
-                    "date_of_birth = :date_of_birth, rank = :rank, call_sign = :call_sign " +
+                    "date_of_birth = :date_of_birth, `rank` = :rank, call_sign = :call_sign " +
                     "WHERE agent_id = :agent_id")
                     .bind("agent_id", agent.getAgentId())
                     .bind("first_name", agent.getFirstName())
