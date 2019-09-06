@@ -153,30 +153,30 @@
     <profile>
       <id>integration-test-live</id>
       <properties>
+        <skip.integration.tests>false</skip.integration.tests>
         <skip.unit.tests>true</skip.unit.tests>
         <skip.starting.app.before.tests>true</skip.starting.app.before.tests>
-        <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
     <profile>
       <id>integration-test-local</id>
       <properties>
-        <target.address>http://localhost:8089</target.address>
+        <skip.integration.tests>false</skip.integration.tests>
         <server.port>8089</server.port>
+        <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
+        <target.address>http://localhost:8089</target.address>
         <skip.unit.tests>true</skip.unit.tests>
         <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
-        <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
-        <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
     <profile>
       <properties>
-        <target.address>http://localhost:8089</target.address>
+        <skip.integration.tests>false</skip.integration.tests>
         <server.port>8089</server.port>
+        <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
+        <target.address>http://localhost:8089</target.address>
         <skip.unit.tests>false</skip.unit.tests>
         <skip.starting.app.before.tests>false</skip.starting.app.before.tests>
-        <database.url>jdbc:mysql://localhost:3306/agentdiscoveries?useSSL=false</database.url>
-        <skip.integration.tests>false</skip.integration.tests>
       </properties>
     </profile>
   </profiles>
@@ -303,8 +303,8 @@
   <properties>
     <dropwizard.version>1.2.2</dropwizard.version>
     <mainClass>org.softwire.training.AgentDiscoveriesApplication</mainClass>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 </project>
 

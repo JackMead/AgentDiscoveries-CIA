@@ -1,9 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
-const extractSass = new ExtractTextPlugin("styles.css");
+const extractSass = new MiniCssExtractPlugin();
 const outputPath = path.join(__dirname, 'target', 'classes', 'frontend');
 
 module.exports = {
@@ -16,14 +16,16 @@ module.exports = {
     module: {
         rules: [{
             test: /\.scss$/,
-            use: extractSass.extract({
-                use: [{
-                    loader: "css-loader"
-                }, {
-                    loader: "sass-loader"
-                }],
-                fallback: "style-loader"
-            })
+            use: [
+                {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        hmr: process.env.NODE_ENV === 'development',
+                    }
+                },
+                "css-loader",
+                "sass-loader"
+            ],
         },
         {
             test: /\.jsx?$/,
