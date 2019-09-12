@@ -14,7 +14,7 @@ public final class LocationIdSearchCriterion extends ReportSearchCriterion {
 
     @Override
     public String getSqlForWhereClause() {
-        return "location.location_id = :" + LOCATION_ID_BINDING_NAME;
+        return "location_id = :" + LOCATION_ID_BINDING_NAME;
     }
 
     @Override

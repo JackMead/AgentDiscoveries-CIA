@@ -1,7 +1,10 @@
 package org.softwire.training.models;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "agents")
 public class Agent {
 
     private int agentId;
@@ -22,6 +25,9 @@ public class Agent {
         this.callSign = callSign;
     }
 
+    @Id
+    @Column(name = "agent_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getAgentId() {
         return agentId;
     }
@@ -30,6 +36,7 @@ public class Agent {
         this.agentId = agentId;
     }
 
+    @Column(name = "first_name", length = 30, nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -38,6 +45,7 @@ public class Agent {
         this.firstName = firstName;
     }
 
+    @Column(name = "last_name", length = 100, nullable = false)
     public String getLastName() {
         return lastName;
     }
@@ -46,6 +54,8 @@ public class Agent {
         this.lastName = lastName;
     }
 
+    @Convert(converter = LocalDateAttributeConverter.class)
+    @Column(name = "date_of_birth", nullable = false)
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
@@ -54,6 +64,7 @@ public class Agent {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @Column(name = "rank", nullable = false)
     public int getRank() {
         return rank;
     }
@@ -62,6 +73,7 @@ public class Agent {
         this.rank = rank;
     }
 
+    @Column(name = "call_sign", length = 20, unique = true, nullable = false)
     public String getCallSign() {
         return callSign;
     }

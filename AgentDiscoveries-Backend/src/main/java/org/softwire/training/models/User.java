@@ -1,5 +1,9 @@
 package org.softwire.training.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
 
     private int userId;
@@ -17,6 +21,9 @@ public class User {
         this.admin = admin;
     }
 
+    @Id
+    @Column(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getUserId() {
         return userId;
     }
@@ -25,6 +32,7 @@ public class User {
         this.userId = userId;
     }
 
+    @Column(name = "username", unique = true, nullable = false)
     public String getUsername() {
         return username;
     }
@@ -33,6 +41,7 @@ public class User {
         this.username = username;
     }
 
+    @Column(name = "hashed_password", nullable = false)
     public String getHashedPassword() {
         return hashedPassword;
     }
@@ -41,6 +50,7 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
+    @Column(name = "agent_id")
     public Integer getAgentId() {
         return agentId;
     }
@@ -49,7 +59,10 @@ public class User {
         this.agentId = agentId;
     }
 
-    public boolean isAdmin(){return admin;}
+    @Column(name = "admin", nullable = false)
+    public boolean isAdmin(){
+        return admin;
+    }
 
     public void setAdmin(boolean admin){this.admin=admin;}
 }

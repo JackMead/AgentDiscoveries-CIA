@@ -1,76 +1,58 @@
 package org.softwire.training.db.daos;
 
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.models.User;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
 public class UsersDao {
 
+    private EntityManagerFactory entityManagerFactory;
+    private DaoHelper<User> helper;
+
     @Inject
-    Jdbi jdbi;
+    public UsersDao(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+        this.helper = new DaoHelper<>(entityManagerFactory);
+    }
 
     public Optional<User> getUserByUsername(String username) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM users WHERE username = :username")
-                    .bind("username", username)
-                    .mapToBean(User.class)
-                    .findFirst();
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.getTransaction().begin();
+
+        List<User> results = em.createQuery("FROM User WHERE username LIKE :username", User.class).setParameter("username", username).getResultList();
+
+        em.getTransaction().commit();
+        em.close();
+
+        User user = null;
+        if (!results.isEmpty()) {
+            user = results.get(0);
         }
+        return Optional.ofNullable(user);
     }
 
     public Optional<User> getUser(int userId) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM users WHERE user_id = :userId")
-                    .bind("userId", userId)
-                    .mapToBean(User.class)
-                    .findFirst();
-        }
+        return helper.getEntity(User.class, userId);
     }
 
     public List<User> getUsers() {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM users")
-                    .mapToBean(User.class)
-                    .list();
-        }
+        return helper.getEntities(User.class);
     }
 
     public int addUser(User user) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO users (username, hashed_password, agent_id, admin) " +
-                    "VALUES (:username, :hashed_password, :agent_id, :admin)")
-                    .bind("username", user.getUsername())
-                    .bind("hashed_password", user.getHashedPassword())
-                    .bind("agent_id", user.getAgentId())
-                    .bind("admin", user.isAdmin())
-                    .executeAndReturnGeneratedKeys("user_id")
-                    .mapTo(Integer.class)
-                    .findOnly();
-        }
+        helper.createEntity(user);
+        return user.getUserId();
     }
 
     public void deleteUser(int userId) {
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate("DELETE FROM users WHERE user_id = :user_id")
-                    .bind("user_id", userId)
-                    .execute();
-        }
+        helper.deleteEntity(User.class, userId);
     }
 
     public void updateUser(User user) {
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate("UPDATE users SET username = :username , hashed_password = :password , agent_id = :agent_id, admin = :admin " +
-                    "WHERE user_id = :user_id")
-                    .bind("user_id", user.getUserId())
-                    .bind("username", user.getUsername())
-                    .bind("password", user.getHashedPassword())
-                    .bind("agent_id", user.getAgentId())
-                    .bind("admin", user.isAdmin())
-                    .execute();
-        }
+        helper.updateEntity(user);
     }
 }

@@ -1,5 +1,9 @@
 package org.softwire.training.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "locations")
 public class Location {
 
     private int locationId;
@@ -8,6 +12,9 @@ public class Location {
     private String timeZone;
     private Integer regionId; // Nullable
 
+    @Id
+    @Column(name = "location_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getLocationId() {
         return locationId;
     }
@@ -16,6 +23,7 @@ public class Location {
         this.locationId = locationId;
     }
 
+    @Column(name = "site_name", length = 20, nullable = false)
     public String getSiteName() {
         return siteName;
     }
@@ -24,6 +32,7 @@ public class Location {
         this.siteName = siteName;
     }
 
+    @Column(name = "location", length = 100, nullable = false)
     public String getLocation() {
         return location;
     }
@@ -32,6 +41,7 @@ public class Location {
         this.location = location;
     }
 
+    @Column(name = "time_zone", length = 30, nullable = false)
     public String getTimeZone() {
         return timeZone;
     }
@@ -40,6 +50,7 @@ public class Location {
         this.timeZone = timeZone;
     }
 
+    @Column(name = "region_id")
     public Integer getRegionId() {
         return regionId;
     }

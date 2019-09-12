@@ -1,59 +1,39 @@
 package org.softwire.training.db.daos;
 
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.models.Region;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
 public class RegionsDao {
 
+    private DaoHelper<Region> helper;
+
     @Inject
-    Jdbi jdbi;
+    public RegionsDao(EntityManagerFactory entityManagerFactory) {
+        this.helper = new DaoHelper<>(entityManagerFactory);
+    }
 
     public Optional<Region> getRegion(int regionId) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM regions WHERE region_id = :region_id")
-                    .bind("region_id", regionId)
-                    .mapToBean(Region.class)
-                    .findFirst();
-        }
+        return helper.getEntity(Region.class, regionId);
     }
 
     public List<Region> getRegions() {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM regions")
-                    .mapToBean(Region.class)
-                    .list();
-        }
+        return helper.getEntities(Region.class);
     }
 
     public int createRegion(Region region) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO regions (name) VALUE (:name)")
-                    .bind("name", region.getName())
-                    .executeAndReturnGeneratedKeys("region_id")
-                    .mapTo(Integer.class)
-                    .findOnly();
-        }
+        helper.createEntity(region);
+        return region.getRegionId();
     }
 
     public void updateRegion(Region region) {
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate("UPDATE regions SET name = :name WHERE region_id = :region_id")
-                    .bind("name", region.getName())
-                    .bind("region_id", region.getRegionId())
-                    .execute();
-        }
+        helper.updateEntity(region);
     }
 
     public void deleteRegion(int regionId) {
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate("DELETE FROM regions WHERE region_id = :region_id")
-                    .bind("region_id", regionId)
-                    .execute();
-        }
+        helper.deleteEntity(Region.class, regionId);
     }
 }

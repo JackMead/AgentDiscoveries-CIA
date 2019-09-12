@@ -8,7 +8,6 @@ import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.flywaydb.core.Flyway;
-import org.jdbi.v3.core.JdbiException;
 import org.softwire.training.api.core.ExceptionMapper;
 import org.softwire.training.api.core.JsonResponseTransformer;
 import org.softwire.training.api.models.ErrorCode;
@@ -20,11 +19,11 @@ import spark.ResponseTransformer;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static spark.Spark.*;
+
 
 public class AgentDiscoveriesApplication implements Runnable {
 
@@ -90,7 +89,6 @@ public class AgentDiscoveriesApplication implements Runnable {
 
             ExceptionMapper exceptionMapper = new ExceptionMapper();
             exception(FailedRequestException.class, exceptionMapper::handleInvalidRequestException);
-            exception(JdbiException.class, exceptionMapper::handleDatabaseException);
 
             // Ensure response has appropriate content type
             notFound("{\"errorCode\": \"1005\", \"message\": \"Not found\"}");

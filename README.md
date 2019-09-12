@@ -9,7 +9,9 @@ You'll need MySQL server and MySQL workbench, this can be downloaded from
 [here](https://dev.mysql.com/downloads/installer/) if you don't already have it.  When running
 through the installer you can keep all the default options.
 
-Update the `database.username` and `database.password` fields in `config.properties`.
+Update:
+ - the `database.username` and `database.password` fields in `config.properties`.
+ - the `javax.persistence.jdbc.user` and `javax.persistence.jdbc.password` fields in `META-INF/persistence.xml`.
 
 # Setup
 

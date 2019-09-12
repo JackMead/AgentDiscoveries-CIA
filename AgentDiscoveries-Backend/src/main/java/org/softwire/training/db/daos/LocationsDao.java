@@ -1,68 +1,39 @@
 package org.softwire.training.db.daos;
 
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
 import org.softwire.training.models.Location;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 import java.util.Optional;
 
 public class LocationsDao {
 
+    private DaoHelper<Location> helper;
+
     @Inject
-    Jdbi jdbi;
+    public LocationsDao(EntityManagerFactory entityManagerFactory) {
+        this.helper = new DaoHelper<>(entityManagerFactory);
+    }
 
     public Optional<Location> getLocation(int locationId) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM locations WHERE location_id = :location_id")
-                    .bind("location_id", locationId)
-                    .mapToBean(Location.class)
-                    .findFirst();
-        }
+        return helper.getEntity(Location.class, locationId);
     }
 
     public List<Location> getLocations() {
-        try (Handle handle = jdbi.open()) {
-            return handle.createQuery("SELECT * FROM locations")
-                    .mapToBean(Location.class)
-                    .list();
-        }
+        return helper.getEntities(Location.class);
     }
 
     public int createLocation(Location location) {
-        try (Handle handle = jdbi.open()) {
-            return handle.createUpdate("INSERT INTO locations (location, site_name, time_zone, region_id) " +
-                    "VALUES (:location, :site_name, :time_zone, :region_id)")
-                    .bind("location", location.getLocation())
-                    .bind("site_name", location.getSiteName())
-                    .bind("time_zone", location.getTimeZone())
-                    .bind("region_id", location.getRegionId())
-                    .executeAndReturnGeneratedKeys("location_id")
-                    .mapTo(Integer.class)
-                    .findOnly();
-        }
+        helper.createEntity(location);
+        return location.getLocationId();
     }
 
     public void deleteLocation(int locationId) {
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate("DELETE FROM locations WHERE location_id = :location_id")
-                    .bind("location_id", locationId)
-                    .execute();
-        }
+        helper.deleteEntity(Location.class, locationId);
     }
 
     public void updateLocation(Location location) {
-        try (Handle handle = jdbi.open()) {
-            handle.createUpdate("UPDATE locations SET location = :location, site_name = :site_name, " +
-                    "time_zone = :time_zone, region_id = :region_id WHERE location_id = :location_id")
-                    .bind("location_id", location.getLocationId())
-                    .bind("location", location.getLocation())
-                    .bind("site_name", location.getSiteName())
-                    .bind("time_zone", location.getTimeZone())
-                    .bind("region_id", location.getRegionId())
-                    .execute();
-        }
+        helper.updateEntity(location);
     }
 }

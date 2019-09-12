@@ -54,7 +54,7 @@ public class PictureRoutes {
         }
 
         try (final InputStream in = filePart.getInputStream()) {
-            picturesDao.createOrUpdateUserPicture(userId, getBlobFromInputStream(in), contentType);
+            picturesDao.createOrUpdateUserPicture(userId, IOUtils.toByteArray(in), contentType);
         } catch (Exception e) {
             throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "failed to update picture");
         } finally {
@@ -91,10 +91,5 @@ public class PictureRoutes {
     private ArrayList<String> getAllowedContentTypes(){
         String[] allowedContent = configuration.getStringArray("database.picture.allowed-content-types");
         return new ArrayList<>(Arrays.asList(allowedContent));
-    }
-
-    private Blob getBlobFromInputStream(InputStream in) throws IOException, SQLException {
-        byte[] contents = IOUtils.toByteArray(in);
-        return new SerialBlob(contents);
     }
 }

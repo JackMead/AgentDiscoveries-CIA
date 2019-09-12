@@ -8,9 +8,9 @@ import java.util.List;
  * Utility class with static method for building sub clause for query logic. This is used by multiple
  * report search implementations.
  */
-public class ReportsDaoUtils {
+class ReportsDaoUtils {
 
-    public static String buildWhereSubClauseFromCriteria(List<ReportSearchCriterion> searchCriteria) {
+    static String buildWhereSubClauseFromCriteria(List<ReportSearchCriterion> searchCriteria) {
         if (!searchCriteria.isEmpty()) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(" WHERE (");

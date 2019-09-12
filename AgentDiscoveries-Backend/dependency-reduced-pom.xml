@@ -246,10 +246,6 @@
           <groupId>org.seleniumhq.selenium</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>byte-buddy</artifactId>
-          <groupId>net.bytebuddy</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>commons-exec</artifactId>
           <groupId>org.apache.commons</groupId>
         </exclusion>
