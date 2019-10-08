@@ -11,17 +11,17 @@ public class Agent {
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
-    private int rank;
+    private int agentRank;
     private String callSign;
 
     public Agent() {}
 
-    public Agent(int agentId, String firstName, String lastName, LocalDate dateOfBirth, int rank, String callSign) {
+    public Agent(int agentId, String firstName, String lastName, LocalDate dateOfBirth, int agentRank, String callSign) {
         this.agentId = agentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        this.rank = rank;
+        this.agentRank = agentRank;
         this.callSign = callSign;
     }
 
@@ -66,11 +66,11 @@ public class Agent {
 
     @Column(name = "agent_rank", nullable = false)
     public int getRank() {
-        return rank;
+        return agentRank;
     }
 
     public void setRank(int rank) {
-        this.rank = rank;
+        this.agentRank = rank;
     }
 
     @Column(name = "call_sign", length = 20, unique = true, nullable = false)
