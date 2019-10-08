@@ -1,5 +1,7 @@
 package org.softwire.training.models;
 
+import com.sun.istack.Nullable;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,11 +16,11 @@ public class User {
 
     public User() {}
 
-    public User(String username, String hashedPassword, Integer agentId, boolean admin) {
+    public User(String username, String hashedPassword, boolean admin,  int agentId) {
         this.username = username;
         this.hashedPassword = hashedPassword;
-        this.agentId = agentId;
         this.admin = admin;
+        this.agentId = agentId;
     }
 
     @Id
