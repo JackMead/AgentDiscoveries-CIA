@@ -6,7 +6,7 @@ create table agents (
   first_name varchar(30) NOT NULL,
   last_name varchar(100) NOT NULL,
   date_of_birth date NOT NULL,
-  `agent_rank` int NOT NULL
+  `rank` int NOT NULL
 );
 
 create table users (
