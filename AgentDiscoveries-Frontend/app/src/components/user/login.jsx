@@ -36,13 +36,24 @@ export default class Login extends React.Component {
                         <Button id='login-submit' type='submit'>Login</Button>
                     </FormGroup>
                 </Form>
+                <h1>
+                <ol>
+                FOR THE LOVE OF GOD, MAKE SURE YOU'VE DONE
+                <li>MVN CLEAN PACKAGE</li>
+                <li>YOU'RE RUNNING IT IN INTELLIJ (AGENT DISCOVERIES APPLICATION)</li>
+                <li><i>AND </i></li>
+                <li>YOU HAVE THE -DDEV SERVER RUNNING TOO.</li>
+                <li>AAAAAAAAAAAAA OH MY GOD!!!!!!!!!!!!!!!</li>
+
+                </ol>
+                </h1>
             </div>
         );
     }
 
     componentWillMount () {
         if (UserHelper.isLoggedIn()) {
-            window.location.hash = '#/message';
+            window.location.hash = '#/';
         }
     }
 
@@ -83,7 +94,7 @@ export default class Login extends React.Component {
             })
             .then(response => {
                 UserHelper.storeUserInfo(response);
-                window.location.hash = '#/';
+                window.location.hash = '#/welcome';
             })
             .catch(error => {
                 this.setState({ message: { message: error.message, type: 'danger' } });

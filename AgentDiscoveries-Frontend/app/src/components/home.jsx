@@ -6,7 +6,7 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-                <Redirect to='/login' />
+                <h1>AHHHHHHHHHHHHH</h1>
             </div>
         );
     }

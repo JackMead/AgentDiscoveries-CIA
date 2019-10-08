@@ -25,7 +25,7 @@ export default class App extends React.Component {
             <React.Fragment>
                 <Router>
                     <Switch>
-                        <Route path='/' exact render={() => <Page><Home /></Page>} />
+                        <Route path='/welcome' exact render={() => <Page><Home /></Page>} />
                         <Route path='/login' render={() => <Page><Login /></Page>} />
                         <Route path='/search/location' render={() => <Page><LocationReportSearch /></Page>} />
                         <Route path='/search/region' render={() => <Page><RegionSummarySearch /></Page>} />
