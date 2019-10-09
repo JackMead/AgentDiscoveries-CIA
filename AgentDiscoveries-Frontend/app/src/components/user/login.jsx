@@ -42,7 +42,7 @@ export default class Login extends React.Component {
 
     componentWillMount () {
         if (UserHelper.isLoggedIn()) {
-            window.location.hash = '#/';
+            window.location.hash = '#/welcome';
         }
     }
 
