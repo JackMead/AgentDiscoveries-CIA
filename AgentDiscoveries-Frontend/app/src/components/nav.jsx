@@ -73,22 +73,22 @@ export default class NavigationBar extends React.Component {
     }
 
     renderAgentOptions() {
-            return (
-                <Nav>
-                    <NavDropdown eventKey={4} title='Submit' id='basic-nav-dropdown'>
-                        <MenuItem componentClass={Link} href='/submit/location' to='/submit/location' eventKey={4.1}>
-                            Location Report
-                        </MenuItem>
-                        <MenuItem componentClass={Link} href='/submit/region' to='/submit/region' eventKey={4.2}>
-                            Region Summary
-                        </MenuItem>
-                        </NavDropdown>
-                        <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>
-                            Today's Message
-                    </NavItem>
-                </Nav>
-            );
-        }
+        return (
+            <Nav>
+                <NavDropdown eventKey={4} title='Submit' id='basic-nav-dropdown'>
+                    <MenuItem componentClass={Link} href='/submit/location' to='/submit/location' eventKey={4.1}>
+                        Location Report
+                    </MenuItem>
+                    <MenuItem componentClass={Link} href='/submit/region' to='/submit/region' eventKey={4.2}>
+                        Region Summary
+                    </MenuItem>
+                </NavDropdown>
+                <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>
+                    Today's Message
+                </NavItem>
+            </Nav>
+        );
+    }
 
     renderAdminOptions() {
         return (

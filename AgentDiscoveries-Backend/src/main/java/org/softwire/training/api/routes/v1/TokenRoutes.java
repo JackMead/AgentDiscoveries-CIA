@@ -50,8 +50,7 @@ public class TokenRoutes {
             User user = userOptional.get();
 
             if (passwordHasher.checkPassword(tokenRequest.getPassword(), user.getHashedPassword())) {
-                TokenResponseApiModel token = generateToken(user);
-                return token;
+                 return generateToken(user);
             } else {
                 throw new FailedRequestException(ErrorCode.INVALID_CREDENTIALS, "Invalid password supplied");
             }
@@ -63,9 +62,6 @@ public class TokenRoutes {
     private TokenResponseApiModel generateToken(User user) {
         // Use the user_id as the subject for the issued token
         TokenIssuer.IssuedToken issuedToken = tokenIssuer.generateToken(Integer.toString(user.getUserId()));
-        int userId = user.getUserId();
-        boolean isAdmin = user.isAdmin();
-        Integer agentId = user.getAgentId();
-        return new TokenResponseApiModel(issuedToken.getToken(), issuedToken.getExpiryInstant().toString(), userId, isAdmin, agentId);
+        return new TokenResponseApiModel(issuedToken.getToken(), issuedToken.getExpiryInstant().toString(), user.getUserId(), user.isAdmin(), user.getAgentId());
     }
 }
