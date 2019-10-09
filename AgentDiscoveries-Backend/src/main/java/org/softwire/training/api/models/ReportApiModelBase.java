@@ -9,15 +9,7 @@ public class ReportApiModelBase {
     private ZonedDateTime reportTime;
     private String reportBody;
     private int agentId;
-    private String reportTitle;
 
-    public String getReportTitle() {
-        return reportTitle;
-    }
-
-    public void setReportTitle(String reportTitle) {
-        this.reportTitle = reportTitle;
-    }
 
     public int getReportId() {
         return reportId;
