@@ -66,7 +66,8 @@ export default class LocationReportSubmit extends React.Component {
                             placeholder='Write report'
                             value={this.state.reportBody}
                             onChange={this.onReportBodyChange}
-                            id="report-input"/>
+                            id="report-input"
+                            className="resizeOff"/>
                     </FormGroup>
                     <FormGroup>
                         <Checkbox type='checkbox'
