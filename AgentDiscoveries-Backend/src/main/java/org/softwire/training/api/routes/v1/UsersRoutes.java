@@ -44,8 +44,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
         User user = new User(
                 userApiModel.getUsername(),
                 passwordHasher.hashPassword(userApiModel.getPassword()),
-                userApiModel.getAgentId(),
-                userApiModel.isAdmin());
+                userApiModel.isAdmin(),
+                userApiModel.getAgentId());
 
         int newUserId = usersDao.addUser(user);
 
@@ -94,8 +94,8 @@ public class UsersRoutes implements EntityCRUDRoutes {
                 Strings.isNullOrEmpty(userApiModel.getPassword())
                         ? oldUser.getHashedPassword()
                         : passwordHasher.hashPassword(userApiModel.getPassword()),
-                userApiModel.getAgentId(),
-                userApiModel.isAdmin());
+                userApiModel.isAdmin(),
+                userApiModel.getAgentId());
 
         user.setUserId(id);
         usersDao.updateUser(user);
