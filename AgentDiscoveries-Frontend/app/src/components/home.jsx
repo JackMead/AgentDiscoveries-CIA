@@ -26,6 +26,7 @@ export default class Home extends React.Component {
     componentWillMount() {
         this.getUser();
     }
+
     render() {
         return (
             <div>
