@@ -47,6 +47,11 @@ export default class Entities extends React.Component {
         // Only rendering the table if there is an entity.
         // In this case, use the first to extract the header labels
         const entity = this.state.entities[0];
+
+        if(this.props.api == "users"){ //user specific operations
+            delete entity.password
+        }
+
         return (
             <thead>
                 <tr>
