@@ -1,6 +1,5 @@
 package org.softwire.training.models;
 
-import com.sun.istack.Nullable;
 
 import javax.persistence.*;
 
