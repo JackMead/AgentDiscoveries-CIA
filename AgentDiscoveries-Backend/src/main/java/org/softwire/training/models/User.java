@@ -1,6 +1,5 @@
 package org.softwire.training.models;
 
-
 import javax.persistence.*;
 
 @Entity
