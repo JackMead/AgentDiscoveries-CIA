@@ -60,7 +60,6 @@ export default class Home extends React.Component {
                     <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Europe/London'} /></td>
                 </tr>
             </table>
-            <img className='rotate' src="https://www.eagles.org/wp-content/uploads/2016/01/Eagle-Eyes.jpeg" />
             </center>
             </div>
         );

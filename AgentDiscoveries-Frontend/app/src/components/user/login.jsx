@@ -36,17 +36,6 @@ export default class Login extends React.Component {
                         <Button id='login-submit' type='submit'>Login</Button>
                     </FormGroup>
                 </Form>
-                <h1>
-                    <ol>
-                        FOR THE LOVE OF GOD, MAKE SURE YOU'VE DONE
-                        <li>MVN CLEAN PACKAGE</li>
-                        <li>YOU'RE RUNNING IT IN INTELLIJ (AGENT DISCOVERIES APPLICATION)</li>
-                        <li><i>AND </i></li>
-                        <li>YOU HAVE THE -DDEV SERVER RUNNING TOO.</li>
-                        <li>AAAAAAAAAAAAA OH MY GOD!!!!!!!!!!!!!!!</li>
-                        <li>A N D YOU NEED TO HAVE AN ACTUAL DATABASE PREPARED ON SQL</li>
-                    </ol>
-                </h1>
             </div>
         );
     }
