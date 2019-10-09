@@ -37,9 +37,7 @@ public class UserApiModel {
         this.userId = userId;
     }
 
-    public Integer getAgentId() {
-        return agentId;
-    }
+    public Integer getAgentId() { return agentId; }
 
     public void setAgentId(Integer agentId) {
         this.agentId = agentId;
