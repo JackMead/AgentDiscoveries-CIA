@@ -50,7 +50,7 @@ public class TokenRoutes {
             User user = userOptional.get();
 
             if (passwordHasher.checkPassword(tokenRequest.getPassword(), user.getHashedPassword())) {
-                 return generateToken(user);
+                return generateToken(user);
             } else {
                 throw new FailedRequestException(ErrorCode.INVALID_CREDENTIALS, "Invalid password supplied");
             }
