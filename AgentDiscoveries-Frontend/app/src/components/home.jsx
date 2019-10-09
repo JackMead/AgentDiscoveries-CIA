@@ -32,7 +32,7 @@ export default class Home extends React.Component {
             <center>
 
             <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>
-            <p>This is the CIA's secret website... create secret messages and add reports!</p>
+            <p>This is the CIA's secret website... create secret messages and add reports!!!!!</p>
 
             <table width="30%">
                 <tr>
