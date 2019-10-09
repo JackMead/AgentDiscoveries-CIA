@@ -4,6 +4,7 @@ export function storeUserInfo(userInfo) {
     window.localStorage.setItem('Token', userInfo.token);
     window.localStorage.setItem('UserId', userInfo.userId);
     window.localStorage.setItem('Admin', userInfo.isAdmin ? 'true' : 'false');
+    window.localStorage.setItem('Agent', userInfo.agentId >= 0 ? 'true' : 'false');
 
     updateListeners();
 }
@@ -12,6 +13,7 @@ export function clearUserInfo() {
     window.localStorage.clear('Token');
     window.localStorage.clear('UserId');
     window.localStorage.clear('Admin');
+    window.localStorage.clear('Agent');
 
     updateListeners();
 }
@@ -30,6 +32,10 @@ export function currentAuthToken() {
 
 export function isAdmin(){
     return window.localStorage.getItem('Admin') === 'true';
+}
+
+export function isAgent() {
+    return window.localStorage.getItem('Agent') === 'true';
 }
 
 // Fire a 'login' event when the user info is updated.
