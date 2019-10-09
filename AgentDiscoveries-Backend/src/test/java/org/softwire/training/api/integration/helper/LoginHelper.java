@@ -21,9 +21,7 @@ public class LoginHelper {
             login(driver);
         }
     }
-
-
-
+    
     public static void login(WebDriver driver) {
         WebElement userNameInput = driver.findElement(By.id("user-name-input"));
         userNameInput.sendKeys(TEST_USER);
