@@ -20,6 +20,7 @@ public class CustomisedGsonBuilder {
         return new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+                .serializeNulls()
                 .create();
     }
 

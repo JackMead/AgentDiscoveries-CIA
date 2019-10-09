@@ -25,13 +25,17 @@ export default class Entity extends React.Component {
 
         if(this.props.type == "users"){ //user specific operations
             delete this.props.entity.password
+
         }
 
         console.log("THESE ARE THE ENTITY PROPERTIES")
         console.log(this.props)
 
         return Object.keys(this.props.entity).map(key =>
-            <td key={key}>{this.props.entity[key]}</td>);
+        {
+        const display = this.props.entity[key] === null ? '' : this.props.entity[key].toString();
+            return <td key={key}>{display}</td>;
+            })
     }
 
     getEditButton() {
