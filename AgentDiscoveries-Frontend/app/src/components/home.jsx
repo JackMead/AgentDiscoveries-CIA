@@ -32,6 +32,7 @@ export default class Home extends React.Component {
             <center>
 
             <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>
+            <p>This is the CIA's secret website... create secret messages and add reports!</p>
 
             <table width="30%">
                 <tr>
@@ -59,7 +60,6 @@ export default class Home extends React.Component {
                     <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Europe/London'} /></td>
                 </tr>
             </table>
-
             <img className='rotate' src="https://www.eagles.org/wp-content/uploads/2016/01/Eagle-Eyes.jpeg" />
             </center>
             </div>

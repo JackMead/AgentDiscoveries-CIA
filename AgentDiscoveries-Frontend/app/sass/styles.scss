@@ -79,7 +79,9 @@ body {
 }
 
 .rotate {
-    animation: rotation 0.5s infinite linear;
+    position: relative;
+    top: 100px;
+    animation: rotation 100s infinite linear;
 }
 
 @keyframes rotation {
