@@ -5,13 +5,12 @@ import {currentUserId} from './utilities/user-helper';
 import {errorLogAndRedirect} from './error';
 
 export default class Home extends React.Component {
-     constructor(props) {
-            super(props);
-
-            this.state = {
-                user: {}
-            };
-     }
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: {}
+        };
+    }
 
     getUser() {
         apiGet('users', currentUserId())
@@ -25,14 +24,44 @@ export default class Home extends React.Component {
     }
 
     componentWillMount() {
-            this.getUser();
-        }
-
+        this.getUser();
+    }
     render() {
         return (
             <div>
-                <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>
-                <Clock format={'HH:mm:ss'} ticking={true} timezone={'US/Pacific'} />
+            <center>
+
+            <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>
+
+            <table width="30%">
+                <tr>
+                    <th>Location:</th>
+                    <th>Time:</th>
+                </tr>
+                <tr>
+                    <td>Africa/Bamako</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Africa/Bamako'} /></td>
+                </tr>
+                <tr>
+                    <td>America/Chihuahua</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'America/Chihuahua'} /></td>
+                </tr>
+                <tr>
+                    <td>America/New_York</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'America/New_York'} /></td>
+                </tr>
+                <tr>
+                    <td>Europe/Moscow</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Europe/Moscow'} /></td>
+                </tr>
+                <tr>
+                    <td>Europe/London</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Europe/London'} /></td>
+                </tr>
+            </table>
+
+            <img className='rotate' src="https://www.eagles.org/wp-content/uploads/2016/01/Eagle-Eyes.jpeg" />
+            </center>
             </div>
         );
     }
