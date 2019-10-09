@@ -10,7 +10,6 @@ public class ReportApiModelBase {
     private String reportBody;
     private int agentId;
 
-
     public int getReportId() {
         return reportId;
     }

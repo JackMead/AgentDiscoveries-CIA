@@ -12,7 +12,6 @@ public class ReportBase {
     private String reportBody;
     private int agentId;
 
-
     @Id
     @Column(name = "report_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
