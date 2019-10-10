@@ -64,6 +64,7 @@ export default class LocationReportSubmit extends React.Component {
                     <FormGroup>
                         <ControlLabel>Title</ControlLabel>
                         <FormControl type='text' required
+                            maxlength='30'
                             componentClass='textarea'
                             placeholder='Write title'
                             value={this.state.reportTitle}
