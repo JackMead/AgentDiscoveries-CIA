@@ -19,8 +19,11 @@ import RegionForm from './admin/region-form';
 import UserForm from './admin/user-form';
 import Error from './error';
 
+import {apiGet} from './utilities/request-helper.js';
+
 export default class App extends React.Component {
     render() {
+        apiGet('/checktoken');
         return (
             <React.Fragment>
                 <Router>
