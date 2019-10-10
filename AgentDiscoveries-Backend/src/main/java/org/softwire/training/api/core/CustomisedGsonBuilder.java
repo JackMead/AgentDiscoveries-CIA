@@ -12,7 +12,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-
 public class CustomisedGsonBuilder {
 
     public static Gson getGson() {
@@ -41,11 +40,6 @@ public class CustomisedGsonBuilder {
                 .serializeNulls()
                 .create();
     }
-
-
-
-
-
 
     /**
      * Gson does not have an adapter for LocalDate so expands into an object with day, month, year fields.
