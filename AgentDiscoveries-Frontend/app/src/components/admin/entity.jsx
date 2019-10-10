@@ -22,15 +22,9 @@ export default class Entity extends React.Component {
     }
 
     getEntityRow() {
-
-        if(this.props.type == 'users'){ //user specific operations
-            delete this.props.entity.password;
-
-        }
-
         return Object.keys(this.props.entity).map(key =>
         {
-            const display = this.props.entity[key] === null ? '' : this.props.entity[key].toString();
+            const display = this.props.entity[key] === null ? 'T E S T' : this.props.entity[key].toString();
             return <td key={key}>{display}</td>;
         });
     }
