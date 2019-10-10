@@ -20,6 +20,7 @@ public class LocationStatusReport extends ReportBase {
         this.reportTitle = reportTitle;
     }
 
+
     @Column(name = "location_id", nullable = false)
     public int getLocationId() {
         return locationId;
