@@ -20,7 +20,7 @@ export default class UserForm extends React.Component {
                 firstName: '',
                 lastName: '',
                 dateOfBirth: '',
-                rank: '',
+                agentRank: '',
                 callSign: ''
             },
 
