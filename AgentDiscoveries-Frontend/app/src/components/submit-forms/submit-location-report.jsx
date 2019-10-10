@@ -13,6 +13,7 @@ export default class LocationReportSubmit extends React.Component {
 
             locationId: '',
             status: '',
+            reportTitle: '',
             reportBody: '',
             sendExternal: false,
 
@@ -22,6 +23,7 @@ export default class LocationReportSubmit extends React.Component {
         this.onLocationChange = this.onLocationChange.bind(this);
         this.onStatusChange = this.onStatusChange.bind(this);
         this.onReportBodyChange = this.onReportBodyChange.bind(this);
+        this.onReportTitleChange = this.onReportTitleChange.bind(this);
         this.onExternalChange = this.onExternalChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
@@ -60,13 +62,24 @@ export default class LocationReportSubmit extends React.Component {
                             id="status-input"/>
                     </FormGroup>
                     <FormGroup>
+                        <ControlLabel>Title</ControlLabel>
+                        <FormControl type='text' required
+                            maxlength='30'
+                            componentClass='textarea'
+                            placeholder='Write title'
+                            value={this.state.reportTitle}
+                            onChange={this.onReportTitleChange}
+                            id="title-input"/>
+                    </FormGroup>
+                    <FormGroup>
                         <ControlLabel>Report</ControlLabel>
                         <FormControl type='text' required
                             componentClass='textarea' rows={6}
                             placeholder='Write report'
                             value={this.state.reportBody}
                             onChange={this.onReportBodyChange}
-                            id="report-input"/>
+                            id="report-input"
+                            className="resizeOff"/>
                     </FormGroup>
                     <FormGroup>
                         <Checkbox type='checkbox'
@@ -92,6 +105,9 @@ export default class LocationReportSubmit extends React.Component {
     onReportBodyChange(event) {
         this.setState({ reportBody: event.target.value });
     }
+    onReportTitleChange(event) {
+        this.setState({ reportTitle: event.target.value});
+    }
 
     onExternalChange(event) {
         this.setState({ sendExternal: event.target.checked });
@@ -106,6 +122,7 @@ export default class LocationReportSubmit extends React.Component {
             locationId: this.state.locationId,
             status: this.state.status,
             reportBody: this.state.reportBody,
+            reportTitle: this.state.reportTitle,
             sendExternal: this.state.sendExternal
         };
 
