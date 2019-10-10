@@ -133,7 +133,6 @@ export default class LocationForm extends React.Component {
             regionId: this.state.regionId ? this.state.regionId : null
         };
 
-        console.log(body)
         const request = this.props.id
             ? apiPut('locations', body, this.props.id) //do this if location ID is present
             : apiPost('locations', body); //do this if location ID is not present

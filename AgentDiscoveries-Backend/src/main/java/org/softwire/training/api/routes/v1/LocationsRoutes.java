@@ -76,26 +76,17 @@ public class LocationsRoutes implements EntityCRUDRoutes {
 
     private void validateLocationModel(Location location) {
 
-        //Cami
-        //Morgan
-        //Add code here to validate fields.
-        //It currently validates time zones, but it can also be used to validate other fields.
-
-        System.out.println("Location model being validated.");
-
         if (location.getSiteName().length() > 20) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "site name is too long (max 20 chars).");
         }
 
         if (StringUtils.isEmpty(location.getTimeZone())) {
-            System.out.println("Time zone field is empty.");
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "timeZone must be specified for location");
         }
 
         try {
             ZoneId.of(location.getTimeZone());
         } catch (DateTimeException e) {
-            System.out.println("Time zone field is INVALID.");
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "timeZone '" + location.getTimeZone() + "' is invalid", e);
         }
     }

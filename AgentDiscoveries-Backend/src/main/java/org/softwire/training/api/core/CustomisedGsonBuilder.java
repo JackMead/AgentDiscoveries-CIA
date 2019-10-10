@@ -15,25 +15,10 @@ import java.time.format.DateTimeParseException;
 public class CustomisedGsonBuilder {
 
     public static Gson getGson() {
-
-        ExclusionStrategy strategy = new ExclusionStrategy() {
-            @Override
-            public boolean shouldSkipField(FieldAttributes fieldAttributes) {
-                System.out.println(fieldAttributes.getDeclaringClass());
-                System.out.println(fieldAttributes.getName());
-                return false;
-            }
-            @Override
-            public boolean shouldSkipClass(Class<?> aClass) {
-                return false;
-            }
-        };
-
         return new GsonBuilder()
 
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
-                .addSerializationExclusionStrategy(strategy)
                 .serializeNulls()
                 .create();
     }
