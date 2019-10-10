@@ -14,7 +14,7 @@ public final class LocationTitleSearchCriterion extends ReportSearchCriterion {
 
     @Override
     public String getSqlForWhereClause() {
-        return "report_title = :" + LOCATION_TITLE_BINDING_NAME;
+        return "report_title LIKE CONCAT ('%',:" + LOCATION_TITLE_BINDING_NAME + ",'%')";
     }
 
     @Override

@@ -43,7 +43,6 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport> {
         System.out.println(whereClause);
 
         TypedQuery<LocationStatusReport> query = em.createQuery("FROM LocationStatusReport " + whereClause, LocationStatusReport.class);
-
         for (ReportSearchCriterion criterion : searchCriteria) {
             for (Map.Entry<String, Object> bindingEntry : criterion.getBindingsForSql().entrySet()) {
                 query = query.setParameter(bindingEntry.getKey(), bindingEntry.getValue());
