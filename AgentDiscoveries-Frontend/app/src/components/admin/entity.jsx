@@ -23,9 +23,8 @@ export default class Entity extends React.Component {
 
     getEntityRow() {
         return Object.keys(this.props.entity).map(key =>
-
         {
-            const display = this.props.entity[key] === null ? '' : this.props.entity[key].toString(); //This replaces null elements with an empty string.
+            const display = this.props.entity[key] === null ? '' : this.props.entity[key].toString();
             console.log(display)
             return <td key={key}>{display}</td>;
         });
