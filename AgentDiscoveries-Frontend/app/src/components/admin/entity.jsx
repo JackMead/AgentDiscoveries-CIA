@@ -28,9 +28,6 @@ export default class Entity extends React.Component {
 
         }
 
-        console.log('THESE ARE THE ENTITY PROPERTIES');
-        console.log(this.props);
-
         return Object.keys(this.props.entity).map(key =>
         {
             const display = this.props.entity[key] === null ? '' : this.props.entity[key].toString();
