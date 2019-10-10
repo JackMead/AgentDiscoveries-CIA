@@ -16,9 +16,6 @@ export default class Home extends React.Component {
         apiGet('users', currentUserId())
             .then(user => {
                 this.setState({ user: user });
-                if (user.agentId) {
-                    this.getAgent(user.agentId);
-                }
             })
             .catch(errorLogAndRedirect);
     }

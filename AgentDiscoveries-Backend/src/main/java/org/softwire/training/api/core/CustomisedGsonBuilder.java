@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+
 public class CustomisedGsonBuilder {
 
     public static Gson getGson() {
@@ -20,12 +21,7 @@ public class CustomisedGsonBuilder {
             @Override
             public boolean shouldSkipField(FieldAttributes fieldAttributes) {
 
-                if (fieldAttributes.getDeclaringClass() == UserApiModel.class && fieldAttributes.getName().equals("password")) {
-                    return true;
-                } else {
-                    return false;
-
-                }
+                return fieldAttributes.getDeclaringClass() == UserApiModel.class && fieldAttributes.getName().equals("password");
             }
             @Override
             public boolean shouldSkipClass(Class<?> aClass) {
@@ -40,6 +36,11 @@ public class CustomisedGsonBuilder {
                 .serializeNulls()
                 .create();
     }
+
+
+
+
+
 
     /**
      * Gson does not have an adapter for LocalDate so expands into an object with day, month, year fields.
