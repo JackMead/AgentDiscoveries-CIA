@@ -90,20 +90,20 @@ export default class LocationForm extends React.Component {
     }
 
     onSiteChange(event) {
-        if(event.target.value.length < 200){
+        if(event.target.value.length < 20){
             this.setState({ siteName: event.target.value });
         }
     }
 
     onLongitudeChange(event) {
-        if(event.target.value < 100 && event.target.value > -100){
+        if(event.target.value < 180 && event.target.value > -180){
                 const newLong = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
                 this.setState({ longitude: newLong });
         }
     }
 
     onLatitudeChange(event) {
-        if(event.target.value < 100 && event.target.value > -100){
+        if(event.target.value < 180 && event.target.value > -180){
                 const newLat = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
                 this.setState({ latitude: newLat });
         }
