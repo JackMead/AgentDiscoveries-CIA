@@ -48,8 +48,8 @@ export default class Entities extends React.Component {
         // In this case, use the first to extract the header labels
         const entity = this.state.entities[0];
 
-        if(this.props.api == "users"){ //user specific operations
-            delete entity.password
+        if(this.props.api == 'users'){ //user specific operations
+            delete entity.password;
         }
 
         return (

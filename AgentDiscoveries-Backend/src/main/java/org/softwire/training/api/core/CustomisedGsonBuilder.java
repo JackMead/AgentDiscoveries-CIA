@@ -26,7 +26,7 @@ public class CustomisedGsonBuilder {
 
     /**
      * Gson does not have an adapter for LocalDate so expands into an object with day, month, year fields.
-     * This adapter allows serializing and derserializing the value as yyyy-mm-dd the ISO standard.
+     * This adapter allows serializing and derserializing the value as yyyy-mm-dd the ISO standard...
      */
     private static class LocalDateAdapter extends TypeAdapter<LocalDate> {
 
