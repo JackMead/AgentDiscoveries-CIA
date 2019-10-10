@@ -117,7 +117,7 @@ export default class UserForm extends React.Component {
                     username: this.state.username,
                     password: this.state.password,
                     agentId: agentId,
-                    admin: this.state.admin
+                    admin: this.state.isAdmin
                 };
                 return this.props.id
                     ? apiPut('users', user, this.props.id)
