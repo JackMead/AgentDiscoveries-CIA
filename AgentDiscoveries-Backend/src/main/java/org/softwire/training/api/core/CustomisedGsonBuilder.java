@@ -16,7 +16,6 @@ public class CustomisedGsonBuilder {
 
     public static Gson getGson() {
         return new GsonBuilder()
-
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
                 .serializeNulls()
