@@ -5,20 +5,20 @@ import java.util.Map;
 
 public final class LocationTitleSearchCriterion extends ReportSearchCriterion {
 
-    private static final String LOCATION_TITLE_BINDING_NAME = "location_id_sc_location_id";
-    private final String titleId;
+    private static final String LOCATION_TITLE_BINDING_NAME = "report_title_sc_report_title";
+    private final String report_title;
 
-    public LocationTitleSearchCriterion(String titleId) {
-        this.titleId = titleId;
+    public LocationTitleSearchCriterion(String reportTitle) {
+        this.report_title = reportTitle;
     }
 
     @Override
     public String getSqlForWhereClause() {
-        return "title_id = :" + LOCATION_TITLE_BINDING_NAME;
+        return "report_title = :" + LOCATION_TITLE_BINDING_NAME;
     }
 
     @Override
     public Map<String, Object> getBindingsForSql() {
-        return Collections.singletonMap(LOCATION_TITLE_BINDING_NAME, titleId);
+        return Collections.singletonMap(LOCATION_TITLE_BINDING_NAME, report_title);
     }
 }
