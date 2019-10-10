@@ -104,7 +104,6 @@ export default class UserForm extends React.Component {
 
     onSubmit(event) {
         event.preventDefault();
-
         const agentIdPromise = this.state.isAgent
             ? this.state.agentId
                 ? apiPut('agents', this.state.agent, this.state.agentId).then(() => this.state.agentId)
