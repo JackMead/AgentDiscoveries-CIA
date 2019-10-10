@@ -9,6 +9,8 @@ export default class LocationForm extends React.Component {
 
         this.state = {
             siteName: '',
+            longitude: '',
+            latitude: '',
             location: '',
             timeZone: '',
             regionId: '',
@@ -17,6 +19,8 @@ export default class LocationForm extends React.Component {
         };
 
         this.onSiteChange = this.onSiteChange.bind(this);
+        this.onLongitudeChange = this.onLongitudeChange.bind(this);
+        this.onLatitudeChange = this.onLatitudeChange.bind(this);
         this.onLocationChange = this.onLocationChange.bind(this);
         this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
         this.onRegionIdChange = this.onRegionIdChange.bind(this);
@@ -42,6 +46,20 @@ export default class LocationForm extends React.Component {
                                 placeholder='Enter site name'
                                 value={this.state.siteName}
                                 onChange={this.onSiteChange}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Longitude(optional)</ControlLabel>
+                            <FormControl type='number'
+                                placeholder='±00.0000000'
+                                value={this.state.longitude}
+                                onChange={this.onLongitudeChange}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Latitude(optional)</ControlLabel>
+                            <FormControl type='number'
+                                placeholder='±00.0000000'
+                                value={this.state.latitude}
+                                onChange={this.onLatitudeChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Location Name</ControlLabel>
@@ -72,7 +90,23 @@ export default class LocationForm extends React.Component {
     }
 
     onSiteChange(event) {
-        this.setState({ siteName: event.target.value });
+        if(event.target.value.length < 200){
+            this.setState({ siteName: event.target.value });
+        }
+    }
+
+    onLongitudeChange(event) {
+        if(event.target.value < 100 && event.target.value > -100){
+                const newLong = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
+                this.setState({ longitude: newLong });
+        }
+    }
+
+    onLatitudeChange(event) {
+        if(event.target.value < 100 && event.target.value > -100){
+                const newLat = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
+                this.setState({ latitude: newLat });
+        }
     }
 
     onLocationChange(event) {
@@ -92,14 +126,17 @@ export default class LocationForm extends React.Component {
 
         const body = {
             siteName: this.state.siteName,
+            longitude: this.state.longitude,
+            latitude: this.state.latitude,
             location: this.state.location,
             timeZone: this.state.timeZone,
             regionId: this.state.regionId ? this.state.regionId : null
         };
 
+        console.log(body)
         const request = this.props.id
-            ? apiPut('locations', body, this.props.id)
-            : apiPost('locations', body);
+            ? apiPut('locations', body, this.props.id) //do this if location ID is present
+            : apiPost('locations', body); //do this if location ID is not present
 
         request
             .then(() => window.location.hash = '#/admin/locations')

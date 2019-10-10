@@ -1,12 +1,10 @@
 package org.softwire.training.api.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.TypeAdapter;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+import org.softwire.training.api.models.UserApiModel;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -17,9 +15,26 @@ import java.time.format.DateTimeParseException;
 public class CustomisedGsonBuilder {
 
     public static Gson getGson() {
+
+        ExclusionStrategy strategy = new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+                System.out.println(fieldAttributes.getDeclaringClass());
+                System.out.println(fieldAttributes.getName());
+                return false;
+            }
+            @Override
+            public boolean shouldSkipClass(Class<?> aClass) {
+                return false;
+            }
+        };
+
         return new GsonBuilder()
+
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+                .addSerializationExclusionStrategy(strategy)
+                .serializeNulls()
                 .create();
     }
 
