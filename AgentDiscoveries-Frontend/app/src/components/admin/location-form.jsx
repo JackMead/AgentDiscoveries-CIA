@@ -50,7 +50,7 @@ export default class LocationForm extends React.Component {
                         <FormGroup>
                             <ControlLabel>Longitude(optional)</ControlLabel>
                             <FormControl type='number'
-                                placeholder='±00.0000000'
+                                placeholder='±000.0000000'
                                 value={this.state.longitude}
                                 onChange={this.onLongitudeChange}/>
                         </FormGroup>
@@ -103,7 +103,7 @@ export default class LocationForm extends React.Component {
     }
 
     onLatitudeChange(event) {
-        if(event.target.value < 180 && event.target.value > -180){
+        if(event.target.value < 90 && event.target.value > -90){
                 const newLat = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
                 this.setState({ latitude: newLat });
         }
