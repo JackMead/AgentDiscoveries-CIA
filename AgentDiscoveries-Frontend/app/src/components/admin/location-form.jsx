@@ -97,14 +97,14 @@ export default class LocationForm extends React.Component {
 
     onLongitudeChange(event) {
         if(event.target.value < 180 && event.target.value > -180){
-                const newLong = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
+                const newLong = event.target.value === '' ? null : event.target.value
                 this.setState({ longitude: newLong });
         }
     }
 
     onLatitudeChange(event) {
         if(event.target.value < 90 && event.target.value > -90){
-                const newLat = event.target.value === '' ? null : event.target.value //This replaces empty strings with null.
+                const newLat = event.target.value === '' ? null : event.target.value
                 this.setState({ latitude: newLat });
         }
     }
