@@ -73,4 +73,8 @@ public class AgentsRoutes {
 
         return new Object();
     }
+
+    public Object editCallSign(Request req, Response res, int idParamAsInt) {
+        // continue...
+    }
 }
