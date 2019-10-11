@@ -134,8 +134,8 @@ export default class LocationForm extends React.Component {
         };
 
         const request = this.props.id
-            ? apiPut('locations', body, this.props.id) //do this if location ID is present
-            : apiPost('locations', body); //do this if location ID is not present
+            ? apiPut('locations', body, this.props.id)
+            : apiPost('locations', body);
 
         request
             .then(() => window.location.hash = '#/admin/locations')
