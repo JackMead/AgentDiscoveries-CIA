@@ -27,8 +27,6 @@ create table regions (
 create table locations (
   location_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   site_name varchar(20) NOT NULL,
-  longitude decimal(9,7),
-  latitude decimal(9,7),
   location varchar(100) NOT NULL,
   time_zone varchar(30) NOT NULL,
   region_id int NULL,
