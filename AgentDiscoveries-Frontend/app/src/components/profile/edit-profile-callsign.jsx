@@ -46,7 +46,6 @@ export default class EditProfileCallSign extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        //TODO add back in agents/editCallSign
 
         const body = { callSign: this.state.callSign };
         apiPut('/agents/editcallsign', body, currentAgentId())
