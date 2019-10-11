@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Button, ButtonGroup, Form, FormControl, FormGroup} from 'react-bootstrap';
 import {apiPut} from '../utilities/request-helper';
-import {currentUserId} from '../utilities/user-helper';
+import {currentAgentId} from '../utilities/user-helper';
 import Message from '../message';
 
 export default class EditProfileCallSign extends React.Component {
@@ -48,7 +48,7 @@ export default class EditProfileCallSign extends React.Component {
         event.preventDefault();
 
         const body = { callSign: this.state.callSign };
-        apiPut('agents/editCallSign', body, currentUserId())
+        apiPut('agents/editCallSign', body, currentAgentId())
             .then(() => { window.location.hash = '/profile'; })
             .catch(() => this.setState({ message: { message: 'Could not update Call Sign, please try again later', type: 'danger'} }));
     }
