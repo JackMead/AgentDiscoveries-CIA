@@ -82,3 +82,34 @@ body {
   resize: none;
 }
 
+.motto {
+  font-size: 30px;
+  text-align: center;
+  font-family: "Courier New";
+  font-weight: bold;
+  color: #0A5FA9;
+}
+
+.align-properly{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.cia-logo{
+    max-width: 60%;
+    max-height: 60%;
+}
+
+.my-custom-scrollbar {
+height: 200px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+
+
+
+
+
