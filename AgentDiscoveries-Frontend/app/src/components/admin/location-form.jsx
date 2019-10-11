@@ -44,7 +44,7 @@ export default class LocationForm extends React.Component {
                             <ControlLabel>Site Name</ControlLabel>
                             <FormControl type='text' required
                                 placeholder='Enter site name'
-                                value={this.state.siteName}
+                                value = {this.state.siteName === null ? '' : this.state.siteName}
                                 maxLength ="20"
                                 onChange={this.onSiteChange}/>
                         </FormGroup>
@@ -52,21 +52,21 @@ export default class LocationForm extends React.Component {
                             <ControlLabel>Longitude(optional)</ControlLabel>
                             <FormControl type='number'
                                 placeholder='±000.0000000'
-                                value={this.state.longitude}
+                                value= {this.state.longitude === null ? '' : this.state.longitude}
                                 onChange={this.onLongitudeChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Latitude(optional)</ControlLabel>
                             <FormControl type='number'
                                 placeholder='±00.0000000'
-                                value={this.state.latitude}
+                                value= {this.state.latitude === null ? '' : this.state.latitude}
                                 onChange={this.onLatitudeChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Location Name</ControlLabel>
                             <FormControl type='text' required
                                 placeholder='Enter location name'
-                                value={this.state.location}
+                                value= {this.state.location === null ? '' : this.state.location}
                                 maxLength = "100"
                                 onChange={this.onLocationChange}/>
                         </FormGroup>
@@ -74,14 +74,14 @@ export default class LocationForm extends React.Component {
                             <ControlLabel>Time Zone</ControlLabel>
                             <FormControl type='text' required
                                 placeholder='Enter time zone (e.g. "Europe/London")'
-                                value={this.state.timeZone}
+                                value= {this.state.timeZone === null ? '' : this.state.timeZone}
                                 onChange={this.onTimeZoneChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Region</ControlLabel>
                             <FormControl type='number'
                                 placeholder='Enter region ID (optional)'
-                                value={this.state.regionId}
+                                value= {this.state.regionId === null ? '' : this.state.regionId}
                                 onChange={this.onRegionIdChange}/>
                         </FormGroup>
                         <Button type='submit'>Submit</Button>
