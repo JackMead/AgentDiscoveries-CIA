@@ -4,7 +4,8 @@ export function storeUserInfo(userInfo) {
     window.localStorage.setItem('Token', userInfo.token);
     window.localStorage.setItem('UserId', userInfo.userId);
     window.localStorage.setItem('Admin', userInfo.isAdmin ? 'true' : 'false');
-    window.localStorage.setItem('Agent', userInfo.agentId >= 0 ? 'true' : 'false');
+    window.localStorage.setItem('AgentId', userInfo.agentId >= 0 ? 'true' : 'false');
+    window.localStorage.setItem('isAgent', userInfo.agentId == null ? 'false' : 'true');
 
     updateListeners();
 }
@@ -13,7 +14,8 @@ export function clearUserInfo() {
     window.localStorage.clear('Token');
     window.localStorage.clear('UserId');
     window.localStorage.clear('Admin');
-    window.localStorage.clear('Agent');
+    window.localStorage.clear('AgentId');
+    window.localStorage.clear('isAgent');
 
     updateListeners();
 }
@@ -35,7 +37,7 @@ export function isAdmin(){
 }
 
 export function isAgent() {
-    return window.localStorage.getItem('Agent') === 'true';
+    return window.localStorage.getItem('isAgent') === 'true';
 }
 
 // Fire a 'login' event when the user info is updated.
