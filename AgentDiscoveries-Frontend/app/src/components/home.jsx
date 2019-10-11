@@ -58,9 +58,6 @@ export default class Home extends React.Component {
     }
 
     renderTimeZones(allTimeZones, index){
-
-        console.log("got this far 1");
-        console.log(allTimeZones);
         return (
                 <tr key = {index}>
                     <td key = {index}>{allTimeZones}</td>
