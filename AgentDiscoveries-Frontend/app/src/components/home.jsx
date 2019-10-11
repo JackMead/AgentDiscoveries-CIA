@@ -8,11 +8,10 @@ import momentTZ from 'moment-timezone';
 
 export default class Home extends React.Component {
     constructor(props) {
-        const timeZonesList = momentTZ.tz.names();
         super(props);
         this.state = {
             user: {},
-            allTimeZones: timeZonesList
+            timeZonesList: momentTZ.tz.names()
         };
     }
 
@@ -34,7 +33,7 @@ export default class Home extends React.Component {
                 <Table className = "align-properly">
                     <thead>
                         <tr>
-                            <th className = "align-properly" className = "motto"><h1>{this.state.user ? `Welcome, ${this.state.user.username}` : '' }</h1></th>
+                            <th className = "align-properly motto"><h1>{this.state.user ? `Welcome, ${this.state.user.username}` : '' }</h1></th>
                             <th><img className = "cia-logo" src = "https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg"/></th>
                         </tr>
                     </thead>
@@ -49,7 +48,7 @@ export default class Home extends React.Component {
                             </tr>
                         </thead>
                     <tbody>
-                        {this.state.allTimeZones.map(this.renderTimeZones)}
+                        {this.state.timeZonesList.map(this.renderTimeZone)}
                     </tbody>
                     </Table>
                 </div>
@@ -57,11 +56,11 @@ export default class Home extends React.Component {
         );
     }
 
-    renderTimeZones(allTimeZones, index){
+    renderTimeZone(timeZone, index){
         return (
                 <tr key = {index}>
-                    <td key = {index}>{allTimeZones}</td>
-                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={allTimeZones} /></td>
+                    <td key = {index}>{timeZone}</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={timeZone} /></td>
                 </tr>
         );
     }
