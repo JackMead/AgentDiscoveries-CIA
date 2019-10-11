@@ -45,6 +45,7 @@ export default class LocationForm extends React.Component {
                             <FormControl type='text' required
                                 placeholder='Enter site name'
                                 value={this.state.siteName}
+                                maxLength ="20"
                                 onChange={this.onSiteChange}/>
                         </FormGroup>
                         <FormGroup>
@@ -66,6 +67,7 @@ export default class LocationForm extends React.Component {
                             <FormControl type='text' required
                                 placeholder='Enter location name'
                                 value={this.state.location}
+                                maxLength = "100"
                                 onChange={this.onLocationChange}/>
                         </FormGroup>
                         <FormGroup>
@@ -90,9 +92,7 @@ export default class LocationForm extends React.Component {
     }
 
     onSiteChange(event) {
-        if(event.target.value.length < 20){
-            this.setState({ siteName: event.target.value });
-        }
+        this.setState({ siteName: event.target.value });
     }
 
     onLongitudeChange(event) {
