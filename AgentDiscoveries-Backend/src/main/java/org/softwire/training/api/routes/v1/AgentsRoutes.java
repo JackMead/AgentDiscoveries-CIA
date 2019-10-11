@@ -74,7 +74,11 @@ public class AgentsRoutes {
         return new Object();
     }
 
-    public Object editCallSign(Request req, Response res, int idParamAsInt) {
-
+    public Agent editCallSign(Request req, Response res, int agentID) {
+        permissionsVerifier.verifyIsAdminOrRelevantAgent(req, agentID);
+        Agent agent = agentsDao.getAgent(agentID).get();
+        agent.setCallSign(JsonRequestUtils.readBodyAsType(req, Agent.class).getCallSign());
+        agentsDao.updateAgent(agent);
+        return agent;
     }
 }
