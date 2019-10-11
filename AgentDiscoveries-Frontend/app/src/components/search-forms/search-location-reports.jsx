@@ -12,6 +12,7 @@ export default class LocationReportsSearch extends React.Component {
 
         this.state = {
             callSign: '',
+            reportTitle: '',
             locationId: '',
             fromTime: '',
             toTime: '',
@@ -21,6 +22,7 @@ export default class LocationReportsSearch extends React.Component {
         };
 
         this.onCallSignChange = this.onCallSignChange.bind(this);
+        this.onReportTitleChange = this.onReportTitleChange.bind(this);
         this.onLocationChange = this.onLocationChange.bind(this);
         this.onFromChange = this.onFromChange.bind(this);
         this.onToChange = this.onToChange.bind(this);
@@ -41,6 +43,13 @@ export default class LocationReportsSearch extends React.Component {
                             placeholder='Enter agent Call Sign'
                             value={this.state.callSign}
                             onChange={this.onCallSignChange}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <ControlLabel>Title</ControlLabel>
+                        <FormControl type='text'
+                            placeholder ='Enter Title'
+                            value={this.state.reportTitle}
+                            onChange={this.onReportTitleChange}/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Location</ControlLabel>
@@ -71,6 +80,10 @@ export default class LocationReportsSearch extends React.Component {
         this.setState({ callSign: event.target.value });
     }
 
+    onReportTitleChange(event) {
+        this.setState({ reportTitle: event.target.value });
+    }
+
     onLocationChange(event) {
         this.setState({ locationId: parseInt(event.target.value) });
     }
@@ -88,6 +101,7 @@ export default class LocationReportsSearch extends React.Component {
 
         const params = {
             callSign: this.state.callSign,
+            reportTitle: this.state.reportTitle,
             locationId: this.state.locationId,
             fromTime: this.state.fromTime && moment.utc(this.state.fromTime).startOf('day').toISOString(),
             toTime: this.state.toTime && moment.utc(this.state.toTime).endOf('day').toISOString()

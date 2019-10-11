@@ -64,7 +64,8 @@ export default class RegionSummarySubmit extends React.Component {
                             placeholder='Write region summary'
                             value={this.state.reportBody}
                             onChange={this.onReportBodyChange}
-                            id="report-input"/>
+                            id="report-input"
+                            className="resizeOff"/>
                     </FormGroup>
                     <Button type='submit' id="submit-report">Submit</Button>
                 </Form>

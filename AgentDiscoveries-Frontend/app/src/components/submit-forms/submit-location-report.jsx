@@ -69,7 +69,8 @@ export default class LocationReportSubmit extends React.Component {
                             placeholder='Write title'
                             value={this.state.reportTitle}
                             onChange={this.onReportTitleChange}
-                            id="title-input"/>
+                            id="title-input"
+                            className="resizeOff"/>
                     </FormGroup>
                     <FormGroup>
                         <ControlLabel>Report</ControlLabel>

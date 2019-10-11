@@ -42,7 +42,6 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport> {
         String whereClause = ReportsDaoUtils.buildWhereSubClauseFromCriteria(searchCriteria);
 
         TypedQuery<LocationStatusReport> query = em.createQuery("FROM LocationStatusReport " + whereClause, LocationStatusReport.class);
-
         for (ReportSearchCriterion criterion : searchCriteria) {
             for (Map.Entry<String, Object> bindingEntry : criterion.getBindingsForSql().entrySet()) {
                 query = query.setParameter(bindingEntry.getKey(), bindingEntry.getValue());
