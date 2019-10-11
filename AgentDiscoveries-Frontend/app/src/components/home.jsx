@@ -3,12 +3,15 @@ import Clock from 'react-live-clock';
 import {apiGet} from './utilities/request-helper';
 import {currentUserId} from './utilities/user-helper';
 import {errorLogAndRedirect} from './error';
+import {Table} from 'react-bootstrap';
+import momentTZ from 'moment-timezone';
 
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
+            user: {},
+            timeZonesList: momentTZ.tz.names()
         };
     }
 
@@ -27,39 +30,38 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-                <center>
-
-                    <h3>{this.state.user ? `Welcome ${this.state.user.username}` : '' }</h3>
-                    <p>This is the CIA's secret website... create secret messages and add reports!!!!!</p>
-
-                    <table width="30%">
+                <Table className = "align-properly">
+                    <thead>
                         <tr>
-                            <th>Location:</th>
-                            <th>Time:</th>
+                            <th className = "align-properly motto"><h1>{this.state.user ? `Welcome, ${this.state.user.username}` : '' }</h1></th>
+                            <th><img className = "cia-logo" src = "https://upload.wikimedia.org/wikipedia/commons/2/25/Seal_of_the_Central_Intelligence_Agency.svg"/></th>
                         </tr>
-                        <tr>
-                            <td>Africa/Bamako</td>
-                            <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Africa/Bamako'} /></td>
-                        </tr>
-                        <tr>
-                            <td>America/Chihuahua</td>
-                            <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'America/Chihuahua'} /></td>
-                        </tr>
-                        <tr>
-                            <td>America/New_York</td>
-                            <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'America/New_York'} /></td>
-                        </tr>
-                        <tr>
-                            <td>Europe/Moscow</td>
-                            <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Europe/Moscow'} /></td>
-                        </tr>
-                        <tr>
-                            <td>Europe/London</td>
-                            <td><Clock format={'HH:mm:ss'} ticking={true} timezone={'Europe/London'} /></td>
-                        </tr>
-                    </table>
-                </center>
+                    </thead>
+                </Table>
+                <p className ="motto">The work of a nation. The center of intelligence.</p>
+                <div className = "table-wrapper-scroll-y my-custom-scrollbar">
+                    <Table striped bordered className = "mb-0">
+                        <thead>
+                            <tr>
+                                <th>Location:</th>
+                                <th>Time:</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        {this.state.timeZonesList.map(this.renderTimeZone)}
+                    </tbody>
+                    </Table>
+                </div>
             </div>
+        );
+    }
+
+    renderTimeZone(timeZone, index){
+        return (
+                <tr key = {index}>
+                    <td key = {index}>{timeZone}</td>
+                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={timeZone} /></td>
+                </tr>
         );
     }
 }
