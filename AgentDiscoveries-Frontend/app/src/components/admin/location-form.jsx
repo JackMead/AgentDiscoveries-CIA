@@ -9,6 +9,8 @@ export default class LocationForm extends React.Component {
 
         this.state = {
             siteName: '',
+            longitude: '',
+            latitude: '',
             location: '',
             timeZone: '',
             regionId: '',
@@ -17,6 +19,8 @@ export default class LocationForm extends React.Component {
         };
 
         this.onSiteChange = this.onSiteChange.bind(this);
+        this.onLongitudeChange = this.onLongitudeChange.bind(this);
+        this.onLatitudeChange = this.onLatitudeChange.bind(this);
         this.onLocationChange = this.onLocationChange.bind(this);
         this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
         this.onRegionIdChange = this.onRegionIdChange.bind(this);
@@ -40,28 +44,44 @@ export default class LocationForm extends React.Component {
                             <ControlLabel>Site Name</ControlLabel>
                             <FormControl type='text' required
                                 placeholder='Enter site name'
-                                value={this.state.siteName}
+                                value = {this.state.siteName === null ? '' : this.state.siteName}
+                                maxLength ="20"
                                 onChange={this.onSiteChange}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Longitude(optional)</ControlLabel>
+                            <FormControl type='number'
+                                placeholder='±000.0000000'
+                                value= {this.state.longitude === null ? '' : this.state.longitude}
+                                onChange={this.onLongitudeChange}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>Latitude(optional)</ControlLabel>
+                            <FormControl type='number'
+                                placeholder='±00.0000000'
+                                value= {this.state.latitude === null ? '' : this.state.latitude}
+                                onChange={this.onLatitudeChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Location Name</ControlLabel>
                             <FormControl type='text' required
                                 placeholder='Enter location name'
-                                value={this.state.location}
+                                value= {this.state.location === null ? '' : this.state.location}
+                                maxLength = "100"
                                 onChange={this.onLocationChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Time Zone</ControlLabel>
                             <FormControl type='text' required
                                 placeholder='Enter time zone (e.g. "Europe/London")'
-                                value={this.state.timeZone}
+                                value= {this.state.timeZone === null ? '' : this.state.timeZone}
                                 onChange={this.onTimeZoneChange}/>
                         </FormGroup>
                         <FormGroup>
                             <ControlLabel>Region</ControlLabel>
                             <FormControl type='number'
                                 placeholder='Enter region ID (optional)'
-                                value={this.state.regionId}
+                                value= {this.state.regionId === null ? '' : this.state.regionId}
                                 onChange={this.onRegionIdChange}/>
                         </FormGroup>
                         <Button type='submit'>Submit</Button>
@@ -73,6 +93,20 @@ export default class LocationForm extends React.Component {
 
     onSiteChange(event) {
         this.setState({ siteName: event.target.value });
+    }
+
+    onLongitudeChange(event) {
+        if(event.target.value < 180 && event.target.value > -180){
+                const newLong = event.target.value === '' ? null : event.target.value
+                this.setState({ longitude: newLong });
+        }
+    }
+
+    onLatitudeChange(event) {
+        if(event.target.value < 90 && event.target.value > -90){
+                const newLat = event.target.value === '' ? null : event.target.value
+                this.setState({ latitude: newLat });
+        }
     }
 
     onLocationChange(event) {
@@ -92,6 +126,8 @@ export default class LocationForm extends React.Component {
 
         const body = {
             siteName: this.state.siteName,
+            longitude: this.state.longitude,
+            latitude: this.state.latitude,
             location: this.state.location,
             timeZone: this.state.timeZone,
             regionId: this.state.regionId ? this.state.regionId : null
