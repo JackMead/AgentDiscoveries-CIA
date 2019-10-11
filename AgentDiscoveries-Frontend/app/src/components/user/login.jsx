@@ -42,7 +42,7 @@ export default class Login extends React.Component {
 
     componentWillMount () {
         if (UserHelper.isLoggedIn()) {
-            window.location.hash = '#/message';
+            window.location.hash = '#/welcome';
         }
     }
 
@@ -83,7 +83,7 @@ export default class Login extends React.Component {
             })
             .then(response => {
                 UserHelper.storeUserInfo(response);
-                window.location.hash = '#/';
+                window.location.hash = '#/welcome';
             })
             .catch(error => {
                 this.setState({ message: { message: error.message, type: 'danger' } });

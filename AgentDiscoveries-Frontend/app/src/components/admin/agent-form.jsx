@@ -8,11 +8,12 @@ export default class AgentForm extends React.Component {
         this.onFirstNameUpdate = this.onUpdate.bind(this, 'firstName');
         this.onLastNameUpdate = this.onUpdate.bind(this, 'lastName');
         this.onDateOfBirthUpdate = this.onUpdate.bind(this, 'dateOfBirth');
-        this.onRankUpdate = this.onUpdate.bind(this, 'rank');
+        this.onRankUpdate = this.onUpdate.bind(this, 'agentRank');
         this.onCallSignUpdate = this.onUpdate.bind(this, 'callSign');
     }
 
     render() {
+
         return (
             <div className='ml-3'>
                 <FormGroup>
@@ -40,7 +41,7 @@ export default class AgentForm extends React.Component {
                     <ControlLabel>Rank</ControlLabel>
                     <FormControl type='number' required
                         placeholder='Enter numeric rank'
-                        value={this.props.agent.rank}
+                        value={this.props.agent.agentRank}
                         onChange={this.onRankUpdate}/>
                 </FormGroup>
                 <FormGroup>

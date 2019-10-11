@@ -132,6 +132,6 @@ export default class NavigationBar extends React.Component {
         event.preventDefault();
 
         clearUserInfo();
-        window.location.hash = '#/';
+        window.location.hash = '#/login';
     }
 }

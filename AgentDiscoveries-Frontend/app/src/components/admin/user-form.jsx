@@ -20,7 +20,7 @@ export default class UserForm extends React.Component {
                 firstName: '',
                 lastName: '',
                 dateOfBirth: '',
-                rank: '',
+                agentRank: '',
                 callSign: ''
             },
 
@@ -104,7 +104,6 @@ export default class UserForm extends React.Component {
 
     onSubmit(event) {
         event.preventDefault();
-
         const agentIdPromise = this.state.isAgent
             ? this.state.agentId
                 ? apiPut('agents', this.state.agent, this.state.agentId).then(() => this.state.agentId)
@@ -117,7 +116,7 @@ export default class UserForm extends React.Component {
                     username: this.state.username,
                     password: this.state.password,
                     agentId: agentId,
-                    admin: this.state.admin
+                    admin: this.state.isAdmin
                 };
                 return this.props.id
                     ? apiPut('users', user, this.props.id)

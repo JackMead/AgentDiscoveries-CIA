@@ -23,7 +23,10 @@ export default class Entity extends React.Component {
 
     getEntityRow() {
         return Object.keys(this.props.entity).map(key =>
-            <td key={key}>{this.props.entity[key].toString()}</td>);
+        {
+            const display = this.props.entity[key] === null ? '' : this.props.entity[key].toString();
+            return <td key={key}>{display}</td>;
+        });
     }
 
     getEditButton() {
