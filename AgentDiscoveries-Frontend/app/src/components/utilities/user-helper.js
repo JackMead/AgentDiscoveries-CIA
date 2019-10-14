@@ -38,6 +38,10 @@ export function isAgent() {
     return window.localStorage.getItem('AgentId') !== 'null';
 }
 
+export function currentAgentId() {
+    return window.localStorage.getItem('AgentId');
+}
+
 // Fire a 'login' event when the user info is updated.
 // Components may listen for this event to update internal state (e.g. displaying nav bar options)
 function updateListeners() {
