@@ -1,13 +1,10 @@
 package org.softwire.training.api.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.TypeAdapter;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-
+import org.softwire.training.api.models.UserApiModel;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -17,15 +14,30 @@ import java.time.format.DateTimeParseException;
 public class CustomisedGsonBuilder {
 
     public static Gson getGson() {
+
+        ExclusionStrategy strategy = new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes fieldAttributes) {
+
+                return fieldAttributes.getDeclaringClass() == UserApiModel.class && fieldAttributes.getName().equals("password");
+            }
+            @Override
+            public boolean shouldSkipClass(Class<?> aClass) {
+                return false;
+            }
+        };
+
         return new GsonBuilder()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
+                .addSerializationExclusionStrategy(strategy)
+                .serializeNulls()
                 .create();
     }
 
     /**
      * Gson does not have an adapter for LocalDate so expands into an object with day, month, year fields.
-     * This adapter allows serializing and derserializing the value as yyyy-mm-dd the ISO standard.
+     * This adapter allows serializing and derserializing the value as yyyy-mm-dd the ISO standard...
      */
     private static class LocalDateAdapter extends TypeAdapter<LocalDate> {
 

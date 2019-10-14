@@ -75,6 +75,11 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     }
 
     private void validateLocationModel(Location location) {
+
+        if (location.getSiteName().length() > 20) {
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "site name is too long (max 20 chars).");
+        }
+
         if (StringUtils.isEmpty(location.getTimeZone())) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "timeZone must be specified for location");
         }

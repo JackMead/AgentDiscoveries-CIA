@@ -49,6 +49,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         model.setStatus(apiModel.getStatus());
         model.setReportTime(reportTimeUtc);
         model.setReportBody(apiModel.getReportBody());
+        model.setReportTitle(apiModel.getReportTitle());
 
         return model;
     }
@@ -69,6 +70,7 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         ZoneId locationTimeZone = ZoneId.of(timeZone);
 
         apiModel.setReportId(model.getReportId());
+        apiModel.setReportTitle(model.getReportTitle());
         apiModel.setAgentId(model.getAgentId());
         apiModel.setLocationId(model.getLocationId());
         apiModel.setStatus(model.getStatus());
@@ -89,6 +91,10 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
 
         if (!isNullOrEmpty(queryMap.get("locationId").value())) {
             searchCriteria.add(new LocationIdSearchCriterion(queryMap.get("locationId").integerValue()));
+        }
+
+        if (!isNullOrEmpty(queryMap.get("reportTitle").value())) {
+            searchCriteria.add(new LocationTitleSearchCriterion(queryMap.get("reportTitle").value()));
         }
 
         if (!isNullOrEmpty(queryMap.get("fromTime").value())) {
