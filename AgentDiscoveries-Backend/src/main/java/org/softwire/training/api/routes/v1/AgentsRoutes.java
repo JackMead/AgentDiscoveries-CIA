@@ -13,6 +13,7 @@ import spark.Response;
 import javax.inject.Inject;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class AgentsRoutes {
@@ -74,9 +75,9 @@ public class AgentsRoutes {
         return new Object();
     }
 
-    public Agent editCallSign(Request req, Response res, int agentID) {
+    public Agent editCallSign (Request req, Response res, int agentID) {
         permissionsVerifier.verifyIsAdminOrRelevantAgent(req, agentID);
-        Agent agent = agentsDao.getAgent(agentID).get();
+        Agent agent = agentsDao.getAgent(agentID).orElseThrow(() -> new NoSuchElementException("No Such Element for " + agentID + " in AgentID"));
         agent.setCallSign(JsonRequestUtils.readBodyAsType(req, Agent.class).getCallSign());
         agentsDao.updateAgent(agent);
         return agent;
