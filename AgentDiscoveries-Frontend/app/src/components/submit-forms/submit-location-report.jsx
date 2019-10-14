@@ -56,7 +56,7 @@ export default class LocationReportSubmit extends React.Component {
                     <FormGroup>
                         <ControlLabel>Status</ControlLabel>
                         <FormControl type='number' required
-                            placeholder='Enter numeric status code'
+                            placeholder='Enter numeric status code between 1-100'
                             value={this.state.status}
                             onChange={this.onStatusChange}
                             id="status-input"/>
@@ -64,7 +64,7 @@ export default class LocationReportSubmit extends React.Component {
                     <FormGroup>
                         <ControlLabel>Title</ControlLabel>
                         <FormControl type='text' required
-                            maxlength='30'
+                            maxLength='30'
                             componentClass='textarea'
                             placeholder='Write title'
                             value={this.state.reportTitle}
