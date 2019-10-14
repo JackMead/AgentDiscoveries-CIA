@@ -55,9 +55,9 @@ public class AgentDiscoveriesApplication implements Runnable {
 
         // Serve the static assets from the frontend project
         staticFileLocation("/frontend");
-
         // Setup of all the routes
         path("/v1", () -> {
+            get("/mostwanted", (req, res) -> agentsRoutes.mostWanted(req, res), responseTransformer);
             // Endpoint used to get an authorisation token
             post("/token", tokenRoutes::createToken, responseTransformer);
             path("/api", () -> {
@@ -118,6 +118,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/editcallsign/:id", (req, res) -> agentsRoutes.editCallSign(req, res, idParamAsInt(req)), responseTransformer);
+        put("/mostwanted/:id", (req, res) -> agentsRoutes.editCallSign(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> agentsRoutes.deleteAgent(req, res, idParamAsInt(req)), responseTransformer);
         get("", (req, res) -> agentsRoutes.readAgents(req, res), responseTransformer);
     }
