@@ -26,7 +26,7 @@ export default class SearchResult extends React.Component {
     renderResultBody(result) {
         return Object.keys(result).map(key => {
             if(this.isADate(result[key])){
-                const time = moment(result[key]).format();
+                const time = moment(result[key]).format('H:mm:ss');
 
                 return (
                         <div>
@@ -34,7 +34,6 @@ export default class SearchResult extends React.Component {
                         <p key={key}> timeInSubmittersTimeZone: {time} </p>
                         </div>
                 );
-
             }
             return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>;
         });
