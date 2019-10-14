@@ -74,7 +74,6 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
 
         ZoneId locationTimeZone = ZoneId.of(timeZone);
 
-
         apiModel.setReportId(model.getReportId());
         apiModel.setReportTitle(model.getReportTitle());
         apiModel.setAgentId(model.getAgentId());
