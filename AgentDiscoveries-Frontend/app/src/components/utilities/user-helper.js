@@ -35,7 +35,7 @@ export function isAdmin(){
 }
 
 export function isAgent() {
-    return window.localStorage.getItem('AgentId') !== null;
+    return window.localStorage.getItem('AgentId') !== 'null';
 }
 
 // Fire a 'login' event when the user info is updated.
