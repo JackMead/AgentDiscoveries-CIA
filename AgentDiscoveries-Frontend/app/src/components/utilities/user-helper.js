@@ -35,7 +35,7 @@ export function isAdmin(){
 }
 
 export function isAgent() {
-    return window.localStorage.getItem('AgentId') !== null;
+    return window.localStorage.getItem('AgentId') !== 'null';
 }
 
 export function currentAgentId() {
