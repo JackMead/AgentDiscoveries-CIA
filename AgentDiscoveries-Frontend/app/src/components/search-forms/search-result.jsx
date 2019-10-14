@@ -27,11 +27,6 @@ export default class SearchResult extends React.Component {
         return Object.keys(result).map(key => {
             if(this.isADate(result[key])){
                 const time = moment(result[key]).format();
-                console.log("TIME")
-                console.log(time)
-
-                //console.log(time.format());
-                //console.log(time.clone().tz("Europe/London").format());
 
                 return (
                         <div>
@@ -41,18 +36,12 @@ export default class SearchResult extends React.Component {
                 );
 
             }
-
-            console.log();
-
             return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>;
         });
     }
 
     isADate(date){
         date = moment(date)
-
-        console.log(date)
-
         return (date.isValid() && (date.year() !== 1970))
     }
 
