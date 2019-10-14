@@ -47,9 +47,9 @@ export default class Home extends React.Component {
                                 <th>Time:</th>
                             </tr>
                         </thead>
-                    <tbody>
-                        {this.state.timeZonesList.map(this.renderTimeZone)}
-                    </tbody>
+                        <tbody>
+                            {this.state.timeZonesList.map(this.renderTimeZone)}
+                        </tbody>
                     </Table>
                 </div>
             </div>
@@ -58,10 +58,10 @@ export default class Home extends React.Component {
 
     renderTimeZone(timeZone, index){
         return (
-                <tr key = {index}>
-                    <td key = {index}>{timeZone}</td>
-                    <td><Clock format={'HH:mm:ss'} ticking={true} timezone={timeZone} /></td>
-                </tr>
+            <tr key = {index}>
+                <td key = {index}>{timeZone}</td>
+                <td><Clock format={'HH:mm:ss'} ticking={true} timezone={timeZone} /></td>
+            </tr>
         );
     }
 }
