@@ -60,15 +60,15 @@ public class AgentDiscoveriesApplication implements Runnable {
         path("/v1", () -> {
             // Endpoint used to get an authorisation token
             post("/token", tokenRoutes::createToken, responseTransformer);
-
             path("/api", () -> {
+
                 before("/*", tokenRoutes::validateToken);
+                get("/checktoken", (req, res) -> "Token is valid");
 
                 path("/legacy", () -> {
                     before("/*", (request, response) -> response.type("text/plain"));
                     path("/executivesummary", this::executivesSummaryGroup);
                 });
-
                 path("/pictures", this::picturesRouteGroup);
                 path("/agents", this::agentsRouteGroup);
                 path("/regions", this::regionsRouteGroup);
@@ -117,6 +117,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         post("", (req, res) -> agentsRoutes.createAgent(req, res), responseTransformer);
         get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
+        put("/editcallsign/:id", (req, res) -> agentsRoutes.editCallSign(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> agentsRoutes.deleteAgent(req, res, idParamAsInt(req)), responseTransformer);
         get("", (req, res) -> agentsRoutes.readAgents(req, res), responseTransformer);
     }

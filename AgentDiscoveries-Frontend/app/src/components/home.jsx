@@ -55,7 +55,6 @@ export default class Home extends React.Component {
             </div>
         );
     }
-
     renderTimeZone(timeZone, index){
         return (
             <tr key = {index}>
