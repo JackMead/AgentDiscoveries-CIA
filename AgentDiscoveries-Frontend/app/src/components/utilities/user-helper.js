@@ -4,7 +4,7 @@ export function storeUserInfo(userInfo) {
     window.localStorage.setItem('Token', userInfo.token);
     window.localStorage.setItem('UserId', userInfo.userId);
     window.localStorage.setItem('Admin', userInfo.isAdmin ? 'true' : 'false');
-    window.localStorage.setItem('AgentId', userInfo.agentId >= 0 ? 'true' : 'false');
+    window.localStorage.setItem('AgentId', userInfo.agentId);
 
     updateListeners();
 }
