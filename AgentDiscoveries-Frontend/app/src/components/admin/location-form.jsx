@@ -139,7 +139,9 @@ export default class LocationForm extends React.Component {
 
         request
             .then(() => window.location.hash = '#/admin/locations')
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => {
+            	this.handleError(error)
+            	});
     }
 
     loadLocation(id) {
@@ -147,4 +149,10 @@ export default class LocationForm extends React.Component {
             .then(result => this.setState(result))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
     }
+
+
+    handleError(error){
+        error.response.json().then(result => {
+        this.setState({ message: { message: result.message, type: 'danger' } });
+        })}
 }

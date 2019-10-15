@@ -60,6 +60,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
 
     @Override
     public Location updateEntity(Request req, Response res, int id) {
+
         Location location = JsonRequestUtils.readBodyAsType(req, Location.class);
 
         if (location.getLocationId() != id && location.getLocationId() != 0) {
