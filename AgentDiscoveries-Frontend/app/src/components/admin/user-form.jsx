@@ -123,7 +123,7 @@ export default class UserForm extends React.Component {
                     : apiPost('users', user);
             })
             .then(() => window.location.hash = '#/admin/users')
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => this.handleError(error));
     }
 
     loadUser(id) {
@@ -134,12 +134,17 @@ export default class UserForm extends React.Component {
                     this.loadAgent(result.agentId);
                 }
             })
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => this.handleError(error));
     }
 
     loadAgent(id) {
         apiGet('agents', id)
             .then(result => this.setState({ isAgent: true, agent: result }))
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => this.handleError(error));
     }
+
+     handleError(error){
+            error.response.json().then(result => {
+            this.setState({ message: { message: result.message, type: 'danger' } });
+            })}
 }
