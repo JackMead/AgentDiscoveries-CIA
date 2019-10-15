@@ -86,7 +86,6 @@ export default class NavigationBar extends React.Component {
                 <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>
                     Today's Message
                 </NavItem>
-{/*                 //TODO */}
                 <NavItem componentClass={Link} href='/mostwanted' to='/mostwanted' eventKey="mostwanted">
                     Most Wanted
                 </NavItem>
