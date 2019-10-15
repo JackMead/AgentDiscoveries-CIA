@@ -93,12 +93,6 @@ public class AgentsRoutes {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(MostWantedWrapper.class);
 
-//        List<MostWantedApiModel> myList = new ArrayList<>();
-//
-//        for (MostWantedWrapper : mostwanted)
-//        {
-//
-//        }
         return mostwanted.items;
     }
 }

@@ -57,13 +57,12 @@ public class AgentDiscoveriesApplication implements Runnable {
         staticFileLocation("/frontend");
         // Setup of all the routes
         path("/v1", () -> {
-            get("/mostwanted", (req, res) -> agentsRoutes.mostWanted(req, res), responseTransformer);
             // Endpoint used to get an authorisation token
             post("/token", tokenRoutes::createToken, responseTransformer);
             path("/api", () -> {
 
                 before("/*", tokenRoutes::validateToken);
-                get("/checktoken", (req, res) -> "Token is valid");
+                get("/checktoken", (req, res) -> "{message: 'Token is valid'}");
 
                 path("/legacy", () -> {
                     before("/*", (request, response) -> response.type("text/plain"));
@@ -82,6 +81,8 @@ public class AgentDiscoveriesApplication implements Runnable {
 
                 post("/decodemessage", messageProcessorRoutes::decodeMessage, responseTransformer);
                 post("/encodemessage", messageProcessorRoutes::encodeMessage, responseTransformer);
+
+                get("/mostwanted", (req, res) -> agentsRoutes.mostWanted(req, res), responseTransformer);
 
                 // API endpoint to initiate shutdown
                 put("/operations/shutdown", this::shutdown);

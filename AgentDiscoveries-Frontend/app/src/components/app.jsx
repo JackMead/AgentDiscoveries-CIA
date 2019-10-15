@@ -17,6 +17,7 @@ import TodaysCodePage from './todays-code-page';
 import LocationForm from './admin/location-form';
 import RegionForm from './admin/region-form';
 import UserForm from './admin/user-form';
+import MostWanted from './mostwanted';
 import Error from './error';
 
 import {apiGet} from './utilities/request-helper.js';
@@ -49,6 +50,7 @@ export default class App extends React.Component {
                         <Route path='/admin/users/edit/:id' render={props => <Page><UserForm id={props.match.params.id} /></Page>} />
 
                         <Route path='/message' render={() => <Page><TodaysCodePage /></Page>} />
+                        <Route path='/mostwanted' render={() => <Page><MostWanted /></Page>} />
                         <Route path='/profile' exact render={() => <Page><Profile /></Page>} />
                         <Route path='/profile/edit/callsign' render={() => <Page><EditProfileCallSign /></Page>} />
                         <Route path='/profile/edit/picture' render={() => <Page><EditProfilePicture /></Page>} />
