@@ -83,7 +83,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     private void validateLocationModel(Location location) {
 
         if(regionsDao.getRegion(location.getRegionId()).equals(Optional.empty())){
-            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "how dare you");
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "this regionId doesn't exist, try again");
         }
 
         if (location.getSiteName().length() > 20) {
