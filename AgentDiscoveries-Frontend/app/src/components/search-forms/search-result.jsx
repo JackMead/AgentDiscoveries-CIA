@@ -24,17 +24,19 @@ export default class SearchResult extends React.Component {
     }
 
     renderResultBody(result) {
-        return Object.keys(result).map(key => {
+        return Object.keys(result).map((key) => {
+
             if(this.isADate(result[key])){
                 const time = moment(result[key]).format('H:mm:ss');
 
                 return (
-                        <div>
-                        <p key ={key} id={key}>{`${key}: ${result[key]}`}</p>
-                        <p key={key}> timeInSubmittersTimeZone: {time} </p>
+                        <div key={key}>
+                        <p id={key}>{`${key}: ${result[key]}`}</p>
+                        <p id={key}> Reporter's Local Time: {time} </p>
                         </div>
                 );
             }
+
             return <p key={key} id={key}>{`${key}: ${result[key]}`}</p>;
         });
     }

@@ -7,9 +7,11 @@ import com.google.gson.stream.JsonWriter;
 import org.softwire.training.api.models.UserApiModel;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.TimeZone;
 
 public class CustomisedGsonBuilder {
 
@@ -73,6 +75,7 @@ public class CustomisedGsonBuilder {
 
         @Override
         public void write(JsonWriter jsonWriter, ZonedDateTime localDateTime) throws IOException {
+
             if (localDateTime == null) {
                 jsonWriter.nullValue();
             } else {
