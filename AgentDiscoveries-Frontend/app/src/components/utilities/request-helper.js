@@ -25,7 +25,7 @@ export function apiRequest(apiPath, method, body) {
         } else {
             throw new ApiError(response);
         }
-    })
+    });
 }
 
 // Generic API request methods. Non-POST methods may take an optional 'id'
@@ -41,7 +41,7 @@ export function apiPost(apiPath, body) {
 
 export function apiPut(apiPath, body, id) {
     const path = id ? `${apiPath}/${id}` : apiPath;
-    return apiRequest(path, 'PUT', body)
+    return apiRequest(path, 'PUT', body);
 }
 
 export function apiDelete(apiPath, id) {

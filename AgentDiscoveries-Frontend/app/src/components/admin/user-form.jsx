@@ -143,8 +143,8 @@ export default class UserForm extends React.Component {
             .catch(error => this.handleError(error));
     }
 
-     handleError(error){
-            error.response.json().then(result => {
+    handleError(error){
+        error.response.json().then(result => {
             this.setState({ message: { message: result.message, type: 'danger' } });
-            })}
+        });}
 }
