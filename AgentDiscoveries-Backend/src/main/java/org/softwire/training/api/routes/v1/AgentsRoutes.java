@@ -63,9 +63,6 @@ public class AgentsRoutes {
 
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
 
-        agent.setAgentId(id);
-        agentsDao.updateAgent(agent);
-
         if (agent.getFirstName().length() > 20){
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "first name too long (max 20 characters)");
         }
@@ -73,6 +70,9 @@ public class AgentsRoutes {
         if (agent.getLastName().length() > 20){
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Last name too long (max 20 characters)");
         }
+
+        agent.setAgentId(id);
+        agentsDao.updateAgent(agent);
 
         return agent;
 
