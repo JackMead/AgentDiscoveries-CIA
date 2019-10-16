@@ -1,11 +1,13 @@
 package org.softwire.training.api.routes.v1;
 
+import org.eclipse.jetty.server.Authentication;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.db.daos.LocationsDao;
 import org.softwire.training.models.Location;
+import org.softwire.training.db.daos.RegionsDao;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
@@ -14,16 +16,19 @@ import javax.inject.Inject;
 import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 public class LocationsRoutes implements EntityCRUDRoutes {
 
     private final LocationsDao locationsDao;
     private final PermissionsVerifier permissionsVerifier;
+    private final RegionsDao regionsDao;
 
     @Inject
-    public LocationsRoutes(LocationsDao locationsDao, PermissionsVerifier permissionsVerifier) {
+    public LocationsRoutes(LocationsDao locationsDao, PermissionsVerifier permissionsVerifier, RegionsDao regionsDao) {
         this.locationsDao = locationsDao;
         this.permissionsVerifier = permissionsVerifier;
+        this.regionsDao = regionsDao;
     }
 
     @Override
@@ -60,6 +65,7 @@ public class LocationsRoutes implements EntityCRUDRoutes {
 
     @Override
     public Location updateEntity(Request req, Response res, int id) {
+
         Location location = JsonRequestUtils.readBodyAsType(req, Location.class);
 
         if (location.getLocationId() != id && location.getLocationId() != 0) {
@@ -75,6 +81,10 @@ public class LocationsRoutes implements EntityCRUDRoutes {
     }
 
     private void validateLocationModel(Location location) {
+
+        if(regionsDao.getRegion(location.getRegionId()).equals(Optional.empty())){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "this regionId doesn't exist, try again");
+        }
 
         if (location.getSiteName().length() > 20) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "site name is too long (max 20 chars).");

@@ -118,7 +118,10 @@ export default class LocationForm extends React.Component {
     }
 
     onRegionIdChange(event) {
-        this.setState({ regionId: parseInt(event.target.value) });
+        if(event.target.value < 100000 ){
+            const newRegionId = event.target.value === '' ? null : event.target.value;
+            this.setState({ regionId: newRegionId });
+        }
     }
 
     onSubmit(event) {
@@ -139,12 +142,21 @@ export default class LocationForm extends React.Component {
 
         request
             .then(() => window.location.hash = '#/admin/locations')
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => {
+                this.handleError(error);
+            });
     }
 
     loadLocation(id) {
         apiGet('locations', id)
             .then(result => this.setState(result))
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => {
+                this.handleError(error);
+            });
     }
+
+    handleError(error){
+        error.response.json().then(result => {
+            this.setState({ message: { message: result.message, type: 'danger' } });
+        });}
 }
