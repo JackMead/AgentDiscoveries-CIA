@@ -1,25 +1,63 @@
 import * as React from 'react';
 import {Panel} from 'react-bootstrap';
 import moment from 'moment-timezone';
+import {Button} from 'react-bootstrap';
+import Link from 'react-router-dom/Link';
 
 export default class SearchResult extends React.Component {
+
+    //constructor
+
+
+
+
     render() {
+
         return (
             <div className='results'>
                 {this.getResultsHeader(this.props.results)}
                 {this.renderResults(this.props.results)}
+                {this.renderEditButton()}
             </div>
         );
     }
 
     renderResults(results) {
+
+        console.log("results")
+        console.log(results)
+
+
+
         return results.map((result, index) => {
-            return (
-                <Panel key={index}>
-                    <Panel.Heading>Result</Panel.Heading>
-                    <Panel.Body>{this.renderResultBody(result)}</Panel.Body>
-                </Panel>
-            );
+
+                const url = '/submit/location/edit/' + results[index].reportId
+                console.log("url")
+                console.log(url)
+
+                console.log("index")
+                console.log(index)
+
+                if (this.props.isPersonal){
+                    return (
+                    <Panel key={index}>
+                        <Panel.Heading>Result</Panel.Heading>
+                        <Panel.Body>{this.renderResultBody(result)}</Panel.Body>
+                        <Panel.Body>
+                                   <Link to={url}>
+                                       <Button type='button'>Edit</Button>
+                                   </Link>
+                        </Panel.Body>
+                    </Panel>
+                    );
+                } else {
+                    return (
+                    <Panel key={index}>
+                        <Panel.Heading>Result</Panel.Heading>
+                        <Panel.Body>{this.renderResultBody(result)}</Panel.Body>
+                    </Panel>
+                    );
+                }
         });
     }
 
@@ -52,5 +90,8 @@ export default class SearchResult extends React.Component {
                 ? <h3>{`${results.length} result`}</h3>
                 : <h3>{`${results.length} results`}</h3>)
             : '';
+    }
+
+    renderEditButton() {
     }
 }

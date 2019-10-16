@@ -79,7 +79,23 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
     }
 
     public T readReport(Request req, Response res, int id) {
-        permissionsVerifier.verifyAdminPermission(req);
+
+        System.out.println("Trying to read report.");
+
+        Integer userId = req.attribute("user_id");
+
+        System.out.println(req.attribute("user_id").toString());
+
+        if(userId == null){
+            System.out.println("Not user. Verifying admin permission.");
+            permissionsVerifier.verifyAdminPermission(req);
+        }
+        else {
+            System.out.println("Is agent. Verifying agent permission.");
+            permissionsVerifier.verifyIsAdminOrRelevantUser(req, userId);
+        }
+
+
         return mapToApiModel(reportsDao.getReport(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Report not found")));
     }
@@ -98,11 +114,30 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
     }
 
     public List<T> searchReports(Request req, Response res) {
-        permissionsVerifier.verifyAdminPermission(req);
+
+        Integer agentId = req.queryMap().get("agentId").integerValue();
+
+        if(agentId == null){
+            permissionsVerifier.verifyAdminPermission(req);
+        }
+        else {
+            permissionsVerifier.verifyIsAdminOrRelevantAgent(req, agentId);
+        }
 
         return reportsDao.searchReports(parseSearchCriteria(req))
                 .stream()
                 .map(this::mapToApiModel)
                 .collect(Collectors.toList());
     }
+
+    public T updateReport(Request req, Response res, int id) {
+
+        System.out.println("WE ARE UPDATING A REPORT.");
+
+        T reportApiModel = JsonRequestUtils.readBodyAsType(req, apiModelClass);
+
+        return reportApiModel;
+
+    }
+
 }
