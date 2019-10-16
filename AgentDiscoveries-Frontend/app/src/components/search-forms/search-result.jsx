@@ -30,10 +30,10 @@ export default class SearchResult extends React.Component {
                 const time = moment(result[key]).format('H:mm:ss');
 
                 return (
-                        <div key={key}>
+                    <div key={key}>
                         <p id={key}>{`${key}: ${result[key]}`}</p>
                         <p id={key}> Reporter's Local Time: {time} </p>
-                        </div>
+                    </div>
                 );
             }
 
@@ -42,8 +42,8 @@ export default class SearchResult extends React.Component {
     }
 
     isADate(date){
-        date = moment(date)
-        return (date.isValid() && (date.year() !== 1970))
+        date = moment(date);
+        return (date.isValid() && (date.year() !== 1970));
     }
 
     getResultsHeader(results) {
