@@ -35,9 +35,9 @@ export default class MostWanted extends React.Component {
                     this.state.mostwanted.map(wantedIndividual => {
                         return  (
                            <div key={wantedIndividual.title} className = "mostwantedportrait">
-                               <h3 className = "mugshot" >{wantedIndividual.title}</h3>
-                               <img className = "mugshot" src = {wantedIndividual.images[0].original}/>
-                               <h4>Crime: {wantedIndividual.description}</h4>
+                               <h3 className = "mostwanted-title" >{wantedIndividual.title}</h3>
+                               <img  className = "mostwanted-image" src = {wantedIndividual.images[0].original}/>
+                               <h4 className = "mostwanted-description">{wantedIndividual.description}</h4>
                            </div>
                        );
                     })

@@ -102,21 +102,40 @@ body {
 }
 
 .my-custom-scrollbar {
-height: 200px;
-overflow: auto;
+    height: 200px;
+    overflow: auto;
 }
 
 .table-wrapper-scroll-y {
-display: block;
+    display: block;
 }
 
-.mugshot {
-text-align: center;
-
+.mostwantedtable{
+    background: red;
 }
 
 .mostwantedportrait {
-text-align: center;
-box-sizing: none;
-display: inline-block;
+    text-align: center;
+    display: inline-table;
+    max-width: 20%;
 }
+
+.mostwanted-title {
+    font-size: 20px;
+    height: 85px;
+}
+
+.mostwanted-description {
+    font-size: 14px;
+    text-align: left;
+    padding-left: 10px;
+    max-height: 60px;
+    overflow: hidden;
+}
+
+.mostwanted-image {
+    width: 90%;
+    max-height: 210px;
+}
+
+
