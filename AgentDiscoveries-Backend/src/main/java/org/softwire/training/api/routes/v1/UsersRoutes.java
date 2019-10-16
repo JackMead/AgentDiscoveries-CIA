@@ -52,7 +52,6 @@ public class UsersRoutes implements EntityCRUDRoutes {
                 userApiModel.isAdmin(),
                 userApiModel.getAgentId());
 
-
         int newUserId = usersDao.addUser(user);
 
         // Set the userId and for security remove the password

@@ -55,7 +55,6 @@ public class AgentsRoutes {
     public Agent updateAgent(Request req, Response res, int id) {
         permissionsVerifier.verifyIsAdminOrRelevantAgent(req, id);
 
-
         try{
             Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
         } catch (Exception e){

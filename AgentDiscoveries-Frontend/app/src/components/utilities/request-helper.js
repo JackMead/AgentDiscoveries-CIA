@@ -26,12 +26,6 @@ export function apiRequest(apiPath, method, body) {
             throw new ApiError(response);
         }
     })
-//		.catch(error => {
-//    	error.response.json().then(result => {
-//            throw new Error(result.message);
-//    		console.log(result);
-//    	})
-//    })
 }
 
 // Generic API request methods. Non-POST methods may take an optional 'id'
