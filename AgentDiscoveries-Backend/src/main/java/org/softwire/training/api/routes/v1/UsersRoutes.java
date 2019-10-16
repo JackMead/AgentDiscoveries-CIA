@@ -41,6 +41,11 @@ public class UsersRoutes implements EntityCRUDRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
         }
 
+        if (userApiModel.getUsername().length() > 20){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Username cannot be greater than 20 characters.");
+
+        }
+
         User user = new User(
                 userApiModel.getUsername(),
                 passwordHasher.hashPassword(userApiModel.getPassword()),
