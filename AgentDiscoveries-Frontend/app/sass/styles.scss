@@ -111,7 +111,7 @@ body {
 }
 
 .mostwantedtable{
-padding: auto;
+    padding: auto;
 }
 
 .mostwantedportrait {
@@ -124,6 +124,7 @@ padding: auto;
     font-size: 20px;
     height: 85px;
     margin-top: 0;
+    color: black;
 }
 
 .mostwanted-description {
@@ -135,6 +136,7 @@ padding: auto;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin-bottom: 50px;
+    color: black;
 }
 
 .mostwanted-image {
