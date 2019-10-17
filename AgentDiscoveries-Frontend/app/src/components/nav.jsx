@@ -92,6 +92,7 @@ export default class NavigationBar extends React.Component {
 
                 <NavItem componentClass={Link} href='/myReports' to='/myReports' eventKey={6}>
                     Your Reports
+                </NavItem>
                 <NavItem componentClass={Link} href='/forumMessage' to='/forumMessage' eventKey={7}>
                     Forum
                 </NavItem>
