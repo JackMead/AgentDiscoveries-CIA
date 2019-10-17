@@ -1,6 +1,7 @@
 package org.softwire.training.db.daos;
 
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
+import org.softwire.training.models.LocationStatusReport;
 import org.softwire.training.models.RegionSummaryReport;
 
 import javax.inject.Inject;
@@ -56,4 +57,8 @@ public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport> 
 
         return results;
     }
+
+    public void updateReport(LocationStatusReport report) {
+    }
+
 }

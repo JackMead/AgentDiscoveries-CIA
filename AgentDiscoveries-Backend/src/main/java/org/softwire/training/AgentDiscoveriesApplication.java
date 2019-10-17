@@ -44,6 +44,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject MessageProcessorRoutes messageProcessorRoutes;
     @Inject ExternalReportRoutes externalReportRoutes;
     @Inject PictureRoutes pictureRoutes;
+    @Inject ForumMessageRoutes forumMessageRoutes;
 
     @Override
     public void run() {
@@ -55,7 +56,6 @@ public class AgentDiscoveriesApplication implements Runnable {
 
         // Serve the static assets from the frontend project
         staticFileLocation("/frontend");
-
         // Setup of all the routes
         path("/v1", () -> {
             // Endpoint used to get an authorisation token
@@ -63,6 +63,7 @@ public class AgentDiscoveriesApplication implements Runnable {
             path("/api", () -> {
 
                 before("/*", tokenRoutes::validateToken);
+
                 get("/checktoken", (req, res) -> "Token is valid", responseTransformer);
 
                 path("/legacy", () -> {
@@ -75,6 +76,7 @@ public class AgentDiscoveriesApplication implements Runnable {
                 path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
                 path("/reports/regionsummaries", () -> reportsRouteGroup(regionSummaryReportsRoutes));
                 path("/external", this::externalRouteGroup);
+                path("/forum", this::forumRouteGroup);
 
                 setupBasicEntityCrudRoutes("/locations", locationsRoutes);
                 get("/locations", locationsRoutes::readEntities, responseTransformer);
@@ -82,6 +84,8 @@ public class AgentDiscoveriesApplication implements Runnable {
 
                 post("/decodemessage", messageProcessorRoutes::decodeMessage, responseTransformer);
                 post("/encodemessage", messageProcessorRoutes::encodeMessage, responseTransformer);
+
+                get("/mostwanted", (req, res) -> agentsRoutes.mostWanted(req, res), responseTransformer);
 
                 // API endpoint to initiate shutdown
                 put("/operations/shutdown", this::shutdown);
@@ -103,6 +107,12 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("/healthcheck", (req, res) -> "Server started okay!");
     }
 
+    private void forumRouteGroup() {
+        get("", (req, res) -> forumMessageRoutes.readForum(req, res), responseTransformer );
+        post("/add", (req, res) -> forumMessageRoutes.createForumMessage(req, res), responseTransformer);
+
+    }
+
     private void executivesSummaryGroup() {
         post("/generate", executiveSummaryRoutes::readExecutiveSummary);
     }
@@ -118,6 +128,7 @@ public class AgentDiscoveriesApplication implements Runnable {
         get("/:id", (req, res) -> agentsRoutes.readAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/:id", (req, res) -> agentsRoutes.updateAgent(req, res, idParamAsInt(req)), responseTransformer);
         put("/editcallsign/:id", (req, res) -> agentsRoutes.editCallSign(req, res, idParamAsInt(req)), responseTransformer);
+        put("/mostwanted/:id", (req, res) -> agentsRoutes.editCallSign(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> agentsRoutes.deleteAgent(req, res, idParamAsInt(req)), responseTransformer);
         get("", (req, res) -> agentsRoutes.readAgents(req, res), responseTransformer);
     }
@@ -133,6 +144,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     private void reportsRouteGroup(ReportsRoutesBase<?, ?> reportsRoutes) {
         post("", reportsRoutes::createReport, responseTransformer);
         get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
+        put("/:id", (req, res) -> reportsRoutes.updateReport(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);
         get("", reportsRoutes::searchReports, responseTransformer);
     }
