@@ -86,7 +86,7 @@ export default class NavigationBar extends React.Component {
                 <NavItem componentClass={Link} href='/message' to='/message' eventKey={5}>
                     Today's Message
                 </NavItem>
-                <NavItem componentClass={Link} href='/forum' to='/forum' eventKey={7}>
+                <NavItem componentClass={Link} href='/forumMessage' to='/forumMessage' eventKey={7}>
                     Forum
                 </NavItem>
             </Nav>
@@ -115,7 +115,7 @@ export default class NavigationBar extends React.Component {
                         Region Summaries
                     </MenuItem>
                 </NavDropdown>
-                <NavItem componentClass={Link} href='/forum' to='/forum' eventKey={7}>
+                <NavItem componentClass={Link} href='/forumMessage' to='/forumMessage' eventKey={7}>
                     Forum
                 </NavItem>
             </Nav>
