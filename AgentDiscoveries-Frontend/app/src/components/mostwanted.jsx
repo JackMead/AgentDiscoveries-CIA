@@ -59,7 +59,7 @@ export default class MostWanted extends React.Component {
                     description: 'Recently known as "The Heartbroken"'
                 },
                 {
-                    title: 'Known alias "Can of Coke"',
+                    title: 'Known alias "Can of Coke, Thor, Viking"',
                     images: [ {original: sandris} ],
                     description: 'Proud of his Li... Lat... heritage  '
                 },
@@ -71,7 +71,7 @@ export default class MostWanted extends React.Component {
                 {
                     title: 'The Lint Master',
                     images: [ {original: mead} ],
-                    description: 'Ring leader,  '
+                    description: 'Ring leader !!  '
                 },
             ],
         });
@@ -86,11 +86,11 @@ export default class MostWanted extends React.Component {
         return (
             <div>
                 <img className = 'wantedlogo' src = {logo} onClick = {this.loadCustomWantedPosters}></img>
-                <div className = 'mostwantedtable'>
+                <div className = {this.state.showCustom ? 'customtable' :  'mostwantedtable'}>
                     {
                         this.state.mostwanted.map(wantedIndividual => {
                             return  (
-                                <div key={wantedIndividual.title} className = {this.state.showCustom ? 'mostwantedportrait classA' : 'mostwantedportrait classB'}>
+                                <div key={wantedIndividual.title} className = {this.state.showCustom ? 'mostwantedportrait customWanted' : 'mostwantedportrait standardWanted'}>
                                     <Link to='/submit/location' target='_blank'>
                                         <h3 className = 'mostwanted-title' >{wantedIndividual.title}</h3>
                                         <img  className = 'mostwanted-image' src = {wantedIndividual.images[0].original}/>

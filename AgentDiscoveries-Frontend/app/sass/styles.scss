@@ -7,6 +7,10 @@ body {
   color: $text-color;
 }
 
+h3 {
+    text-decoration: underline;
+}
+
 .agent-discoveries-logo {
   height: 100%;
   display: inline-block;
@@ -110,19 +114,27 @@ body {
     display: block;
 }
 
-.mostwantedtable{
-    padding: auto;
+.mostwantedtable {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
 }
 
-.mostwantedportrait classA {
+.customtable {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.mostwantedportrait {
     text-align: center;
     display: inline-table;
     max-width: 20%;
 
-}.mostwantedportrait classB {
-    text-align: center;
-    display: inline-table;
-    max-width: 25%;
+}
+
+.customWanted {
+    max-width: 246px;
 }
 
 .mostwanted-title {
