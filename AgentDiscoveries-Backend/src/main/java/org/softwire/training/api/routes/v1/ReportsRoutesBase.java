@@ -91,8 +91,6 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
         else {
             permissionsVerifier.verifyIsAdminOrRelevantUser(req, userId);
         }
-
-
         return mapToApiModel(reportsDao.getReport(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Report not found")));
     }

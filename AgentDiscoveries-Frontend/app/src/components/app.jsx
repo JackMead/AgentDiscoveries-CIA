@@ -50,14 +50,12 @@ export default class App extends React.Component {
                         <Route path='/admin/regions/edit/:id' render={props => <Page><RegionForm id={props.match.params.id} /></Page>} />
                         <Route path='/admin/users/edit/:id' render={props => <Page><UserForm id={props.match.params.id} /></Page>} />
 
-
                         <Route path='/message' render={() => <Page><TodaysCodePage /></Page>} />
                         <Route path='/profile' exact render={() => <Page><Profile /></Page>} />
                         <Route path='/profile/edit/callsign' render={() => <Page><EditProfileCallSign /></Page>} />
                         <Route path='/profile/edit/picture' render={() => <Page><EditProfilePicture /></Page>} />
 
                         <Route path='/myReports' render={() => <Page><MyReportsPage api='reports'/></Page>} />
-
                         <Route path='/error' render={() => <Page><Error/></Page>}/>
                         <Route render={() => <Page><Error/></Page>}/>
                     </Switch>

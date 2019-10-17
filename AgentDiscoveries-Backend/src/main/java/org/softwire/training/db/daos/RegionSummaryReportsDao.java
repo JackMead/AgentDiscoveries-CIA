@@ -59,7 +59,6 @@ public class RegionSummaryReportsDao implements ReportsDao<RegionSummaryReport> 
     }
 
     public void updateReport(LocationStatusReport report) {
-        //Unimplemented.
     }
 
 }

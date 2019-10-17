@@ -38,8 +38,6 @@ export default class LocationReportSubmit extends React.Component {
             .catch(() => this.addMessage('Error fetching locations, please try again later', 'danger'));
     }
 
-
-
     render() {
         return (
             <div className='col-md-8 col-md-offset-2'>

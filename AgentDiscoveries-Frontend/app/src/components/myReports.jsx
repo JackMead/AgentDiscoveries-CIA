@@ -11,8 +11,6 @@ export default class myReports extends React.Component {
         this.state = {
             results: [],
             agentId: window.localStorage.getItem('AgentId')
-            //callSign: "Test Fox"
-
         };
     }
 
@@ -32,7 +30,6 @@ export default class myReports extends React.Component {
 
         const param = {
             agentId: this.state.agentId
-            //callSign: this.state.callSign
         };
 
         const url = 'reports/locationstatuses?' + QueryString.stringify(param);
