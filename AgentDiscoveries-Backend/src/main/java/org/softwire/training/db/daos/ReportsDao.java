@@ -1,6 +1,7 @@
 package org.softwire.training.db.daos;
 
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
+import org.softwire.training.models.LocationStatusReport;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,6 @@ public interface ReportsDao<T> {
     void deleteReport(int reportId);
 
     List<T> searchReports(List<ReportSearchCriterion> searchCriteria);
+
+    void updateReport(LocationStatusReport report);
 }
