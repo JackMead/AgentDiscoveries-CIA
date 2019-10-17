@@ -30,7 +30,7 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-                <Table className = "align-properly" className={this.props.classToUse}>
+                <Table className = "align-properly">
                     <thead>
                         <tr>
                             <th className = "align-properly motto"><h1>{this.state.user ? `Welcome, ${this.state.user.username}` : '' }</h1></th>
