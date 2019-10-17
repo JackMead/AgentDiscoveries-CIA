@@ -1,10 +1,30 @@
-$background-color: rgb(238, 238, 238);
+$background-color: rgb(238, 238, 238); //238 x 3
 $text-color: rgb(12, 12, 12);
 $overlay-color: rgb(247, 197, 89);
+$dark-background-color: rgb(52, 52, 52);
+$dark-text-color: rgb(100, 100, 100);
+$minimum-view-height: 1000px;
 
 body {
   background-color: $background-color;
   color: $text-color;
+}
+
+.nightMode {
+    background-color: $dark-background-color;
+    color: $dark-text-color;
+    min-height: $minimum-view-height
+}
+
+.lightMode {
+    background-color: $background-color;
+    color: $text-color;
+    min-height: $minimum-view-height
+}
+
+.default {
+    background-color: white;
+    min-height: $minimum-view-height
 }
 
 .agent-discoveries-logo {

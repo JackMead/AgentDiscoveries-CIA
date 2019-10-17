@@ -127,7 +127,7 @@ export default class LocationReportSubmit extends React.Component {
             locationId: this.state.locationId,
             reportId: this.props.id,
             status: this.state.status,
-            agentId: window.localStorage.getItem("AgentId"),
+            agentId: window.localStorage.getItem('AgentId'),
             reportBody: this.state.reportBody,
             reportTitle: this.state.reportTitle,
             sendExternal: this.state.sendExternal
