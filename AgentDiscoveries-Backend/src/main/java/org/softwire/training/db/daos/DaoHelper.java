@@ -28,9 +28,7 @@ class DaoHelper<T> {
         EntityManager em = entityManagerFactory.createEntityManager();
         em.getTransaction().begin();
 
-        List<T> results = em.createQuery("SELECT f FROM " + entityClass.getSimpleName() +
-                " f INNER JOIN f.user u" +
-                " ORDER BY MessageId DESC", entityClass).setMaxResults(limit).getResultList();
+        List<T> results = em.createQuery("FROM " + entityClass.getSimpleName() + " ORDER BY MessageId DESC", entityClass).setMaxResults(limit).getResultList();
         em.getTransaction().commit();
         em.close();
         return results;
