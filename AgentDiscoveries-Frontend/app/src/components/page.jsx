@@ -7,9 +7,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "react-bootst
 
 export default class Page extends React.Component {
 
-
-
-
     render() {
         return (
             <React.Fragment>

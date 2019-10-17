@@ -50,7 +50,7 @@ export default class App extends React.Component {
             if(mode){
                 this.setState({ class: mode });
             } else {
-                this.setState({ class: 'default' });
+                this.setState({ class: 'lightMode' });
             }
     };
 
