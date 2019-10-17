@@ -20,17 +20,49 @@ import UserForm from './admin/user-form';
 import MostWanted from './mostwanted';
 import Error from './error';
 import MyReportsPage from './myReports';
+import { Button } from 'react-bootstrap';
 
 import {apiGet} from './utilities/request-helper.js';
 
 export default class App extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            class: '',
+        };
+
+        this.switch = this.switch.bind(this);
+    }
+
+    switch() {
+        var mode = localStorage.getItem("mode");
+        if (mode === "lightMode") {
+            localStorage.setItem("mode", "nightMode");
+            this.setState({ class: "nightMode" });
+        } else {
+            localStorage.setItem("mode", "lightMode");
+            this.setState({ class: 'lightMode'});
+        }
+    };
+
+    componentDidMount() {
+        var mode = localStorage.getItem("mode");
+            if(mode){
+                this.setState({ class: mode });
+            } else {
+                this.setState({ class: 'lightMode' });
+            }
+    };
+
     render() {
         apiGet('/checktoken');
         return (
+        <div className = {this.state.class}>
             <React.Fragment>
                 <Router>
                     <Switch>
-                        <Route path='/welcome' exact render={() => <Page><Home /></Page>} />
+                        <Route path='/welcome' exact render={() => <Page ><Home /></Page>} />
                         <Route path='/' exact render={() => <Page><Login /></Page>} />
                         <Route path='/login' render={() => <Page><Login /></Page>} />
                         <Route path='/search/location' render={() => <Page><LocationReportSearch /></Page>} />
@@ -64,6 +96,11 @@ export default class App extends React.Component {
                     </Switch>
                 </Router>
             </React.Fragment>
+            <center>
+                <p> ___________________________________________________________________________________ </p>
+                <Button onClick={this.switch} type="submit">Toggle night mode!</Button>
+            </center>
+            </div>
         );
     }
 }
