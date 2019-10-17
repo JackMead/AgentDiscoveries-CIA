@@ -1,16 +1,22 @@
 package org.softwire.training.api.routes.v1;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import org.apache.commons.lang3.StringUtils;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
+import org.softwire.training.api.models.MostWantedApiModel;
+import org.softwire.training.api.models.MostWantedWrapper;
 import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.models.Agent;
 import spark.Request;
 import spark.Response;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
@@ -81,5 +87,15 @@ public class AgentsRoutes {
         agent.setCallSign(JsonRequestUtils.readBodyAsType(req, Agent.class).getCallSign());
         agentsDao.updateAgent(agent);
         return agent;
+    }
+
+    public MostWantedApiModel[] mostWanted (Request req, Response res) {
+        Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).hostnameVerifier((s1, s2) -> true).build();
+        MostWantedWrapper mostwanted = client
+                .target("https://api.fbi.gov/@wanted?pageSize=10&page=1&sort_on=publication&sort_order=desc&person_classification=main&status=na")
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .get(MostWantedWrapper.class);
+        System.out.println(mostwanted.items);
+        return mostwanted.items;
     }
 }
