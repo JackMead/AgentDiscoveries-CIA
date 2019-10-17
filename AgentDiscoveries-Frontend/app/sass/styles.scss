@@ -25,6 +25,8 @@ body {
 .default {
     background-color: white;
     min-height: $minimum-view-height
+h3 {
+    text-decoration: underline;
 }
 
 .agent-discoveries-logo {
@@ -122,10 +124,62 @@ body {
 }
 
 .my-custom-scrollbar {
-height: 200px;
-overflow: auto;
+    height: 200px;
+    overflow: auto;
 }
 
 .table-wrapper-scroll-y {
-display: block;
+    display: block;
 }
+
+.mostwantedtable {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.customtable {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.mostwantedportrait {
+    text-align: center;
+    display: inline-table;
+    max-width: 20%;
+
+}
+
+.customWanted {
+    max-width: 246px;
+}
+
+.mostwanted-title {
+    font-size: 20px;
+    height: 85px;
+    margin-top: 0;
+    color: black;
+}
+
+.mostwanted-description {
+    font-size: 14px;
+    text-align: left;
+    padding-left: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 50px;
+    color: black;
+}
+
+.mostwanted-image {
+    width: 90%;
+    max-height: 210px;
+}
+
+.wantedlogo {
+    width: 100%;
+}
+
