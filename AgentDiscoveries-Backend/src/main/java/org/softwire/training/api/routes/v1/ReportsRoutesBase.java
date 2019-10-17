@@ -8,11 +8,14 @@ import org.softwire.training.api.models.ReportApiModelBase;
 import org.softwire.training.db.daos.ReportsDao;
 import org.softwire.training.db.daos.UsersDao;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
+import org.softwire.training.models.LocationStatusReport;
 import org.softwire.training.models.ReportBase;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,18 +83,12 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
 
     public T readReport(Request req, Response res, int id) {
 
-        System.out.println("Trying to read report.");
-
         Integer userId = req.attribute("user_id");
 
-        System.out.println(req.attribute("user_id").toString());
-
         if(userId == null){
-            System.out.println("Not user. Verifying admin permission.");
             permissionsVerifier.verifyAdminPermission(req);
         }
         else {
-            System.out.println("Is agent. Verifying agent permission.");
             permissionsVerifier.verifyIsAdminOrRelevantUser(req, userId);
         }
 
@@ -130,14 +127,11 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
                 .collect(Collectors.toList());
     }
 
-    public T updateReport(Request req, Response res, int id) {
-
-        System.out.println("WE ARE UPDATING A REPORT.");
-
-        T reportApiModel = JsonRequestUtils.readBodyAsType(req, apiModelClass);
-
-        return reportApiModel;
-
+    public LocationStatusReport updateReport(Request req, Response res, int id) {
+        LocationStatusReport location = JsonRequestUtils.readBodyAsType(req, LocationStatusReport.class);
+        location.setReportTime(LocalDateTime.now(ZoneOffset.UTC));
+        reportsDao.updateReport(location);
+        return location;
     }
 
 }

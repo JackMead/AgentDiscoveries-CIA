@@ -109,8 +109,6 @@ export default class LocationReportsSearch extends React.Component {
 
         const url = 'reports/locationstatuses?' + QueryString.stringify(params);
 
-        console.log(url);
-
         apiGet(url)
             .then(results => this.setState({ results: results, message: {} }))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));

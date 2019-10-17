@@ -6,11 +6,6 @@ import Link from 'react-router-dom/Link';
 
 export default class SearchResult extends React.Component {
 
-    //constructor
-
-
-
-
     render() {
 
         return (
@@ -24,40 +19,30 @@ export default class SearchResult extends React.Component {
 
     renderResults(results) {
 
-        console.log("results")
-        console.log(results)
-
-
-
         return results.map((result, index) => {
 
-                const url = '/submit/location/edit/' + results[index].reportId
-                console.log("url")
-                console.log(url)
+            const url = '/submit/location/edit/' + results[index].reportId;
 
-                console.log("index")
-                console.log(index)
-
-                if (this.props.isPersonal){
-                    return (
+            if (this.props.isPersonal){
+                return (
                     <Panel key={index}>
                         <Panel.Heading>Result</Panel.Heading>
                         <Panel.Body>{this.renderResultBody(result)}</Panel.Body>
                         <Panel.Body>
-                                   <Link to={url}>
-                                       <Button type='button'>Edit</Button>
-                                   </Link>
+                            <Link to={url}>
+                                <Button type='button'>Edit</Button>
+                            </Link>
                         </Panel.Body>
                     </Panel>
-                    );
-                } else {
-                    return (
+                );
+            } else {
+                return (
                     <Panel key={index}>
                         <Panel.Heading>Result</Panel.Heading>
                         <Panel.Body>{this.renderResultBody(result)}</Panel.Body>
                     </Panel>
-                    );
-                }
+                );
+            }
         });
     }
 

@@ -6,14 +6,14 @@ import {apiGet} from './utilities/request-helper';
 export default class myReports extends React.Component {
 
     constructor(props) {
-            super(props);
+        super(props);
 
-            this.state = {
-                results: ['This should be empty.'],
-                agentId: window.localStorage.getItem('AgentId')
-                //callSign: "Test Fox"
+        this.state = {
+            results: [],
+            agentId: window.localStorage.getItem('AgentId')
+            //callSign: "Test Fox"
 
-            }
+        };
     }
 
     componentDidMount() {
@@ -26,12 +26,9 @@ export default class myReports extends React.Component {
             <SearchResult results={this.state.results} isPersonal={true}/>
         );
 
-        }
+    }
 
     loadEntities(){
-
-        console.log("AgentId:")
-        console.log(this.state.agentId);
 
         const param = {
             agentId: this.state.agentId
@@ -40,13 +37,11 @@ export default class myReports extends React.Component {
 
         const url = 'reports/locationstatuses?' + QueryString.stringify(param);
 
-        console.log(url);
-
         apiGet(url)
             .then(results => this.setState({ results: results, message: {} }))
             .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
 
     }
 
-    }
+}
 

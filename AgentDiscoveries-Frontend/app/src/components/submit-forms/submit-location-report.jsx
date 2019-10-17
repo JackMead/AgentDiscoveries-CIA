@@ -127,13 +127,13 @@ export default class LocationReportSubmit extends React.Component {
 
         const body = {
             locationId: this.state.locationId,
+            reportId: this.props.id,
             status: this.state.status,
+            agentId: window.localStorage.getItem("AgentId"),
             reportBody: this.state.reportBody,
             reportTitle: this.state.reportTitle,
             sendExternal: this.state.sendExternal
         };
-
-        console.log(body);
 
         const request = this.props.id
             ? apiPut('reports/locationstatuses', body, this.props.id)
