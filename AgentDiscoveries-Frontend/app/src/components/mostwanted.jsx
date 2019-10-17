@@ -61,7 +61,7 @@ export default class MostWanted extends React.Component {
                 {
                     title: 'Known alias "Can of Coke, Thor, Viking"',
                     images: [ {original: sandris} ],
-                    description: 'Proud of his Li... Lat... heritage  '
+                    description: 'Proud of his Li... Lat... heritage'
                 },
                 {
                     title: 'The Duck',
