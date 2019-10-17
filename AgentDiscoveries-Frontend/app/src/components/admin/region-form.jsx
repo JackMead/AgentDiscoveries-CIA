@@ -61,12 +61,19 @@ export default class RegionForm extends React.Component {
 
         request
             .then(() => window.location.hash = '#/admin/regions')
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => this.handleError(error));
     }
 
     loadRegion(id) {
         apiGet('regions', id)
             .then(result => this.setState({ name: result.name, locations: result.locations.join(', ') }))
-            .catch(error => this.setState({ message: { message: error.message, type: 'danger' } }));
+            .catch(error => this.handleError(error));
     }
+
+    handleError(error){
+        error.response.json().then(result => {
+            console.log(result);
+            this.setState({ message: { message: result.message, type: 'danger' } });
+        });}
+
 }

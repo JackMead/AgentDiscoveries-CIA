@@ -44,6 +44,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     @Inject MessageProcessorRoutes messageProcessorRoutes;
     @Inject ExternalReportRoutes externalReportRoutes;
     @Inject PictureRoutes pictureRoutes;
+    @Inject ForumMessageRoutes forumMessageRoutes;
 
     @Override
     public void run() {
@@ -62,7 +63,8 @@ public class AgentDiscoveriesApplication implements Runnable {
             path("/api", () -> {
 
                 before("/*", tokenRoutes::validateToken);
-                get("/checktoken", (req, res) -> "{message: 'Token is valid'}");
+
+                get("/checktoken", (req, res) -> "Token is valid", responseTransformer);
 
                 path("/legacy", () -> {
                     before("/*", (request, response) -> response.type("text/plain"));
@@ -74,6 +76,7 @@ public class AgentDiscoveriesApplication implements Runnable {
                 path("/reports/locationstatuses", () -> reportsRouteGroup(locationStatusReportsRoutes));
                 path("/reports/regionsummaries", () -> reportsRouteGroup(regionSummaryReportsRoutes));
                 path("/external", this::externalRouteGroup);
+                path("/forum", this::forumRouteGroup);
 
                 setupBasicEntityCrudRoutes("/locations", locationsRoutes);
                 get("/locations", locationsRoutes::readEntities, responseTransformer);
@@ -102,6 +105,12 @@ public class AgentDiscoveriesApplication implements Runnable {
         });
 
         get("/healthcheck", (req, res) -> "Server started okay!");
+    }
+
+    private void forumRouteGroup() {
+        get("", (req, res) -> forumMessageRoutes.readForum(req, res), responseTransformer );
+        post("/add", (req, res) -> forumMessageRoutes.createForumMessage(req, res), responseTransformer);
+
     }
 
     private void executivesSummaryGroup() {
