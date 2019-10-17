@@ -7,7 +7,7 @@ import Page from './page';
 import Profile from './profile/profile';
 import EditProfilePicture from './profile/edit-profile-picture';
 import EditProfileCallSign from './profile/edit-profile-callsign';
-
+import Forum from './submit-forms/submit-message';
 import LocationReportSearch from './search-forms/search-location-reports';
 import RegionSummarySearch from './search-forms/search-region-summaries';
 import LocationReportSubmit from './submit-forms/submit-location-report';
@@ -37,6 +37,7 @@ export default class App extends React.Component {
                         <Route path='/submit/location' exact render={() => <Page><LocationReportSubmit /></Page>} />
                         <Route path='/submit/region' render={() => <Page><RegionSummarySubmit /></Page>} />
                         <Route path='/submit/location/edit/:id' render={props => <Page><LocationReportSubmit id={props.match.params.id}/></Page>} />
+                        <Route path='/forumMessage' render={() => <Page><Forum /></Page>} />
 
                         <Route path='/admin/locations' exact render={() => <Page><Entities api='locations' key='locations'/></Page>} />
                         <Route path='/admin/regions' exact render={() => <Page><Entities api='regions' key='regions'/></Page>} />
