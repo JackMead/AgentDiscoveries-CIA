@@ -66,7 +66,4 @@ public class User {
     }
 
     public void setAdmin(boolean admin){this.admin=admin;}
-
-    @OneToMany(mappedBy = "UserID")
-    public List<ForumMessage> forumMessages;
 }
