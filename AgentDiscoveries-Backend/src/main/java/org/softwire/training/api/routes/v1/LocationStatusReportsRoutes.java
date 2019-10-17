@@ -44,9 +44,14 @@ public class LocationStatusReportsRoutes extends ReportsRoutesBase<LocationStatu
         LocalDateTime reportTimeUtc = LocalDateTime.now(ZoneOffset.UTC);
 
         LocationStatusReport model = new LocationStatusReport();
+        model.setStatus(apiModel.getStatus());
+
+        if (model.getStatus() > 100 || model.getStatus() <= 0){
+            throw new FailedRequestException(ErrorCode.UNKNOWN_ERROR, "Status code must be between 1 and 100.");
+        }
+
         model.setAgentId(apiModel.getAgentId());
         model.setLocationId(apiModel.getLocationId());
-        model.setStatus(apiModel.getStatus());
         model.setReportTime(reportTimeUtc);
         model.setReportBody(apiModel.getReportBody());
         model.setReportTitle(apiModel.getReportTitle());
