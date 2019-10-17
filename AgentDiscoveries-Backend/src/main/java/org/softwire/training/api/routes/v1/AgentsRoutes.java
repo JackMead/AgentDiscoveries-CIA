@@ -3,7 +3,11 @@ package org.softwire.training.api.routes.v1;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import org.apache.commons.lang3.StringUtils;
+<<<<<<< HEAD
 import org.glassfish.jersey.jackson.JacksonFeature;
+=======
+import org.eclipse.jetty.server.Authentication;
+>>>>>>> 4b547deec534066f104174fba4ad1bbabe6b5a31
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
@@ -60,11 +64,27 @@ public class AgentsRoutes {
     public Agent updateAgent(Request req, Response res, int id) {
         permissionsVerifier.verifyIsAdminOrRelevantAgent(req, id);
 
+        try{
+            Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
+        } catch (Exception e){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Rank is too high (max 11 digits).");
+        }
+
         Agent agent = JsonRequestUtils.readBodyAsType(req, Agent.class);
+
+        if (agent.getFirstName().length() > 20){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "first name too long (max 20 characters)");
+        }
+
+        if (agent.getLastName().length() > 20){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Last name too long (max 20 characters)");
+        }
+
         agent.setAgentId(id);
         agentsDao.updateAgent(agent);
 
         return agent;
+
     }
 
     public Object deleteAgent(Request req, Response res, int id) {
