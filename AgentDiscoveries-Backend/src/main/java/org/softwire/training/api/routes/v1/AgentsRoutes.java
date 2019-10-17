@@ -6,10 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PermissionsVerifier;
-import org.softwire.training.api.models.ErrorCode;
-import org.softwire.training.api.models.FailedRequestException;
-import org.softwire.training.api.models.MostWantedApiModel;
-import org.softwire.training.api.models.MostWantedWrapper;
+import org.softwire.training.api.models.*;
 import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.models.Agent;
 import spark.Request;
@@ -105,10 +102,10 @@ public class AgentsRoutes {
     public MostWantedApiModel[] mostWanted (Request req, Response res) {
         Client client = ClientBuilder.newBuilder().register(JacksonFeature.class).hostnameVerifier((s1, s2) -> true).build();
         MostWantedWrapper mostwanted = client
-                .target("https://api.fbi.gov/@wanted?pageSize=10&page=1&sort_on=publication&sort_order=desc&person_classification=main&status=na")
+                .target("https://api.fbi.gov/@wanted?pageSize=10&page=1&sort_on=modified&sort_order=desc&person_classification=main&status=na")
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get(MostWantedWrapper.class);
-        System.out.println(mostwanted.items);
+
         return mostwanted.items;
     }
 }
