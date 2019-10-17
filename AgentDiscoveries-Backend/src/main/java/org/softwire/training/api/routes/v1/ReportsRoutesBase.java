@@ -8,11 +8,14 @@ import org.softwire.training.api.models.ReportApiModelBase;
 import org.softwire.training.db.daos.ReportsDao;
 import org.softwire.training.db.daos.UsersDao;
 import org.softwire.training.db.daos.searchcriteria.ReportSearchCriterion;
+import org.softwire.training.models.LocationStatusReport;
 import org.softwire.training.models.ReportBase;
 import spark.Request;
 import spark.Response;
 import spark.utils.StringUtils;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -79,7 +82,15 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
     }
 
     public T readReport(Request req, Response res, int id) {
-        permissionsVerifier.verifyAdminPermission(req);
+
+        Integer userId = req.attribute("user_id");
+
+        if(userId == null){
+            permissionsVerifier.verifyAdminPermission(req);
+        }
+        else {
+            permissionsVerifier.verifyIsAdminOrRelevantUser(req, userId);
+        }
         return mapToApiModel(reportsDao.getReport(id)
                 .orElseThrow(() -> new FailedRequestException(ErrorCode.NOT_FOUND, "Report not found")));
     }
@@ -98,11 +109,27 @@ public abstract class ReportsRoutesBase<T extends ReportApiModelBase, U extends 
     }
 
     public List<T> searchReports(Request req, Response res) {
-        permissionsVerifier.verifyAdminPermission(req);
+
+        Integer agentId = req.queryMap().get("agentId").integerValue();
+
+        if(agentId == null){
+            permissionsVerifier.verifyAdminPermission(req);
+        }
+        else {
+            permissionsVerifier.verifyIsAdminOrRelevantAgent(req, agentId);
+        }
 
         return reportsDao.searchReports(parseSearchCriteria(req))
                 .stream()
                 .map(this::mapToApiModel)
                 .collect(Collectors.toList());
     }
+
+    public LocationStatusReport updateReport(Request req, Response res, int id) {
+        LocationStatusReport location = JsonRequestUtils.readBodyAsType(req, LocationStatusReport.class);
+        location.setReportTime(LocalDateTime.now(ZoneOffset.UTC));
+        reportsDao.updateReport(location);
+        return location;
+    }
+
 }

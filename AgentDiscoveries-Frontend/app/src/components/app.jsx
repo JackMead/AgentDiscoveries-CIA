@@ -18,6 +18,7 @@ import LocationForm from './admin/location-form';
 import RegionForm from './admin/region-form';
 import UserForm from './admin/user-form';
 import Error from './error';
+import MyReportsPage from './myReports';
 
 import {apiGet} from './utilities/request-helper.js';
 
@@ -33,8 +34,9 @@ export default class App extends React.Component {
                         <Route path='/login' render={() => <Page><Login /></Page>} />
                         <Route path='/search/location' render={() => <Page><LocationReportSearch /></Page>} />
                         <Route path='/search/region' render={() => <Page><RegionSummarySearch /></Page>} />
-                        <Route path='/submit/location' render={() => <Page><LocationReportSubmit /></Page>} />
+                        <Route path='/submit/location' exact render={() => <Page><LocationReportSubmit /></Page>} />
                         <Route path='/submit/region' render={() => <Page><RegionSummarySubmit /></Page>} />
+                        <Route path='/submit/location/edit/:id' render={props => <Page><LocationReportSubmit id={props.match.params.id}/></Page>} />
                         <Route path='/forumMessage' render={() => <Page><Forum /></Page>} />
 
                         <Route path='/admin/locations' exact render={() => <Page><Entities api='locations' key='locations'/></Page>} />
@@ -54,6 +56,7 @@ export default class App extends React.Component {
                         <Route path='/profile/edit/callsign' render={() => <Page><EditProfileCallSign /></Page>} />
                         <Route path='/profile/edit/picture' render={() => <Page><EditProfilePicture /></Page>} />
 
+                        <Route path='/myReports' render={() => <Page><MyReportsPage api='reports'/></Page>} />
                         <Route path='/error' render={() => <Page><Error/></Page>}/>
                         <Route render={() => <Page><Error/></Page>}/>
                     </Switch>
