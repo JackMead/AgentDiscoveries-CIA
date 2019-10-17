@@ -114,10 +114,15 @@ body {
     padding: auto;
 }
 
-.mostwantedportrait {
+.mostwantedportrait classA {
     text-align: center;
     display: inline-table;
     max-width: 20%;
+
+}.mostwantedportrait classB {
+    text-align: center;
+    display: inline-table;
+    max-width: 25%;
 }
 
 .mostwanted-title {
