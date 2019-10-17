@@ -1,6 +1,7 @@
 package org.softwire.training.models;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -65,4 +66,7 @@ public class User {
     }
 
     public void setAdmin(boolean admin){this.admin=admin;}
+
+    @OneToMany(mappedBy = "UserID")
+    public List<ForumMessage> forumMessages;
 }

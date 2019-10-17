@@ -31,10 +31,22 @@ public class ForumMessage {
     public void setMessage(String Message) { this.Message = Message; }
 
 
-    @Column(name = "UserId")
+    @Column(name = "UserID")
     public int getUserId() {
         return UserId;
     }
 
     public void setUserId(int userId) { UserId = userId; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    public User user;
 }
