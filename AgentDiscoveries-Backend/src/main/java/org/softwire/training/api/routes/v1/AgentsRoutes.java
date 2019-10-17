@@ -3,11 +3,7 @@ package org.softwire.training.api.routes.v1;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import org.apache.commons.lang3.StringUtils;
-<<<<<<< HEAD
 import org.glassfish.jersey.jackson.JacksonFeature;
-=======
-import org.eclipse.jetty.server.Authentication;
->>>>>>> 4b547deec534066f104174fba4ad1bbabe6b5a31
 import org.softwire.training.api.core.JsonRequestUtils;
 import org.softwire.training.api.core.PermissionsVerifier;
 import org.softwire.training.api.models.ErrorCode;
@@ -18,13 +14,10 @@ import org.softwire.training.db.daos.AgentsDao;
 import org.softwire.training.models.Agent;
 import spark.Request;
 import spark.Response;
-
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.time.LocalDate;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 public class AgentsRoutes {
 
