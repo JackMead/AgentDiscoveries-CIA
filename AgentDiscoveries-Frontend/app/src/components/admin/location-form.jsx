@@ -142,9 +142,7 @@ export default class LocationForm extends React.Component {
 
         request
             .then(() => window.location.hash = '#/admin/locations')
-            .catch(error => {
-                this.handleError(error);
-            });
+            .catch(error => {this.handleError(error);});
     }
 
     loadLocation(id) {

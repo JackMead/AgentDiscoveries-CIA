@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, Checkbox, ControlLabel, Form, FormControl, FormGroup} from 'react-bootstrap';
-import {apiGet, apiPost} from '../utilities/request-helper';
+import {apiGet, apiPost, apiPut} from '../utilities/request-helper';
 import {Messages} from '../message';
 
 
@@ -10,7 +10,6 @@ export default class LocationReportSubmit extends React.Component {
 
         this.state = {
             locations: [],
-
             locationId: '',
             status: '',
             reportTitle: '',
@@ -26,6 +25,11 @@ export default class LocationReportSubmit extends React.Component {
         this.onReportTitleChange = this.onReportTitleChange.bind(this);
         this.onExternalChange = this.onExternalChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+
+        if (this.props.id) {
+            this.loadLocation(this.props.id);
+        }
+
     }
 
     componentWillMount() {
@@ -121,26 +125,33 @@ export default class LocationReportSubmit extends React.Component {
 
         const body = {
             locationId: this.state.locationId,
+            reportId: this.props.id,
             status: this.state.status,
+            agentId: window.localStorage.getItem('AgentId'),
             reportBody: this.state.reportBody,
             reportTitle: this.state.reportTitle,
             sendExternal: this.state.sendExternal
         };
 
-        apiPost('reports/locationstatuses', body)
-            .then(() => this.addMessage('Report submitted', 'info'))
-            .catch(() => this.addMessage('Error submitting report, please try again later', 'danger'));
-
-        if (this.state.sendExternal) {
-            apiPost('external/reports', body)
-                .then(() => this.addMessage('Report submitted to external partner', 'info'))
-                .catch(() => this.addMessage('Error submitting report externally, please try again later', 'danger'));
-        }
+        const request = this.props.id
+            ? apiPut('reports/locationstatuses', body, this.props.id)
+            : apiPost('reports/locationstatuses', body);
+        request
+            .then(window.location.hash = '#/myReports')
+            .catch(error => console.log(error));
     }
 
     addMessage(message, type) {
         this.setState(oldState => {
             return { messages: [...oldState.messages, { message: message, type: type }] };
         });
+    }
+
+    loadLocation(id) {
+        apiGet('reports/locationstatuses', id)
+            .then(result => this.setState(result))
+            .catch(error => {
+                this.handleError(error);
+            });
     }
 }

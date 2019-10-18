@@ -1,14 +1,33 @@
-$background-color: rgb(238, 238, 238);
+$background-color: rgb(238, 238, 238); //238 x 3
 $text-color: rgb(12, 12, 12);
 $overlay-color: rgb(247, 197, 89);
+$dark-background-color: rgb(52, 52, 52);
+$dark-text-color: rgb(100, 100, 100);
+$minimum-view-height: 1000px;
 
 body {
   background-color: $background-color;
   color: $text-color;
 }
 
-h3 {
-    text-decoration: underline;
+.nightMode {
+    background-color: $dark-background-color;
+    color: $dark-text-color;
+    min-height: $minimum-view-height;
+}
+
+.lightMode {
+    background-color: $background-color;
+    color: $text-color;
+    min-height: $minimum-view-height;
+}
+
+.default {
+    background-color: white;
+    min-height: $minimum-view-height;
+    h3 {
+        text-decoration: underline;
+    }
 }
 
 .agent-discoveries-logo {
@@ -53,7 +72,7 @@ h3 {
 .overlay-action {
   width: 100%;
   height: 100%;
-  
+
   p {
     color: white;
     font-size: 20px;
@@ -62,7 +81,7 @@ h3 {
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 }
 
