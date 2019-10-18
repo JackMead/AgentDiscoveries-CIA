@@ -10,7 +10,7 @@ export default class ForumMessages extends React.Component {
                 <div>
                     {
                         this.props.forum.map(message => <div key={message.MessageId} className={'messageBox'}><p
-                            className={'messageText'}> {message.Message}</p> <p className={'sender'}> {message.user} </p></div>)
+                            className={'messageText'}> {message.Message}</p> <p className={'sender'}> by {message.user.username} </p></div>)
                     }
                 </div>
             </React.Fragment>

@@ -34,7 +34,7 @@ public class ForumMessageRoutes {
         permissionsVerifier.verifyisAgentorAdmin(req);
 
         User user = new User();
-        user.setUserId(0);
+        user.setUserId(req.attribute("user_id"));
         forumMessageModel.setUser(user);
 
         int MessageId = forumMessageDao.createForum(forumMessageModel);

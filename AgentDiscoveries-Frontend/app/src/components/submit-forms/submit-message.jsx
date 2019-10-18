@@ -28,7 +28,7 @@ export default class Forum extends React.Component {
 
     getLatestMessages(){
         apiGet('forum')
-            .then(results => this.setState({ posts: results }))
+            .then(results => this.setState({ posts: results.reverse() }))
             .catch(() => this.addMessage('Error fetching messages, please try again later', 'danger'));
     }
 
