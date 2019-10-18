@@ -29,7 +29,6 @@ body {
         text-decoration: underline;
     }
 }
-
 .agent-discoveries-logo {
   height: 100%;
   display: inline-block;
@@ -81,10 +80,9 @@ body {
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)
   }
 }
-
 
 .img {
   display: inline-block;
@@ -149,7 +147,6 @@ body {
     text-align: center;
     display: inline-table;
     max-width: 20%;
-
 }
 
 .customWanted {
@@ -186,4 +183,23 @@ body {
 
 .audio {
     visibility: hidden;
+}
+
+.messageBox {
+   background-color: #f0f0f0;
+   border-style: solid;
+   border-radius: 4px;
+   border-width: thin;
+   border-color: #A9A9A9;
+   padding: 10px 20px 0px 15px;
+   margin: 0 0 12px 0;
+}
+  
+.messageText {
+   font-style: italic;
+}
+  
+.sender {
+   text-align: right;
+   color: #808080;
 }
