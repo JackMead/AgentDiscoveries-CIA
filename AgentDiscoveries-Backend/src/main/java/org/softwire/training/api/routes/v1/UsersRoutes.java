@@ -14,6 +14,7 @@ import spark.Response;
 import spark.utils.StringUtils;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,11 @@ public class UsersRoutes implements EntityCRUDRoutes {
 
         if (userApiModel.getUserId() != 0) {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "userId cannot be specified on create");
+        }
+
+        if (userApiModel.getUsername().length() > 20){
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Username cannot be greater than 20 characters.");
+
         }
 
         User user = new User(

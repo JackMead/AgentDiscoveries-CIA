@@ -33,6 +33,10 @@ public class RegionsRoutes {
             throw new FailedRequestException(ErrorCode.INVALID_INPUT, "regionId cannot be specified on create");
         }
 
+        if (region.getName().length() > 50) {
+            throw new FailedRequestException(ErrorCode.INVALID_INPUT, "Region name too long (50 characters max).");
+        }
+
         int newRegionId = regionsDao.createRegion(region);
 
         // Create requests should return 201
