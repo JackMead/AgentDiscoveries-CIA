@@ -13,20 +13,21 @@ body {
 .nightMode {
     background-color: $dark-background-color;
     color: $dark-text-color;
-    min-height: $minimum-view-height
+    min-height: $minimum-view-height;
 }
 
 .lightMode {
     background-color: $background-color;
     color: $text-color;
-    min-height: $minimum-view-height
+    min-height: $minimum-view-height;
 }
 
 .default {
     background-color: white;
-    min-height: $minimum-view-height
-h3 {
-    text-decoration: underline;
+    min-height: $minimum-view-height;
+    h3 {
+        text-decoration: underline;
+    }
 }
 
 .agent-discoveries-logo {
@@ -80,7 +81,7 @@ h3 {
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -182,4 +183,3 @@ h3 {
 .wantedlogo {
     width: 100%;
 }
-
