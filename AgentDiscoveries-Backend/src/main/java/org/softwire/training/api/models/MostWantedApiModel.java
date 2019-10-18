@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class MostWantedApiModel {
     String title;
     String description;
-    String image;
+    MostWantedSuspectImage[] images;
 
     public String getTitle() {
         return title;
@@ -16,7 +16,7 @@ public class MostWantedApiModel {
         return description;
     }
 
-    public String getImage() {
-        return image;
+    public MostWantedSuspectImage[] getImages() {
+        return images;
     }
 }

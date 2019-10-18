@@ -55,4 +55,8 @@ public class LocationReportsDao implements ReportsDao<LocationStatusReport> {
 
         return results;
     }
+
+    public void updateReport(LocationStatusReport report) {
+        helper.updateEntity(report);
+    }
 }

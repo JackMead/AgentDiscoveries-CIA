@@ -58,12 +58,12 @@ public class AgentDiscoveriesApplication implements Runnable {
         staticFileLocation("/frontend");
         // Setup of all the routes
         path("/v1", () -> {
-            get("/mostwanted", (req, res) -> agentsRoutes.mostWanted(req, res), responseTransformer);
             // Endpoint used to get an authorisation token
             post("/token", tokenRoutes::createToken, responseTransformer);
             path("/api", () -> {
 
                 before("/*", tokenRoutes::validateToken);
+
                 get("/checktoken", (req, res) -> "Token is valid", responseTransformer);
 
                 path("/legacy", () -> {
@@ -84,6 +84,8 @@ public class AgentDiscoveriesApplication implements Runnable {
 
                 post("/decodemessage", messageProcessorRoutes::decodeMessage, responseTransformer);
                 post("/encodemessage", messageProcessorRoutes::encodeMessage, responseTransformer);
+
+                get("/mostwanted", (req, res) -> agentsRoutes.mostWanted(req, res), responseTransformer);
 
                 // API endpoint to initiate shutdown
                 put("/operations/shutdown", this::shutdown);
@@ -142,6 +144,7 @@ public class AgentDiscoveriesApplication implements Runnable {
     private void reportsRouteGroup(ReportsRoutesBase<?, ?> reportsRoutes) {
         post("", reportsRoutes::createReport, responseTransformer);
         get("/:id", (req, res) -> reportsRoutes.readReport(req, res, idParamAsInt(req)), responseTransformer);
+        put("/:id", (req, res) -> reportsRoutes.updateReport(req, res, idParamAsInt(req)), responseTransformer);
         delete("/:id", (req, res) -> reportsRoutes.deleteReport(req, res, idParamAsInt(req)), responseTransformer);
         get("", reportsRoutes::searchReports, responseTransformer);
     }

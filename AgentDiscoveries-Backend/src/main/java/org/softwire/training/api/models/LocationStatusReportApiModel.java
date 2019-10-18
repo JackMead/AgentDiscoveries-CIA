@@ -18,7 +18,6 @@ public class LocationStatusReportApiModel extends ReportApiModelBase {
         this.reportTitle = reportTitle;
     }
 
-
     public int getLocationId() {
         return locationId;
     }

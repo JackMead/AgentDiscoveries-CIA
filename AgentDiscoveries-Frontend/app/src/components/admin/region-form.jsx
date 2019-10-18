@@ -72,7 +72,6 @@ export default class RegionForm extends React.Component {
 
     handleError(error){
         error.response.json().then(result => {
-            console.log(result);
             this.setState({ message: { message: result.message, type: 'danger' } });
         });}
 
