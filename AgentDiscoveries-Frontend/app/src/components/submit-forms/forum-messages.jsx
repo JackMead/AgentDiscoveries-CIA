@@ -1,14 +1,19 @@
 import * as React from 'react';
+// import {currentUserId} from './utilities/user-helper';
 
 export default class ForumMessages extends React.Component {
 
     render() {
+
         return (
-            <div>
-                {
-                    this.props.forum.map(message => <p key={message.MessageId}>{message.Message}</p>)
-                }
-            </div>
+            <React.Fragment>
+                <div>
+                    {
+                        this.props.forum.map(message => <div key={message.MessageId} className={'messageBox'}><p
+                            className={'messageText'}> {message.Message}</p> <p className={'sender'}> by {message.user.username} </p></div>)
+                    }
+                </div>
+            </React.Fragment>
         );
     }
 }
