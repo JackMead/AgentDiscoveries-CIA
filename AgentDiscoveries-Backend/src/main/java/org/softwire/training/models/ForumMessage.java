@@ -8,14 +8,12 @@ public class ForumMessage {
 
     private int MessageId;
     private String Message;
-    private int UserId;
 
     public ForumMessage() {}
 
-    public ForumMessage(int messageId, String message, int userId) {
+    public ForumMessage(int messageId, String message) {
         MessageId = messageId;
         Message = message;
-        UserId = userId;
     }
 
     @Id
@@ -30,11 +28,15 @@ public class ForumMessage {
 
     public void setMessage(String Message) { this.Message = Message; }
 
-
-    @Column(name = "UserId")
-    public int getUserId() {
-        return UserId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "UserID")
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) { UserId = userId; }
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    private User user;
 }

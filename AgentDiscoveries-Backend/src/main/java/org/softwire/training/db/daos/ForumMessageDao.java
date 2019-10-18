@@ -18,7 +18,10 @@ public class ForumMessageDao {
 
     public Optional<ForumMessage> getForumMessage(int MessageId) { return helper.getEntity(ForumMessage.class, MessageId);}
 
-    public List<ForumMessage> getForumMessages() { return helper.getEntities(ForumMessage.class);}
+    public List<ForumMessage> getForumMessages() {
+        List<ForumMessage> messages = helper.getNrOfEntities(ForumMessage.class, 10);
+        return messages;
+    }
 
     public int createForum(ForumMessage forumMessage) {
         helper.createEntity(forumMessage);

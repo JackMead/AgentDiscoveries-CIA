@@ -23,8 +23,12 @@ export default class Forum extends React.Component {
     }
 
     componentWillMount() {
+        this.getLatestMessages();
+    }
+
+    getLatestMessages(){
         apiGet('forum')
-            .then(results => this.setState({ posts: results }))
+            .then(results => this.setState({ posts: results.reverse() }))
             .catch(() => this.addMessage('Error fetching messages, please try again later', 'danger'));
     }
 
@@ -45,7 +49,7 @@ export default class Forum extends React.Component {
                             id='message-input'
                             componentClass='textarea' rows={6}
                             placeholder='Enter message'
-                            value={this.state.message}
+                            value={this.state.Message}
                             onChange={this.onMessageChange}
                             className="resizeOff"/>
                     </FormGroup>
@@ -63,20 +67,26 @@ export default class Forum extends React.Component {
     onPost(event) {
         event.preventDefault();
 
+        //console.log(window.localStorage.getItem(""))
+
         const body = {
             Message: this.state.Message
+            //Username: window.localStorage.getItem("Username")
         };
 
         apiPost('forum/add', body)
             .then(() => this.addMessage('Message submitted', 'info'))
             .catch(() => this.addMessage('Error submitting message, please try again later', 'danger'))
-            .finally(() => { window.location.reload; });
+            .finally(() => {
+                this.getLatestMessages();
+                this.setState({Message: ''});
+            });
 
     }
 
     addMessage(message, type) {
         this.setState(oldState => {
-            return { messages: [...oldState.messages, { message: message, type: type }] };
+            return { messages: [{ message: message, type: type }] };
         });
     }
 }
