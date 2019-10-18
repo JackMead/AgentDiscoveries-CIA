@@ -3,12 +3,6 @@ import {apiGet} from './utilities/request-helper';
 import {errorLogAndRedirect} from './error';
 import logo from '../../static/wanted.png';
 import {Link} from 'react-router-dom';
-import dan from '../../static/Dan.jpg';
-import sandris from '../../static/Sandris.jpg';
-import henry from '../../static/Henry.jpg';
-import mdog from '../../static/Mdog.jpg';
-import mike from '../../static/Mike.jpg';
-import luan from '../../static/Luan.jpg';
 import mead from '../../static/Jack.jpg';
 import bond from '../../static/bond.mp3';
 
