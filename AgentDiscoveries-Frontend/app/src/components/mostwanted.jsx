@@ -10,6 +10,7 @@ import mdog from '../../static/Mdog.jpg';
 import mike from '../../static/Mike.jpg';
 import luan from '../../static/Luan.jpg';
 import mead from '../../static/Jack.jpg';
+import bond from '../../static/bond.mp3';
 
 export default class MostWanted extends React.Component {
     constructor(props) {
@@ -101,6 +102,10 @@ export default class MostWanted extends React.Component {
                         })
                     }
                 </div>
+                {this.state.showCustom ?
+                    <audio className = {'audio'} controls autoPlay>
+                        <source src={bond} type='audio/mpeg'></source>
+                    </audio> : null}
             </div>
         );
     }
