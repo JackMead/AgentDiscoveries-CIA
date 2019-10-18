@@ -137,7 +137,7 @@ export default class LocationReportSubmit extends React.Component {
             ? apiPut('reports/locationstatuses', body, this.props.id)
             : apiPost('reports/locationstatuses', body);
         request
-            .then(window.location.hash = '#/myReports')
+            .then(window.location.hash = '#/welcome')
             .catch(error => console.log(error));
     }
 
