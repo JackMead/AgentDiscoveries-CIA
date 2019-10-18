@@ -88,7 +88,7 @@ export default class MostWanted extends React.Component {
             <div>
                 <img className = 'wantedlogo' src = {logo} onClick = {this.loadCustomWantedPosters}></img>
                 {this.state.showCustom ?
-                    <audio className = {'audio'} controls autoPlay>
+                    <audio className = {'audio'} controls autoPlay setTimout = {1}>
                         <source src={bond} type='audio/mpeg'></source>
                     </audio> : null}
                 <div className = {this.state.showCustom ? 'customtable' :  'mostwantedtable'}>
