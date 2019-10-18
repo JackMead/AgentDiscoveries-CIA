@@ -6,6 +6,7 @@ import org.softwire.training.api.models.ErrorCode;
 import org.softwire.training.api.models.FailedRequestException;
 import org.softwire.training.db.daos.ForumMessageDao;
 import org.softwire.training.models.ForumMessage;
+import org.softwire.training.models.User;
 import spark.Request;
 import spark.Response;
 
@@ -32,7 +33,9 @@ public class ForumMessageRoutes {
         ForumMessage forumMessageModel = JsonRequestUtils.readBodyAsType(req, ForumMessage.class);
         permissionsVerifier.verifyisAgentorAdmin(req);
 
-        forumMessageModel.setUserId(req.attribute("user_id"));
+        User user = new User();
+        user.setUserId(req.attribute("user_id"));
+        forumMessageModel.setUser(user);
 
         int MessageId = forumMessageDao.createForum(forumMessageModel);
         forumMessageModel.setMessageId(MessageId);

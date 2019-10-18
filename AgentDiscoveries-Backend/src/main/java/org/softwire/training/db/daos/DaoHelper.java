@@ -13,6 +13,7 @@ class DaoHelper<T> {
         this.entityManagerFactory = entityManagerFactory;
     }
 
+
     Optional<T> getEntity(Class<T> entityClass, int id) {
 
         EntityManager em = entityManagerFactory.createEntityManager();
@@ -21,6 +22,16 @@ class DaoHelper<T> {
         em.getTransaction().commit();
         em.close();
         return Optional.ofNullable(entity);
+    }
+
+    List<T> getNrOfEntities(Class<T> entityClass, int limit) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.getTransaction().begin();
+
+        List<T> results = em.createQuery("FROM " + entityClass.getSimpleName() + " ORDER BY MessageId DESC", entityClass).setMaxResults(limit).getResultList();
+        em.getTransaction().commit();
+        em.close();
+        return results;
     }
 
     List<T> getEntities(Class<T> entityClass) {

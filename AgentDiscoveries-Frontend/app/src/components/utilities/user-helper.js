@@ -6,7 +6,7 @@ export function storeUserInfo(userInfo) {
     window.localStorage.setItem('Admin', userInfo.isAdmin ? 'true' : 'false');
     window.localStorage.setItem('AgentId', userInfo.agentId);
     window.localStorage.setItem('mode', 'lightMode');
-
+  
     updateListeners();
 }
 
@@ -15,6 +15,7 @@ export function clearUserInfo() {
     window.localStorage.clear('UserId');
     window.localStorage.clear('Admin');
     window.localStorage.clear('AgentId');
+    //window.localStorage.clear("Username");
 
     updateListeners();
 }
