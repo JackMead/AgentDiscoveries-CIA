@@ -39,7 +39,10 @@ export default class App extends React.Component {
         var mode = localStorage.getItem('mode');
         if (mode === 'lightMode') {
             localStorage.setItem('mode', 'nightMode');
+
+            this.setState({ class: 'nightMode' });
             this.setState({ class: 'nightMode'});
+
         } else {
             localStorage.setItem('mode', 'lightMode');
             this.setState({ class: 'lightMode'});
